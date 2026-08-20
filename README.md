@@ -1,2 +1,2 @@
-# Animic-Protein
+# animic-protein
 Codex-viu
