@@ -19,6 +19,7 @@ No duplicar contingut canònic entre repositoris. Si un text, recurs visual, reg
 - `codex/`
 - `univers-visual/`
 - `harmonia-viva/`
+  - `jazz-viu/`: improvisació, harmonia funcional i modal, llenguatge melòdic, ritme, solos, formes i free jazz.
 - `retrodansa/`
 - `site/`
 - `governanca/`
