@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viver del Còdex Viu — Anímic Protein</title>
+  <meta name="description" content="Viver de llavors del Còdex Viu d’Anímic Protein" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">ANÍMIC PROTEIN · CÒDEX VIU</p>
+      <h1>🌱 Viver del Còdex</h1>
+      <p class="lede">Les llavors entren, es relacionen, muten i només després decideixen què arriben a ser.</p>
+      <div class="formula">INTUITIO MACHINAE → EXTRA NOS → INTER NOS → MUTATIO ↻</div>
+    </header>
+
+    <section class="controls" aria-label="Filtres del viver">
+      <button class="filter active" data-filter="all">Totes</button>
+      <button class="filter" data-filter="principi">Principis</button>
+      <button class="filter" data-filter="prova">En prova</button>
+    </section>
+
+    <section id="seed-grid" class="grid" aria-live="polite"></section>
+
+    <section class="note">
+      <p><strong>Regla del viver:</strong> una llavor no esdevé canònica perquè ens agradi, sinó perquè crea una diferència perceptible i sobreviu al contrast.</p>
+    </section>
+  </main>
+
+  <template id="seed-card-template">
+    <article class="card">
+      <div class="card-top">
+        <span class="status">LLAVOR</span>
+        <span class="type"></span>
+      </div>
+      <h2 class="name"></h2>
+      <p class="definition"></p>
+      <blockquote class="question"></blockquote>
+      <div class="connections"></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
