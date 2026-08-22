@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0d1512" />
+  <title>Anímic Protein · Còdex Viu</title>
+  <meta name="description" content="Còdex Viu d’Anímic Protein — música, pensament, símbols i organisme interactiu." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="hero">
+    <p class="eyebrow">ANÍMIC PROTEIN · CÒDEX VIU</p>
+    <h1>Una obra que continua aprenent.</h1>
+    <p class="lead">No és un llibre tancat: és un organisme viu on música, pensament, símbols i escolta es transformen mútuament.</p>
+    <div class="actions">
+      <button class="portal primary" data-open="sembra">Sembra una llavor</button>
+      <button class="portal z" data-open="instrument-z">Z</button>
+      <button class="portal question" data-open="rosa">?</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="principis">
+      <div>
+        <p class="kicker">Principis vius</p>
+        <h2>Inter‑Nos · MUTATIO · Continuum</h2>
+      </div>
+      <div class="cards">
+        <article><h3>Inter‑Nos</h3><p>Allò que neix entre nosaltres no pertany del tot a cap de nosaltres.</p></article>
+        <article><h3>MUTATIO</h3><p>Cap forma és definitiva si encara pot respirar, escoltar i canviar.</p></article>
+        <article><h3>Continuum musicalis</h3><p>La música no comença ni acaba: només travessa estats.</p></article>
+      </div>
+    </section>
+
+    <section class="panel split" id="cicle">
+      <div>
+        <p class="kicker">El cicle de la idea</p>
+        <h2>Llavor → Germinació → Floració → Collita → Compost</h2>
+      </div>
+      <p>Tot ordre esdevé caos natural i, naturalment, el caos esdevé el seu ordre.</p>
+    </section>
+
+    <section class="panel" id="cambres">
+      <p class="kicker">Cambres del Còdex</p>
+      <div class="cards chambers">
+        <article><h3>Harmonia Viva</h3><p>Intervals, camps, pedals, microtonalitat i retro‑harmonia.</p></article>
+        <article><h3>Zajj‑viu</h3><p>Improvisació, modalitat, risc i escolta col·lectiva.</p></article>
+        <article><h3>Retrodansa</h3><p>Moviment invertit: del final cap a l’origen.</p></article>
+        <article><h3>Univers visual</h3><p>Escut, cartografies, làmines, futurs recordats i símbols actius.</p></article>
+      </div>
+    </section>
+
+    <section class="inscription">
+      <blockquote>“Bene navigavi, cum naufragium feci.”</blockquote>
+      <p>Les mans al terra, els peus al cel.</p>
+    </section>
+  </main>
+
+  <dialog id="sembra">
+    <button class="close" aria-label="Tancar">×</button>
+    <p class="kicker">Sembra una llavor</p>
+    <h2>Atzar dadaista</h2>
+    <p id="seed-output">Prem el botó i deixa que el Còdex et retorni una llavor.</p>
+    <button id="seed-button" class="portal primary">Sembrar ara</button>
+  </dialog>
+
+  <dialog id="instrument-z">
+    <button class="close" aria-label="Tancar">×</button>
+    <p class="kicker">Instrument Z</p>
+    <h2>Escoltar abans d’ordenar</h2>
+    <p>Un portal d’acció immediata sobre el Còdex: pregunta, mutació, silenci i retorn.</p>
+  </dialog>
+
+  <dialog id="rosa">
+    <button class="close" aria-label="Tancar">×</button>
+    <p class="kicker">Rosa de l’Escolta</p>
+    <h2>Portals secundaris</h2>
+    <div class="rose-links">
+      <a href="#cambres">Harmonia</a>
+      <a href="#cambres">Retrodansa</a>
+      <a href="#principis">Silenci</a>
+      <a href="#cambres">Univers visual</a>
+    </div>
+  </dialog>
+
+  <footer>
+    <span>Còdex Viu · Anímic Protein</span>
+    <span>Creat per mutar.</span>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
