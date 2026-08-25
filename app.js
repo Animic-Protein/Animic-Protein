@@ -56,15 +56,23 @@ const nodePanel = document.getElementById('node-panel');
 
 let activeNode = null;
 let relationStart = null;
-const MEMORY_KEY = 'animic-protein-inter-nos-v1';
+const MEMORY_KEY = 'animic-protein-inter-nos-v2';
+const RELATION_STATES = ['canonica', 'emergent', 'sembrada', 'compostada'];
+
+const stateLabels = {
+  canonica: 'Canònica',
+  emergent: 'Emergent',
+  sembrada: 'Sembrada',
+  compostada: 'Compostada'
+};
 
 const canonicalRelations = {
-  'retrodansa|harmonia-viva': {
+  'harmonia-viva|retrodansa': {
     title: 'Retroharmonia corporal',
     text: 'La forma harmònica també pot aprendre a caminar enrere: una tensió pot revelar-se abans que la causa que l’ha produïda.',
     action: 'Prova una seqüència harmònica de 4 estats i reconstrueix-la des de l’últim acord fins al primer.'
   },
-  'mutatio|compost': {
+  'compost|mutatio': {
     title: 'Mutació per descomposició',
     text: 'Allò que es descarta no desapareix: el compost conserva rastres que poden reaparèixer transformats en una nova estructura.',
     action: 'Recupera un fragment rebutjat i canvia-li només una regla abans de tornar-lo a sembrar.'
@@ -89,12 +97,12 @@ const canonicalRelations = {
     text: 'Amo: volo ut sis aplicat a la governança significa crear regles que protegeixin l’emergència d’una forma sense decidir per endavant què ha de ser.',
     action: 'Formula una regla que protegeixi una contribució sense determinar-ne el resultat.'
   },
-  'vortex|atzar': {
+  'atzar|vortex': {
     title: 'Atzar amb gravetat',
     text: 'El Vòrtex no elimina l’atzar: li dóna camp. Les desviacions aleatòries són atretes, deformades i retornades al sistema.',
     action: 'Genera tres accidents i conserva només el que alteri una relació existent.'
   },
-  'univers-visual|rosetta': {
+  'rosetta|univers-visual': {
     title: 'Traducció simbòlica',
     text: 'Rosetta converteix l’univers visual en una gramàtica: un símbol pot travessar imatge, text, so i gest sense quedar reduït a una sola lectura.',
     action: 'Tria un símbol de l’escut i tradueix-lo a un gest i a un so.'
@@ -115,7 +123,8 @@ function normalizeRelationKey(a, b) {
 
 function readMemory() {
   try {
-    return JSON.parse(localStorage.getItem(MEMORY_KEY) || '[]');
+    const next = JSON.parse(localStorage.getItem(MEMORY_KEY) || '[]');
+    return Array.isArray(next) ? next : [];
   } catch {
     return [];
   }
@@ -123,28 +132,130 @@ function readMemory() {
 
 function writeMemory(memory) {
   try {
-    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory.slice(-12)));
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory.slice(-24)));
   } catch {
     // El mapa continua funcionant encara que el navegador bloquegi l’emmagatzematge local.
   }
 }
 
-function rememberRelation(aNode, bNode, result) {
-  const memory = readMemory();
+function relationIdentity(aId, bId) {
+  return [aId, bId].sort().join('::');
+}
+
+function getRelationResult(aNode, bNode) {
+  const key = normalizeRelationKey(aNode.dataset.node, bNode.dataset.node);
+  const canonical = canonicalRelations[key];
+  if (canonical) return { ...canonical, state: 'canonica' };
+
   const a = aNode.dataset.title || aNode.textContent.trim();
   const b = bNode.dataset.title || bNode.textContent.trim();
+  return {
+    title: 'Relació emergent',
+    text: `${a} i ${b} encara no tenen una relació canònica. El Còdex la tracta com una hipòtesi viva, no com una absència.`,
+    action: `Pregunta viva: què hauria de canviar en «${a}» perquè «${b}» deixés de ser extern?`,
+    state: 'emergent'
+  };
+}
+
+function rememberRelation(aNode, bNode, result) {
+  const memory = readMemory();
+  const aId = aNode.dataset.node;
+  const bId = bNode.dataset.node;
+  const id = relationIdentity(aId, bId);
+  const a = aNode.dataset.title || aNode.textContent.trim();
+  const b = bNode.dataset.title || bNode.textContent.trim();
+  const previous = memory.find((item) => item.id === id);
   const entry = {
+    id,
     a,
     b,
-    aId: aNode.dataset.node,
-    bId: bNode.dataset.node,
+    aId,
+    bId,
     title: result.title,
     text: result.text,
+    action: result.action,
+    state: previous?.state || result.state || 'emergent',
     timestamp: new Date().toISOString()
   };
-  memory.push(entry);
+  const next = memory.filter((item) => item.id !== id);
+  next.push(entry);
+  writeMemory(next);
+  renderMemory();
+  drawPersistentRelations();
+  return entry;
+}
+
+function changeRelationState(id, state) {
+  if (!RELATION_STATES.includes(state)) return;
+  const memory = readMemory().map((item) => item.id === id ? { ...item, state, timestamp: new Date().toISOString() } : item);
   writeMemory(memory);
   renderMemory();
+  drawPersistentRelations();
+}
+
+function nextState(current) {
+  const index = Math.max(0, RELATION_STATES.indexOf(current));
+  return RELATION_STATES[(index + 1) % RELATION_STATES.length];
+}
+
+function ensureRelationLayer() {
+  if (!map) return null;
+  let svg = map.querySelector('.relation-layer');
+  if (!svg) {
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('relation-layer');
+    svg.setAttribute('aria-hidden', 'true');
+    map.prepend(svg);
+  }
+  return svg;
+}
+
+function nodeCenter(node) {
+  const mapRect = map.getBoundingClientRect();
+  const rect = node.getBoundingClientRect();
+  return {
+    x: rect.left - mapRect.left + rect.width / 2,
+    y: rect.top - mapRect.top + rect.height / 2
+  };
+}
+
+function drawPersistentRelations() {
+  const svg = ensureRelationLayer();
+  if (!svg || !map) return;
+  const width = map.clientWidth;
+  const height = map.clientHeight;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  svg.setAttribute('width', String(width));
+  svg.setAttribute('height', String(height));
+  svg.innerHTML = '';
+
+  readMemory().forEach((item) => {
+    const a = map.querySelector(`[data-node="${item.aId}"]`);
+    const b = map.querySelector(`[data-node="${item.bId}"]`);
+    if (!a || !b) return;
+
+    const p1 = nodeCenter(a);
+    const p2 = nodeCenter(b);
+    const dx = p2.x - p1.x;
+    const curve = Math.max(28, Math.min(110, Math.abs(dx) * .18));
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x + dx * .35} ${p1.y - curve}, ${p2.x - dx * .35} ${p2.y + curve}, ${p2.x} ${p2.y}`);
+    path.classList.add('living-relation', `state-${item.state || 'emergent'}`);
+    path.dataset.relationId = item.id;
+    svg.appendChild(path);
+  });
+}
+
+function flashRelation(aNode, bNode) {
+  [aNode, bNode].forEach((node) => {
+    node.classList.add('is-related', 'is-pulsing');
+    setTimeout(() => node.classList.remove('is-related', 'is-pulsing'), 2600);
+  });
+}
+
+function showRelation(entry) {
+  if (!entry || !relationOutput) return;
+  relationOutput.innerHTML = `<strong>${entry.title}</strong><br>${entry.text}<br><span>${entry.action || ''}</span><br><em>Estat: ${stateLabels[entry.state] || stateLabels.emergent}</em>`;
 }
 
 function renderMemory() {
@@ -156,7 +267,7 @@ function renderMemory() {
     nodePanel.appendChild(memoryBox);
   }
 
-  const memory = readMemory().slice(-4).reverse();
+  const memory = readMemory().slice(-6).reverse();
   if (!memory.length) {
     memoryBox.innerHTML = '<p class="memory-title">Memòria INTER NOS</p><p class="memory-empty">Encara no hi ha relacions conservades.</p>';
     return;
@@ -164,40 +275,35 @@ function renderMemory() {
 
   memoryBox.innerHTML = `
     <p class="memory-title">Memòria INTER NOS</p>
+    <div class="state-legend">
+      ${RELATION_STATES.map((state) => `<span class="state-chip state-${state}">${stateLabels[state]}</span>`).join('')}
+    </div>
     <div class="memory-list">
-      ${memory.map((item) => `<button type="button" data-memory-a="${item.aId}" data-memory-b="${item.bId}"><strong>${item.title}</strong><span>${item.a} ↔ ${item.b}</span></button>`).join('')}
+      ${memory.map((item) => `<div class="memory-item state-${item.state || 'emergent'}">
+        <button class="memory-open" type="button" data-memory-id="${item.id}"><strong>${item.title}</strong><span>${item.a} ↔ ${item.b}</span></button>
+        <button class="memory-state" type="button" data-state-id="${item.id}" title="Canvia l’estat">${stateLabels[item.state || 'emergent']}</button>
+      </div>`).join('')}
     </div>`;
 
-  memoryBox.querySelectorAll('button').forEach((button) => {
+  memoryBox.querySelectorAll('.memory-open').forEach((button) => {
     button.addEventListener('click', () => {
-      const a = map?.querySelector(`[data-node="${button.dataset.memoryA}"]`);
-      const b = map?.querySelector(`[data-node="${button.dataset.memoryB}"]`);
+      const item = readMemory().find((entry) => entry.id === button.dataset.memoryId);
+      if (!item) return;
+      const a = map?.querySelector(`[data-node="${item.aId}"]`);
+      const b = map?.querySelector(`[data-node="${item.bId}"]`);
       if (a && b) {
         flashRelation(a, b);
         activateNode(b);
+        showRelation(item);
       }
     });
   });
-}
 
-function getRelationResult(aNode, bNode) {
-  const key = normalizeRelationKey(aNode.dataset.node, bNode.dataset.node);
-  const canonical = canonicalRelations[key];
-  if (canonical) return canonical;
-
-  const a = aNode.dataset.title || aNode.textContent.trim();
-  const b = bNode.dataset.title || bNode.textContent.trim();
-  return {
-    title: 'Relació emergent',
-    text: `${a} i ${b} encara no tenen una relació canònica. El Còdex la tracta com una hipòtesi viva, no com una absència.`,
-    action: `Pregunta viva: què hauria de canviar en «${a}» perquè «${b}» deixés de ser extern?`
-  };
-}
-
-function flashRelation(aNode, bNode) {
-  [aNode, bNode].forEach((node) => {
-    node.classList.add('is-related', 'is-pulsing');
-    setTimeout(() => node.classList.remove('is-related', 'is-pulsing'), 2600);
+  memoryBox.querySelectorAll('.memory-state').forEach((button) => {
+    button.addEventListener('click', () => {
+      const item = readMemory().find((entry) => entry.id === button.dataset.stateId);
+      if (item) changeRelationState(item.id, nextState(item.state || 'emergent'));
+    });
   });
 }
 
@@ -214,10 +320,8 @@ function activateNode(node) {
     relationStart = null;
     const result = getRelationResult(start, node);
     flashRelation(start, node);
-    rememberRelation(start, node, result);
-    if (relationOutput) {
-      relationOutput.innerHTML = `<strong>${result.title}</strong><br>${result.text}<br><span>${result.action}</span>`;
-    }
+    const entry = rememberRelation(start, node, result);
+    showRelation(entry);
   }
 }
 
@@ -262,6 +366,10 @@ if (seedAction) {
   });
 }
 
+window.addEventListener('resize', () => requestAnimationFrame(drawPersistentRelations));
+window.addEventListener('orientationchange', () => setTimeout(drawPersistentRelations, 180));
+
 renderMemory();
 const core = map?.querySelector('[data-node="codex"]');
 if (core) activateNode(core);
+requestAnimationFrame(drawPersistentRelations);
