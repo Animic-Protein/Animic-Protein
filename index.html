@@ -15,6 +15,7 @@
     <h1>Una obra que continua aprenent.</h1>
     <p class="lead">No és un llibre tancat: és un organisme viu on música, pensament, símbols i escolta es transformen mútuament.</p>
     <div class="actions">
+      <a class="portal map-link" href="#mapa-viu">Mapa viu</a>
       <button class="portal primary" data-open="sembra">Sembra una llavor</button>
       <button class="portal z" data-open="instrument-z">Z</button>
       <button class="portal question" data-open="rosa">?</button>
@@ -22,6 +23,112 @@
   </header>
 
   <main>
+    <section class="map-section" id="mapa-viu" aria-labelledby="map-title">
+      <div class="map-heading">
+        <div>
+          <p class="kicker">Cartographia Mutabilis</p>
+          <h2 id="map-title">Mapa Viu</h2>
+        </div>
+        <p>Explora el Còdex com una constel·lació. Toca un node per revelar-lo; combina’n dos per activar <strong>INTER NOS</strong>.</p>
+      </div>
+
+      <div class="living-map" id="living-map">
+        <div class="map-orbit" aria-hidden="true"></div>
+        <button class="map-core" type="button" data-node="codex" data-title="Còdex viu" data-desc="Centre relacional de l’organisme. Tot pot connectar-se, mutar i tornar al compost.">
+          <span class="core-mark">✦</span>
+          <strong>Còdex viu</strong>
+          <small>Tot es relaciona</small>
+        </button>
+
+        <section class="constellation c1" data-cluster="llavor">
+          <button class="hub" type="button" data-node="llavor-mutatio" data-title="Llavor / MUTATIO" data-desc="La cambra on una idea entra, canvia de forma i torna a sembrar-se.">1 · Llavor / MUTATIO</button>
+          <div class="satellites">
+            <button type="button" data-node="sembra-llavor" data-title="Sembra una llavor" data-desc="Genera una instrucció inesperada per iniciar una mutació creativa.">Sembra una llavor</button>
+            <button type="button" data-node="cicle-idea" data-title="Cicle de la idea" data-desc="Llavor, germinació, floració, collita i compost.">Cicle de la idea</button>
+            <button type="button" data-node="compost" data-title="Compost" data-desc="Cap idea es perd: allò descartat torna com a nutrient.">Compost</button>
+            <button type="button" data-node="atzar" data-title="Atzar" data-desc="L’atzar dadaista com a motor de desviació i descoberta.">Atzar</button>
+          </div>
+        </section>
+
+        <section class="constellation c2" data-cluster="pensament">
+          <button class="hub" type="button" data-node="pensament" data-title="Pensament" data-desc="Arrels, aforismes i principis que orienten sense tancar el sentit.">2 · Pensament</button>
+          <div class="satellites">
+            <button type="button" data-node="arrels" data-title="Arrels" data-desc="Interlocutors filosòfics, científics i poètics del Còdex.">Arrels</button>
+            <button type="button" data-node="aforismes" data-title="Aforismes" data-desc="Frases de condensació: petites portes cap a sistemes més grans.">Aforismes</button>
+            <button type="button" data-node="amo" data-title="Amo: volo ut sis" data-desc="Estimo: vull que siguis. Crear les condicions perquè una realitat pugui esdevenir ella mateixa.">Amo: volo ut sis</button>
+            <button type="button" data-node="ockham" data-title="Navalla d’Okham" data-desc="Reduir sense empobrir: deixar només allò que la forma necessita.">Navalla d’Okham</button>
+            <button type="button" data-node="continuum-pensament" data-title="Continuum" data-desc="Cap idea no queda aïllada; travessa estats, capes i relacions.">Continuum</button>
+          </div>
+        </section>
+
+        <section class="constellation c3" data-cluster="escolta">
+          <button class="hub" type="button" data-node="escolta" data-title="Escolta" data-desc="Rosa de l’Escolta, harmonia, microtonalitat, Zajj-viu i silenci.">3 · Escolta</button>
+          <div class="satellites">
+            <button type="button" data-node="rosa-escolta" data-title="Rosa de l’Escolta" data-desc="Portal secundari per entrar a les cambres sonores i perceptives.">Rosa de l’Escolta</button>
+            <button type="button" data-node="harmonia-viva" data-title="Harmonia Viva" data-desc="Intervals, tensions, camps, pedals i formes harmòniques que respiren.">Harmonia Viva</button>
+            <button type="button" data-node="pedals" data-title="Pedals" data-desc="Arrel, dominant, doble, cromàtic, espectral i latent.">Pedals</button>
+            <button type="button" data-node="microtonalitat" data-title="Microtonalitat" data-desc="Zones entre les notes: desplaçar l’orella abans que la teoria.">Microtonalitat</button>
+            <button type="button" data-node="zajj" data-title="Zajj-viu" data-desc="Improvisació, modalitat, risc i escolta col·lectiva.">Zajj-viu</button>
+            <button type="button" data-node="silenci" data-title="Silenci" data-desc="No absència, sinó material actiu i relacional.">Silenci</button>
+          </div>
+        </section>
+
+        <section class="constellation c4" data-cluster="moviment">
+          <button class="hub" type="button" data-node="moviment" data-title="Moviment" data-desc="Cos, gest, rastre i coreografies capaces de caminar cap enrere.">4 · Moviment</button>
+          <div class="satellites">
+            <button type="button" data-node="retrodansa" data-title="Retrodansa" data-desc="Coreografia inversa: del final cap a l’origen.">Retrodansa</button>
+            <button type="button" data-node="rastre" data-title="Rastre fantasma" data-desc="Persistència perceptiva d’un moviment que ja ha desaparegut.">Rastre fantasma</button>
+            <button type="button" data-node="cos" data-title="Cos" data-desc="El cos com a lector, instrument i territori del Còdex.">Cos</button>
+            <button type="button" data-node="coreografia" data-title="Coreografia" data-desc="Organització temporal del gest, inclosa la seva inversió.">Coreografia</button>
+          </div>
+        </section>
+
+        <section class="constellation c5" data-cluster="visual">
+          <button class="hub" type="button" data-node="univers-visual" data-title="Univers visual" data-desc="Símbols, herbaris, escuts i làmines com a òrgans del mateix sistema.">5 · Univers visual</button>
+          <div class="satellites">
+            <button type="button" data-node="escut" data-title="Escut" data-desc="Heràldica viva d’Anímic Protein: brúixola, llavor, xarxa, flama i compost.">Escut</button>
+            <button type="button" data-node="herbarium" data-title="Herbarium" data-desc="Arxiu vegetal de formes, proves i espècies simbòliques.">Herbarium</button>
+            <button type="button" data-node="simbols" data-title="Símbols" data-desc="Vocabulari visual reutilitzable i mutacional.">Símbols</button>
+            <button type="button" data-node="rosetta" data-title="Rosetta" data-desc="Traducció entre llenguatges, signes i futurs recordats.">Rosetta</button>
+            <button type="button" data-node="lamines" data-title="Làmines" data-desc="Cartografies, esquemes i peces editorials del Còdex.">Làmines</button>
+          </div>
+        </section>
+
+        <section class="constellation c6" data-cluster="continuum">
+          <button class="hub" type="button" data-node="continuum" data-title="Continuum" data-desc="La xarxa que impedeix que les cambres siguin illes.">6 · Continuum</button>
+          <div class="satellites">
+            <button type="button" data-node="vortex" data-title="Vòrtex" data-desc="Camp d’atracció on els materials entren, xoquen i canvien d’estat.">Vòrtex</button>
+            <button type="button" data-node="inter-nos" data-title="Inter Nos" data-desc="Allò que neix entre dos nodes i no pertany del tot a cap d’ells.">Inter Nos</button>
+            <button type="button" data-node="continuum-musicalis" data-title="Continuum musicalis" data-desc="La música no comença ni acaba: només travessa estats.">Continuum musicalis</button>
+            <button type="button" data-node="relacions" data-title="Relacions" data-desc="Connexions canòniques, afinitats, hipòtesis i mutacions recents.">Relacions</button>
+          </div>
+        </section>
+
+        <section class="constellation c7" data-cluster="metacodex">
+          <button class="hub" type="button" data-node="metacodex" data-title="Metacòdex" data-desc="La capa que explica com el Còdex canvia sense perdre memòria.">7 · Metacòdex</button>
+          <div class="satellites">
+            <button type="button" data-node="governanca" data-title="Governança" data-desc="Regles de cura, participació, qualitat i reversibilitat.">Governança</button>
+            <button type="button" data-node="autoria" data-title="Autoria" data-desc="Traça de contribucions humanes, col·laboratives i maquinals.">Autoria</button>
+            <button type="button" data-node="versions" data-title="Versions" data-desc="Memòria dels canvis perquè MUTATIO no signifiqui amnèsia.">Versions</button>
+            <button type="button" data-node="contribucions" data-title="Contribucions" data-desc="Entrades de la comunitat que poden ser acceptades, transformades o compostades.">Contribucions</button>
+            <button type="button" data-node="tracabilitat" data-title="Traçabilitat" data-desc="Poder reconstruir d’on prové una idea i com ha mutat.">Traçabilitat</button>
+          </div>
+        </section>
+
+        <aside class="node-panel" id="node-panel" aria-live="polite">
+          <p class="kicker">Node actiu</p>
+          <h3 id="node-title">Còdex viu</h3>
+          <p id="node-desc">Toca qualsevol node per revelar-ne el sentit.</p>
+          <div class="node-actions">
+            <button type="button" id="reveal-action">Revela</button>
+            <button type="button" id="relate-action">Relaciona</button>
+            <button type="button" id="seed-action">Sembra</button>
+          </div>
+          <p class="relation-output" id="relation-output"></p>
+        </aside>
+      </div>
+    </section>
+
     <section class="panel" id="principis">
       <div>
         <p class="kicker">Principis vius</p>
