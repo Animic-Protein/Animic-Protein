@@ -1,4 +1,5 @@
 (() => {
+  const germCss=document.createElement('link');germCss.rel='stylesheet';germCss.href='germinacio.css';document.head.appendChild(germCss);
   const GERM_KEY='animic-protein-germina-v1';
   const readGerms=()=>{try{const v=JSON.parse(localStorage.getItem(GERM_KEY)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const writeGerms=v=>{try{localStorage.setItem(GERM_KEY,JSON.stringify(v.slice(-18)))}catch{}};
