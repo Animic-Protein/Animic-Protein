@@ -31,7 +31,8 @@ const secondary=[
   './pressio.js',
   './homeostasi-constitucional.js',
   './histeresi.js',
-  './allostasi.js'
+  './allostasi.js',
+  './consolidacio.js'
 ];
 
 const boot=async()=>{
