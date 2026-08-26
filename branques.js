@@ -6,6 +6,7 @@
   const CANON_KEY='animic-protein-canon-local-v1';
   const BRANCH_KEY='animic-protein-branches-v1';
   const PRESSURE_KEY='animic-protein-branch-pressure-v1';
+  const HOMEOSTASIS_KEY='animic-protein-constitutional-homeostasis-v1';
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const write=(key,value,limit=18)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
@@ -22,7 +23,13 @@
   });
   const mutationRequirement=branch=>normalizeBranch(branch).constitutionVersion+2;
   const pressureRequirement=branch=>8+((normalizeBranch(branch).constitutionVersion-1)*3);
-  const pressureState=branch=>read(PRESSURE_KEY).find(p=>p.id===branch?.id)||{score:0,components:{}};
+  const pressureState=branch=>{
+    const raw=read(PRESSURE_KEY).find(p=>p.id===branch?.id)||{score:0,components:{}};
+    const homeo=read(HOMEOSTASIS_KEY).find(h=>h.id===branch?.id)||{relief:0};
+    const relief=Math.max(0,Number(homeo.relief)||0);
+    const rawScore=Math.max(0,Number(raw.score)||0);
+    return {...raw,rawScore,relief,score:Math.max(0,rawScore-relief)};
+  };
   const mutationTrigger=branch=>{
     const members=branch?.members?.length||0;
     const memberReady=members>=mutationRequirement(branch);
@@ -94,7 +101,7 @@
       version:previousVersion,
       constitution:(branch.constitution||[]).map(article=>({...article})),
       archivedAt:new Date().toISOString(),
-      reason:trigger.pressureReady&&!trigger.memberReady?`Mutació activada per pressió interna: ${trigger.pressure.score} unitats vives.`:trigger.pressureReady&&trigger.memberReady?`Mutació activada per doble llindar: ${members} membres i ${trigger.pressure.score} unitats de pressió.`:`Mutació activada per descendència: ${members} membres consagrats.`
+      reason:trigger.pressureReady&&!trigger.memberReady?`Mutació activada per pressió efectiva: ${trigger.pressure.score} unitats després d’homeòstasi (${trigger.pressure.rawScore||trigger.pressure.score} brutes).`:trigger.pressureReady&&trigger.memberReady?`Mutació activada per doble llindar: ${members} membres i ${trigger.pressure.score} unitats efectives de pressió.`:`Mutació activada per descendència: ${members} membres consagrats.`
     };
     const index=(nextVersion-2)%Math.max(1,(branch.constitution||[]).length);
     const constitution=(branch.constitution||[]).map((article,i)=>i===index?evolveArticle(article,nextVersion,members):article);
@@ -188,7 +195,7 @@
     const trigger=mutationTrigger(normalized);
     const mutate=document.createElement('button');mutate.type='button';mutate.className='grow-germ mutate-constitution';
     mutate.textContent=canMutate(normalized)?'Mutar constitució':`Mutació: ${requirement} membres o ${pRequirement} pressió`;
-    mutate.title=trigger.pressureReady?'La pressió interna ja ha assolit el llindar constitucional.':`Pressió actual: ${pState.score||0}/${pRequirement}.`;
+    mutate.title=trigger.pressureReady?'La pressió efectiva ja ha assolit el llindar constitucional.':`Pressió efectiva: ${pState.score||0}/${pRequirement} · bruta: ${pState.rawScore||0} · absorbida: ${pState.relief||0}.`;
     mutate.disabled=!canMutate(normalized);
     mutate.addEventListener('click',()=>{
       const current=activeBranch(),updated=mutateConstitution(current?.id);
@@ -255,6 +262,7 @@
   window.addEventListener('animic:branch-founded',render);
   window.addEventListener('animic:constitution-mutated',render);
   window.addEventListener('animic:pressure-updated',render);
+  window.addEventListener('animic:homeostasis-updated',render);
   window.addEventListener('storage',render);
   window.addEventListener('resize',()=>window.setTimeout(renderLayer,0));
   window.addEventListener('orientationchange',()=>window.setTimeout(renderLayer,220));
