@@ -51,7 +51,7 @@ Els enllaços interns d’un diàleg ara tanquen el diàleg abans de navegar a l
 
 ### 5. Robustesa offline
 
-El cache del service worker passa a `codex-viu-canonical-v2`, inclou `foundation.js` i només conserva respostes HTTP correctes. Les caches antigues es retiren en activar-se la versió nova.
+El cache del service worker passa a `codex-viu-canonical-v3`, inclou `foundation.js` i només conserva respostes HTTP correctes. Les caches antigues es retiren en activar-se la versió nova. La portada `index.html` només s’utilitza com a fallback offline per a navegacions, evitant retornar HTML quan falla la càrrega d’un recurs JavaScript, CSS o d’imatge.
 
 ## Criteris fundacionals de continuïtat
 
