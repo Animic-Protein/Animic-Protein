@@ -152,12 +152,7 @@
   };
 
   const panel=document.getElementById('node-panel');
-  if(panel){
-    const observer=new MutationObserver(()=>window.setTimeout(render,0));
-    observer.observe(panel,{childList:true,subtree:true,characterData:true});
-    panel.addEventListener('click',()=>window.setTimeout(render,0));
-  }
-
+  if(panel)window.addEventListener('animic:node-activated',()=>window.setTimeout(render,0));
   window.addEventListener('animic:pressure-updated',()=>window.setTimeout(sampleAll,0));
   window.addEventListener('animic:homeostasis-updated',()=>window.setTimeout(sampleAll,0));
   window.addEventListener('animic:constitution-mutated',()=>window.setTimeout(sampleAll,0));

@@ -146,12 +146,7 @@
   };
 
   const panel=document.getElementById('node-panel');
-  if(panel){
-    const observer=new MutationObserver(()=>window.setTimeout(render,0));
-    observer.observe(panel,{childList:true,subtree:true,characterData:true});
-    panel.addEventListener('click',()=>window.setTimeout(render,0));
-  }
-
+  if(panel)window.addEventListener('animic:node-activated',()=>window.setTimeout(render,0));
   ['animic:metabolized','animic:canonicalized','animic:branch-founded','animic:constitution-mutated'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
   window.addEventListener('storage',publish);
   window.addEventListener('resize',()=>window.setTimeout(render,0));
