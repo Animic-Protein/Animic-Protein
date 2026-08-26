@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  const promoCss=document.createElement('link');promoCss.rel='stylesheet';promoCss.href='promocio.css';document.head.appendChild(promoCss);
+
   const GERM_KEY='animic-protein-germina-v2';
   const CANON_KEY='animic-protein-canon-local-v1';
   const MIN_RELATIONS=2;
