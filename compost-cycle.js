@@ -100,10 +100,8 @@
     panel.appendChild(button);
   };
 
-  const panel = document.getElementById('node-panel');
-  if (!panel) return;
-  const observer = new MutationObserver(() => window.setTimeout(decorate, 0));
-  observer.observe(panel, { childList: true, subtree: true, characterData: true });
-  panel.addEventListener('click', () => window.setTimeout(decorate, 0));
+  const panel=document.getElementById('node-panel');
+  if(!panel)return;
+  window.addEventListener('animic:node-activated',()=>window.setTimeout(decorate,0));
   decorate();
 })();
