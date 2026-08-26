@@ -263,11 +263,7 @@
   const render=()=>{renderLayer();renderPanel()};
 
   const panel=document.getElementById('node-panel');
-  if(panel){
-    const observer=new MutationObserver(()=>window.setTimeout(renderPanel,0));
-    observer.observe(panel,{childList:true,subtree:true,characterData:true});
-    panel.addEventListener('click',()=>window.setTimeout(renderPanel,0));
-  }
+  if(panel)window.addEventListener('animic:node-activated',()=>window.setTimeout(renderPanel,0));
   window.addEventListener('animic:canonicalized',render);
   window.addEventListener('animic:branch-founded',render);
   window.addEventListener('animic:constitution-mutated',render);
