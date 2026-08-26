@@ -69,8 +69,7 @@
 
   const panel=document.getElementById('node-panel');
   if(!panel)return;
-  const observer=new MutationObserver(()=>window.setTimeout(render,0));
-  observer.observe(panel,{childList:true,subtree:true,characterData:true});
+  window.addEventListener('animic:node-activated',()=>window.setTimeout(render,0));
   window.addEventListener('resize',()=>window.setTimeout(render,0));
   window.addEventListener('storage',render);
   render();
