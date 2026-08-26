@@ -14,6 +14,7 @@ const loadScript=(src)=>new Promise((resolve,reject)=>{
   await loadScript('./seed-bridge.js');
   await loadScript('./compost-cycle.js');
   await loadScript('./metabolism.js');
+  await loadScript('./homeostasis.js');
   window.AnimicFoundation?.afterBoot?.();
 })().catch(error=>{
   console.error('[Còdex Viu] Error d’arrencada:',error);
