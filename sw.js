@@ -1,7 +1,8 @@
-const CACHE = 'codex-viu-canonical-v18';
+const CACHE = 'codex-viu-canonical-v19';
 const ASSETS = [
   './', './index.html', './styles.css', './cartographia.css',
   './germinacio.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './metabolism.js', './homeostasis.js', './lineage.js', './breathing.js', './attention.js', './context-propi.js',
+  './promocio.js', './promocio.css',
   './manifest.webmanifest', './assets/icon.svg'
 ];
 
