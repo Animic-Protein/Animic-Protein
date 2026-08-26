@@ -25,7 +25,27 @@ const canonicalRelations={
 const aliases={'llavor-mutatio':'mutatio'};
 const keyFor=(a,b)=>[aliases[a]||a,aliases[b]||b].sort().join('|');
 const idFor=(a,b)=>[a,b].sort().join('::');
-function readMemory(){try{const v=JSON.parse(localStorage.getItem(MEMORY_KEY)||'[]');return Array.isArray(v)?v:[]}catch{return[]}}
+const cleanText=(v,max=500)=>typeof v==='string'?v.replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max):'';
+const safeNodeId=v=>typeof v==='string'&&/^[a-z0-9:_-]{1,120}$/i.test(v)?v:'';
+const safeState=v=>RELATION_STATES.includes(v)?v:'emergent';
+function readMemory(){
+  try{
+    const v=JSON.parse(localStorage.getItem(MEMORY_KEY)||'[]');
+    if(!Array.isArray(v))return[];
+    return v.map(x=>({
+      id:cleanText(x?.id,180),
+      a:cleanText(x?.a,120),
+      b:cleanText(x?.b,120),
+      aId:safeNodeId(x?.aId),
+      bId:safeNodeId(x?.bId),
+      title:cleanText(x?.title,180),
+      text:cleanText(x?.text,700),
+      action:cleanText(x?.action,420),
+      state:safeState(x?.state),
+      timestamp:cleanText(x?.timestamp,80)
+    })).filter(x=>x.id&&x.aId&&x.bId);
+  }catch{return[]}
+}
 function writeMemory(v){try{localStorage.setItem(MEMORY_KEY,JSON.stringify(v.slice(-24)))}catch{}}
 function resultFor(a,b){const c=canonicalRelations[keyFor(a.dataset.node,b.dataset.node)];if(c)return{...c,state:'canonica'};const A=a.dataset.title||a.textContent.trim(),B=b.dataset.title||b.textContent.trim();return{title:'Relació emergent',text:`${A} i ${B} encara no tenen una relació canònica. El Còdex la tracta com una hipòtesi viva, no com una absència.`,action:`Pregunta viva: què hauria de canviar en «${A}» perquè «${B}» deixés de ser extern?`,state:'emergent'}}
 function remember(a,b,r){const m=readMemory(),id=idFor(a.dataset.node,b.dataset.node),old=m.find(x=>x.id===id),entry={id,a:a.dataset.title||a.textContent.trim(),b:b.dataset.title||b.textContent.trim(),aId:a.dataset.node,bId:b.dataset.node,title:r.title,text:r.text,action:r.action,state:old?.state||r.state||'emergent',timestamp:new Date().toISOString()};writeMemory([...m.filter(x=>x.id!==id),entry]);renderMemory();drawRelations();return entry}
@@ -35,9 +55,55 @@ function ensureLayer(){if(!map)return null;let s=map.querySelector('.relation-la
 function center(n){const m=map.getBoundingClientRect(),r=n.getBoundingClientRect();return{x:r.left-m.left+r.width/2,y:r.top-m.top+r.height/2}}
 function drawRelations(){const s=ensureLayer();if(!s||!map)return;const w=map.clientWidth,h=map.clientHeight;s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.setAttribute('width',w);s.setAttribute('height',h);s.innerHTML='';readMemory().forEach(item=>{const a=map.querySelector(`[data-node="${item.aId}"]`),b=map.querySelector(`[data-node="${item.bId}"]`);if(!a||!b)return;const p1=center(a),p2=center(b),dx=p2.x-p1.x,c=Math.max(28,Math.min(110,Math.abs(dx)*.18)),p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',`M ${p1.x} ${p1.y} C ${p1.x+dx*.35} ${p1.y-c}, ${p2.x-dx*.35} ${p2.y+c}, ${p2.x} ${p2.y}`);p.classList.add('living-relation',`state-${item.state||'emergent'}`);s.appendChild(p)})}
 function flash(a,b){[a,b].forEach(n=>{n.classList.add('is-related','is-pulsing');setTimeout(()=>n.classList.remove('is-related','is-pulsing'),2600)})}
-function show(entry){if(relationOutput)relationOutput.innerHTML=`<strong>${entry.title}</strong><br>${entry.text}<br><span>${entry.action||''}</span><br><em>Estat: ${stateLabels[entry.state]||stateLabels.emergent}</em>`}
-function renderMemory(){if(!nodePanel)return;let box=nodePanel.querySelector('.relation-memory');if(!box){box=document.createElement('div');box.className='relation-memory';nodePanel.appendChild(box)}const m=readMemory().slice(-6).reverse();if(!m.length){box.innerHTML='<p class="memory-title">Memòria INTER NOS</p><p class="memory-empty">Encara no hi ha relacions conservades.</p>';return}box.innerHTML=`<p class="memory-title">Memòria INTER NOS</p><div class="state-legend">${RELATION_STATES.map(s=>`<span class="state-chip state-${s}">${stateLabels[s]}</span>`).join('')}</div><div class="memory-list">${m.map(x=>`<div class="memory-item state-${x.state||'emergent'}"><button class="memory-open" type="button" data-memory-id="${x.id}"><strong>${x.title}</strong><span>${x.a} ↔ ${x.b}</span></button><button class="memory-state" type="button" data-state-id="${x.id}" title="Canvia l’estat">${stateLabels[x.state||'emergent']}</button></div>`).join('')}</div>`;box.querySelectorAll('.memory-open').forEach(b=>b.addEventListener('click',()=>{const x=readMemory().find(e=>e.id===b.dataset.memoryId);if(!x)return;const a=map?.querySelector(`[data-node="${x.aId}"]`),c=map?.querySelector(`[data-node="${x.bId}"]`);if(a&&c){flash(a,c);activateNode(c);show(x)}}));box.querySelectorAll('.memory-state').forEach(b=>b.addEventListener('click',()=>{const x=readMemory().find(e=>e.id===b.dataset.stateId);if(x)changeState(x.id,nextState(x.state||'emergent'))}))}
-function activateNode(n){if(!n)return;map?.querySelectorAll('[data-node].is-active').forEach(e=>e.classList.remove('is-active'));n.classList.add('is-active');activeNode=n;if(nodeTitle)nodeTitle.textContent=n.dataset.title||n.textContent.trim();if(nodeDesc)nodeDesc.textContent=n.dataset.desc||'Aquest node encara està germinant.';if(relationStart&&relationStart!==n){const a=relationStart;relationStart=null;const r=resultFor(a,n);flash(a,n);show(remember(a,n,r))}}
+function show(entry){
+  if(!relationOutput)return;
+  relationOutput.replaceChildren();
+  const strong=document.createElement('strong');strong.textContent=cleanText(entry?.title,180);
+  const text=document.createTextNode(cleanText(entry?.text,700));
+  const action=document.createElement('span');action.textContent=cleanText(entry?.action,420);
+  const em=document.createElement('em');em.textContent='Estat: '+(stateLabels[safeState(entry?.state)]||stateLabels.emergent);
+  relationOutput.append(strong,document.createElement('br'),text,document.createElement('br'),action,document.createElement('br'),em);
+}
+function renderMemory(){
+  if(!nodePanel)return;
+  let box=nodePanel.querySelector('.relation-memory');
+  if(!box){box=document.createElement('div');box.className='relation-memory';nodePanel.appendChild(box)}
+  box.replaceChildren();
+  const title=document.createElement('p');title.className='memory-title';title.textContent='Memòria INTER NOS';box.appendChild(title);
+  const m=readMemory().slice(-6).reverse();
+  if(!m.length){
+    const empty=document.createElement('p');empty.className='memory-empty';empty.textContent='Encara no hi ha relacions conservades.';box.appendChild(empty);return;
+  }
+  const legend=document.createElement('div');legend.className='state-legend';
+  RELATION_STATES.forEach(s=>{const chip=document.createElement('span');chip.className='state-chip state-'+s;chip.textContent=stateLabels[s];legend.appendChild(chip)});
+  box.appendChild(legend);
+  const list=document.createElement('div');list.className='memory-list';
+  m.forEach(x=>{
+    const item=document.createElement('div');item.className='memory-item state-'+safeState(x.state);
+    const open=document.createElement('button');open.type='button';open.className='memory-open';open.dataset.memoryId=x.id;
+    const strong=document.createElement('strong');strong.textContent=x.title;
+    const span=document.createElement('span');span.textContent=x.a+' ↔ '+x.b;
+    open.append(strong,span);
+    open.addEventListener('click',()=>{
+      const current=readMemory().find(e=>e.id===x.id);if(!current)return;
+      const a=map?.querySelector('[data-node="'+current.aId+'"]'),b=map?.querySelector('[data-node="'+current.bId+'"]');
+      if(a&&b){flash(a,b);activateNode(b);show(current)}
+    });
+    const state=document.createElement('button');state.type='button';state.className='memory-state';state.dataset.stateId=x.id;state.title='Canvia l’estat';state.textContent=stateLabels[safeState(x.state)];
+    state.addEventListener('click',()=>{const current=readMemory().find(e=>e.id===x.id);if(current)changeState(current.id,nextState(safeState(current.state)))});
+    item.append(open,state);list.appendChild(item);
+  });
+  box.appendChild(list);
+}
+function activateNode(n){
+  if(!n)return;
+  map?.querySelectorAll('[data-node].is-active').forEach(e=>e.classList.remove('is-active'));
+  n.classList.add('is-active');activeNode=n;
+  if(nodeTitle)nodeTitle.textContent=n.dataset.title||n.textContent.trim();
+  if(nodeDesc)nodeDesc.textContent=n.dataset.desc||'Aquest node encara està germinant.';
+  if(relationStart&&relationStart!==n){const a=relationStart;relationStart=null;const r=resultFor(a,n);flash(a,n);show(remember(a,n,r))}
+  try{window.dispatchEvent(new CustomEvent('animic:node-activated',{detail:{id:n.dataset.node||null}}))}catch{}
+}
 if(map)map.querySelectorAll('[data-node]').forEach(n=>n.addEventListener('click',()=>activateNode(n)));
 if(revealAction)revealAction.addEventListener('click',()=>{if(!activeNode)return;const children=activeNode.closest('.constellation')?.querySelectorAll('.satellites button')||[];children.forEach((c,i)=>c.animate([{opacity:.45,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,delay:i*55,easing:'ease-out'}));if(relationOutput)relationOutput.textContent=children.length?'Revelat: observa les branques i tria on entrar.':'Aquest node no té subbranques visibles encara.'});
 if(relateAction)relateAction.addEventListener('click',()=>{if(!activeNode)return;relationStart=activeNode;activeNode.classList.add('is-related','is-pulsing');if(relationOutput)relationOutput.textContent='INTER NOS preparat. Ara toca un segon node.'});
