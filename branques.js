@@ -5,6 +5,7 @@
 
   const CANON_KEY='animic-protein-canon-local-v1';
   const BRANCH_KEY='animic-protein-branches-v1';
+  const PRESSURE_KEY='animic-protein-branch-pressure-v1';
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const write=(key,value,limit=18)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
@@ -20,7 +21,19 @@
     constitutionHistory:Array.isArray(branch.constitutionHistory)?branch.constitutionHistory:[]
   });
   const mutationRequirement=branch=>normalizeBranch(branch).constitutionVersion+2;
-  const canMutate=branch=>(branch?.members?.length||0)>=mutationRequirement(branch);
+  const pressureRequirement=branch=>8+((normalizeBranch(branch).constitutionVersion-1)*3);
+  const pressureState=branch=>read(PRESSURE_KEY).find(p=>p.id===branch?.id)||{score:0,components:{}};
+  const mutationTrigger=branch=>{
+    const members=branch?.members?.length||0;
+    const memberReady=members>=mutationRequirement(branch);
+    const pressure=pressureState(branch);
+    const pressureReady=(Number(pressure.score)||0)>=pressureRequirement(branch);
+    return {memberReady,pressureReady,pressure,members};
+  };
+  const canMutate=branch=>{
+    const trigger=mutationTrigger(branch);
+    return trigger.memberReady||trigger.pressureReady;
+  };
 
   const activeId=()=>document.querySelector('#living-map [data-node].is-active')?.dataset?.node||null;
   const activeCanon=()=>canons().find(x=>x.id===activeId())||null;
@@ -73,6 +86,7 @@
   const mutateConstitution=branchId=>{
     const list=branches(),raw=list.find(b=>b.id===branchId);if(!raw)return null;
     const branch=normalizeBranch(raw),members=branch.members?.length||0;
+    const trigger=mutationTrigger(branch);
     if(!canMutate(branch))return null;
     const previousVersion=branch.constitutionVersion;
     const nextVersion=previousVersion+1;
@@ -80,7 +94,7 @@
       version:previousVersion,
       constitution:(branch.constitution||[]).map(article=>({...article})),
       archivedAt:new Date().toISOString(),
-      reason:`Mutació activada per descendència: ${members} membres consagrats.`
+      reason:trigger.pressureReady&&!trigger.memberReady?`Mutació activada per pressió interna: ${trigger.pressure.score} unitats vives.`:trigger.pressureReady&&trigger.memberReady?`Mutació activada per doble llindar: ${members} membres i ${trigger.pressure.score} unitats de pressió.`:`Mutació activada per descendència: ${members} membres consagrats.`
     };
     const index=(nextVersion-2)%Math.max(1,(branch.constitution||[]).length);
     const constitution=(branch.constitution||[]).map((article,i)=>i===index?evolveArticle(article,nextVersion,members):article);
@@ -169,8 +183,12 @@
     }
 
     const requirement=mutationRequirement(normalized);
+    const pRequirement=pressureRequirement(normalized);
+    const pState=pressureState(normalized);
+    const trigger=mutationTrigger(normalized);
     const mutate=document.createElement('button');mutate.type='button';mutate.className='grow-germ mutate-constitution';
-    mutate.textContent=canMutate(normalized)?'Mutar constitució':`Mutació en ${requirement} membres`;
+    mutate.textContent=canMutate(normalized)?'Mutar constitució':`Mutació: ${requirement} membres o ${pRequirement} pressió`;
+    mutate.title=trigger.pressureReady?'La pressió interna ja ha assolit el llindar constitucional.':`Pressió actual: ${pState.score||0}/${pRequirement}.`;
     mutate.disabled=!canMutate(normalized);
     mutate.addEventListener('click',()=>{
       const current=activeBranch(),updated=mutateConstitution(current?.id);
@@ -236,6 +254,7 @@
   window.addEventListener('animic:canonicalized',render);
   window.addEventListener('animic:branch-founded',render);
   window.addEventListener('animic:constitution-mutated',render);
+  window.addEventListener('animic:pressure-updated',render);
   window.addEventListener('storage',render);
   window.addEventListener('resize',()=>window.setTimeout(renderLayer,0));
   window.addEventListener('orientationchange',()=>window.setTimeout(renderLayer,220));
