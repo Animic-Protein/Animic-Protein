@@ -6,6 +6,7 @@
   const readGerms=()=>{try{const v=JSON.parse(localStorage.getItem(GERM_KEY)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const writeGerms=v=>{try{localStorage.setItem(GERM_KEY,JSON.stringify(v.slice(-24)))}catch{}};
   const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)};
+  const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const germinate=entry=>{
     if(!entry)return null;
     const germs=readGerms();
@@ -38,7 +39,7 @@
     const i=Math.max(0,LIFE.indexOf(g.life||'germen'));
     const next=LIFE[Math.min(i+1,LIFE.length-1)];
     const evolved=updateGerm(id,{life:next});
-    if(relationOutput&&evolved)relationOutput.innerHTML=`<strong>Mutatio vital</strong><br>«${evolved.title}» passa a estat <em>${lifeLabels[next]}</em>.`;
+    if(relationOutput&&evolved)relationOutput.innerHTML=`<strong>Mutatio vital</strong><br>«${esc(evolved.title)}» passa a estat <em>${esc(lifeLabels[next])}</em>.`;
   };
   const incrementUse=id=>{const g=readGerms().find(x=>x.id===id);if(g)updateGerm(id,{uses:(g.uses||0)+1})};
   const ensureLifePanel=()=>{
@@ -51,7 +52,7 @@
     const box=ensureLifePanel();if(!box)return;
     if(!g){box.innerHTML='';return}
     const life=g.life||'germen';
-    box.innerHTML=`<p class="memory-title">Cicle vital</p><div class="life-row"><span class="life-badge life-${life}">${lifeLabels[life]}</span><span class="life-uses">${g.uses||0} relacions</span></div><button type="button" class="grow-germ" ${life==='compost'?'disabled':''}>${life==='compost'?'Retornat al compost':'Fer créixer'}</button><p class="life-lineage">Origen: ${g.aId} ↔ ${g.bId}</p>`;
+    box.innerHTML=`<p class="memory-title">Cicle vital</p><div class="life-row"><span class="life-badge life-${esc(life)}">${esc(lifeLabels[life])}</span><span class="life-uses">${Math.max(0,Number(g.uses)||0)} relacions</span></div><button type="button" class="grow-germ" ${life==='compost'?'disabled':''}>${life==='compost'?'Retornat al compost':'Fer créixer'}</button><p class="life-lineage">Origen: ${esc(g.aId)} ↔ ${esc(g.bId)}</p>`;
     box.querySelector('.grow-germ')?.addEventListener('click',()=>grow(g.id));
   };
   const render=()=>{
