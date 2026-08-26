@@ -4,7 +4,7 @@ Data: 26 d’agost de 2026
 
 ## Tronc canònic
 
-`Animic-Protein/Animic-Protein` és l’única font activa de veritat del Còdex
+`Animic-Protein/Animic-Protein.github.io` és l’única font activa de veritat del Còdex
 Viu d’Anímic Protein.
 
 ## Materials integrats

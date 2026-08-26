@@ -4,14 +4,13 @@ Repositori canònic de l’univers **Anímic Protein** i del seu **Còdex Viu**.
 
 El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, musical i interactiu que evoluciona amb les seves lectures, proves i transformacions.
 
-## Estructura inicial
+## Estructura activa
 
-- `codex/` — textos fundacionals, vocabulari viu, cicles, principis i glossae.
-- `univers-visual/` — criteris, seleccions i metadades de l’univers visual.
-- `harmonia-viva/` — harmonia, pedals, retroharmonia i materials sonors.
-- `retrodansa/` — coreografies inverses i rastres fantasma.
-- `site/` — arquitectura i continguts de la web interactiva.
-- `governanca/` — decisions canòniques, consentiments, llicències i traçabilitat.
+- `index.html`, `styles.css` i els mòduls `.js`/`.css` de l’arrel — organisme interactiu publicat.
+- `assets/` — icones i recursos visuals del Site instal·lable.
+- `scripts/` — barreres automàtiques de coherència.
+- `governanca/` — arquitectura, auditories, decisions canòniques i traçabilitat.
+- `arxiu/` — versions històriques preservades, no actives.
 
 ## Principis de treball
 
@@ -22,7 +21,7 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 
 > *Bene navigavi, cum naufragium feci.*
 
-Estat: **fundació tècnica en curs**.
+Estat: **tronc canònic públic i en evolució**.
 
 ## Repositori canònic
 

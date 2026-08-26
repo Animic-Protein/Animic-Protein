@@ -2,12 +2,13 @@
 
 ## Repositori canònic
 
-`Animic-Protein/Animic-Protein` és la font principal del projecte.
+`Animic-Protein/Animic-Protein.github.io` és la font principal i l’únic tronc
+actiu del projecte.
 
 ## Repositoris auxiliars
 
-- `Animic-Protein/C-dex-viu`: mantenir com a espai auxiliar o redirecció fins que la migració estigui completada.
-- `Animic-Protein/An-mic-Protein`: còpia antiga/no canònica; no afegir-hi nou contingut.
+- `Animic-Protein/C-dex-viu`: origen històric preservat dins `arxiu/`; no és font activa.
+- `Animic-Protein/An-mic-Protein`: repositori antic buit; no és font activa.
 - `Animic-Protein/awesome-codex-skills`: dependència/col·lecció externa; no és font del contingut del Còdex.
 
 ## Regla de consolidació
@@ -16,12 +17,11 @@ No duplicar contingut canònic entre repositoris. Si un text, recurs visual, reg
 
 ## Àrees
 
-- `codex/`
-- `univers-visual/`
-- `harmonia-viva/`
-- `retrodansa/`
-- `site/`
-- `governanca/`
+- Arrel: portada, estils i mòduls funcionals del Còdex públic.
+- `assets/`: recursos visuals i icones instal·lables.
+- `scripts/`: validació automàtica del tronc.
+- `governanca/`: arquitectura, auditories i decisions traçables.
+- `arxiu/`: formes històriques preservades; mai font activa.
 
 ## Flux de canvi
 
