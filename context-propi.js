@@ -80,9 +80,20 @@
 
   const renderPulse=()=>{
     const target=section.querySelector('.metabolic-count');
+    const mutationTarget=section.querySelector('.mutation-counts');
     if(!target)return;
     const history=readMetabolism();
-    const n=history.length;\n    if(mutationTarget){\n      const counts=history.reduce((acc,item)=>{const k=item?.mutationLevel||'sense-classificar';acc[k]=(acc[k]||0)+1;return acc;},{});\n      mutationTarget.textContent=n===0\n        ? 'Encara no hi ha prou rastre per distingir graus de mutació.'\n        : `Superficials: ${counts.superficial||0} · Estructurals: ${counts.estructural||0} · Constitucionals: ${counts.constitucional||0}${counts['sense-classificar']?` · Històriques sense classificar: ${counts['sense-classificar']}`:''}.`;\n    }
+    const n=history.length;
+    if(mutationTarget){
+      const counts=history.reduce((acc,item)=>{
+        const k=item?.mutationLevel||'sense-classificar';
+        acc[k]=(acc[k]||0)+1;
+        return acc;
+      },{});
+      mutationTarget.textContent=n===0
+        ? 'Encara no hi ha prou rastre per distingir graus de mutació.'
+        : `Superficials: ${counts.superficial||0} · Estructurals: ${counts.estructural||0} · Constitucionals: ${counts.constitucional||0}${counts['sense-classificar']?` · Històriques sense classificar: ${counts['sense-classificar']}`:''}.`;
+    }
     target.textContent=n===0
       ? 'El Còdex encara no ha registrat cap metabolització local en aquest dispositiu.'
       : `Metabolitzacions registrades localment: ${n}. L’organisme ja conserva rastre de les seves transformacions.`;
