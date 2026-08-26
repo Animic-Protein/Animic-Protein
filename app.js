@@ -25,7 +25,8 @@ const secondary=[
   './lineage.js',
   './breathing.js',
   './attention.js',
-  './context-propi.js'
+  './context-propi.js',
+  './promocio.js'
 ];
 
 const boot=async()=>{
