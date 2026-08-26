@@ -7,6 +7,7 @@
   const BRANCH_KEY='animic-protein-branches-v1';
   const PRESSURE_KEY='animic-protein-branch-pressure-v1';
   const HOMEOSTASIS_KEY='animic-protein-constitutional-homeostasis-v1';
+  const HYSTERESIS_KEY='animic-protein-constitutional-hysteresis-v1';
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const write=(key,value,limit=18)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
@@ -34,8 +35,12 @@
     const members=branch?.members?.length||0;
     const memberReady=members>=mutationRequirement(branch);
     const pressure=pressureState(branch);
-    const pressureReady=(Number(pressure.score)||0)>=pressureRequirement(branch);
-    return {memberReady,pressureReady,pressure,members};
+    const hysteresis=read(HYSTERESIS_KEY).find(h=>h.id===branch?.id)||{streak:0,refractory:0};
+    const pressureAbove=(Number(pressure.score)||0)>=pressureRequirement(branch);
+    const pressurePersistent=(Number(hysteresis.streak)||0)>=3;
+    const refractory=(Number(hysteresis.refractory)||0)>0;
+    const pressureReady=pressureAbove&&pressurePersistent&&!refractory;
+    return {memberReady,pressureReady,pressureAbove,pressurePersistent,refractory,hysteresis,pressure,members};
   };
   const canMutate=branch=>{
     const trigger=mutationTrigger(branch);
@@ -195,7 +200,7 @@
     const trigger=mutationTrigger(normalized);
     const mutate=document.createElement('button');mutate.type='button';mutate.className='grow-germ mutate-constitution';
     mutate.textContent=canMutate(normalized)?'Mutar constitució':`Mutació: ${requirement} membres o ${pRequirement} pressió`;
-    mutate.title=trigger.pressureReady?'La pressió efectiva ja ha assolit el llindar constitucional.':`Pressió efectiva: ${pState.score||0}/${pRequirement} · bruta: ${pState.rawScore||0} · absorbida: ${pState.relief||0}.`;
+    mutate.title=trigger.pressureReady?'La pressió efectiva ha assolit el llindar i ha persistit prou cicles.':trigger.pressureAbove?`Pressió al llindar, però encara cal persistència: ${trigger.hysteresis?.streak||0}/3${trigger.refractory?' · període refractari actiu':''}.`:`Pressió efectiva: ${pState.score||0}/${pRequirement} · bruta: ${pState.rawScore||0} · absorbida: ${pState.relief||0}.`;
     mutate.disabled=!canMutate(normalized);
     mutate.addEventListener('click',()=>{
       const current=activeBranch(),updated=mutateConstitution(current?.id);
@@ -263,6 +268,7 @@
   window.addEventListener('animic:constitution-mutated',render);
   window.addEventListener('animic:pressure-updated',render);
   window.addEventListener('animic:homeostasis-updated',render);
+  window.addEventListener('animic:hysteresis-updated',render);
   window.addEventListener('storage',render);
   window.addEventListener('resize',()=>window.setTimeout(renderLayer,0));
   window.addEventListener('orientationchange',()=>window.setTimeout(renderLayer,220));

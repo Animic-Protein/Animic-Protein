@@ -29,7 +29,8 @@ const secondary=[
   './promocio.js',
   './branques.js',
   './pressio.js',
-  './homeostasi-constitucional.js'
+  './homeostasi-constitucional.js',
+  './histeresi.js'
 ];
 
 const boot=async()=>{
