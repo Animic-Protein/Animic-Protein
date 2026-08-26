@@ -30,7 +30,8 @@ const secondary=[
   './branques.js',
   './pressio.js',
   './homeostasi-constitucional.js',
-  './histeresi.js'
+  './histeresi.js',
+  './allostasi.js'
 ];
 
 const boot=async()=>{

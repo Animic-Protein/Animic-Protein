@@ -7,7 +7,8 @@
     branches:'animic-protein-branches-v1',
     pressure:'animic-protein-branch-pressure-v1',
     homeo:'animic-protein-constitutional-homeostasis-v1',
-    hysteresis:'animic-protein-constitutional-hysteresis-v1'
+    hysteresis:'animic-protein-constitutional-hysteresis-v1',
+    allostasis:'animic-protein-constitutional-allostasis-v1'
   };
   const REQUIRED_STREAK=3;
   const REFRACTORY_CYCLES=2;
@@ -15,7 +16,11 @@
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const write=(key,value,limit=24)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
   const versionOf=branch=>Math.max(1,Number(branch?.constitutionVersion)||1);
-  const threshold=branch=>8+((versionOf(branch)-1)*3);
+  const threshold=branch=>{
+    const base=8+((versionOf(branch)-1)*3);
+    const adaptation=read(KEYS.allostasis).find(a=>a.id===branch?.id);
+    return Math.max(4,base+(Number(adaptation?.adjustment)||0));
+  };
   const rawPressure=id=>Math.max(0,Number(read(KEYS.pressure).find(p=>p.id===id)?.score)||0);
   const relief=id=>Math.max(0,Number(read(KEYS.homeo).find(h=>h.id===id)?.relief)||0);
   const effective=id=>Math.max(0,rawPressure(id)-relief(id));
@@ -157,6 +162,7 @@
   window.addEventListener('animic:homeostasis-updated',()=>window.setTimeout(sampleAll,0));
   window.addEventListener('animic:constitution-mutated',()=>window.setTimeout(sampleAll,0));
   window.addEventListener('animic:branch-founded',()=>window.setTimeout(sampleAll,0));
+  window.addEventListener('animic:allostasis-updated',()=>window.setTimeout(sampleAll,0));
   window.addEventListener('storage',render);
   render();
 })();
