@@ -96,7 +96,7 @@ function renderMemory(){
   box.appendChild(list);
 }
 function activateNode(n){
-  if(!n)return;
+  if(!n||n.disabled||n.dataset?.inert==='true')return;
   map?.querySelectorAll('[data-node].is-active').forEach(e=>e.classList.remove('is-active'));
   n.classList.add('is-active');activeNode=n;
   if(nodeTitle)nodeTitle.textContent=n.dataset.title||n.textContent.trim();
@@ -106,7 +106,7 @@ function activateNode(n){
 }
 if(map)map.querySelectorAll('[data-node]').forEach(n=>n.addEventListener('click',()=>activateNode(n)));
 if(revealAction)revealAction.addEventListener('click',()=>{if(!activeNode)return;const children=activeNode.closest('.constellation')?.querySelectorAll('.satellites button')||[];children.forEach((c,i)=>c.animate([{opacity:.45,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,delay:i*55,easing:'ease-out'}));if(relationOutput)relationOutput.textContent=children.length?'Revelat: observa les branques i tria on entrar.':'Aquest node no té subbranques visibles encara.'});
-if(relateAction)relateAction.addEventListener('click',()=>{if(!activeNode)return;relationStart=activeNode;activeNode.classList.add('is-related','is-pulsing');if(relationOutput)relationOutput.textContent='INTER NOS preparat. Ara toca un segon node.'});
-if(seedAction)seedAction.addEventListener('click',()=>{const d=document.getElementById('sembra');if(d&&typeof d.showModal==='function')d.showModal();if(seedOutput&&activeNode){const t=activeNode.dataset.title||activeNode.textContent.trim();seedOutput.textContent=`Llavor des de «${t}»: ${seeds[Math.floor(Math.random()*seeds.length)]}`}});
+if(relateAction)relateAction.addEventListener('click',()=>{if(!activeNode||activeNode.disabled||activeNode.dataset?.inert==='true')return;relationStart=activeNode;activeNode.classList.add('is-related','is-pulsing');if(relationOutput)relationOutput.textContent='INTER NOS preparat. Ara toca un segon node.'});
+if(seedAction)seedAction.addEventListener('click',()=>{if(activeNode?.disabled||activeNode?.dataset?.inert==='true')return;const d=document.getElementById('sembra');if(d&&typeof d.showModal==='function')d.showModal();if(seedOutput&&activeNode){const t=activeNode.dataset.title||activeNode.textContent.trim();seedOutput.textContent=`Llavor des de «${t}»: ${seeds[Math.floor(Math.random()*seeds.length)]}`}});
 window.addEventListener('resize',()=>requestAnimationFrame(drawRelations));window.addEventListener('orientationchange',()=>setTimeout(drawRelations,180));
 renderMemory();const core=map?.querySelector('[data-node="codex"]');if(core)activateNode(core);requestAnimationFrame(drawRelations);

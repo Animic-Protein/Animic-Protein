@@ -12,6 +12,12 @@
   const clean=(v,max=180)=>typeof v==='string'?v.replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max):'';
   const stripSeed=v=>clean(v,120).replace(/^Llavor\s*·\s*/i,'');
   const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)};
+  const announce=(title,text)=>{
+    if(!relationOutput)return;
+    relationOutput.replaceChildren();
+    const strong=document.createElement('strong');strong.textContent=clean(title,120);
+    relationOutput.append(strong,document.createElement('br'),document.createTextNode(clean(text,420)));
+  };
 
   const readGerms=()=>read(GERM_KEY);
   const writeGerms=value=>write(GERM_KEY,value,24);
@@ -140,9 +146,7 @@
     button.addEventListener('click',()=>{
       const current=activeGerm();
       const entry=canonicalize(current);
-      if(relationOutput&&entry){
-        relationOutput.innerHTML=`<strong>Promoció canònica</strong><br>«${entry.title}» entra com a node consagrat del teu mapa, sense perdre la genealogia.`;
-      }
+      if(entry)announce('Promoció canònica',`«${entry.title}» entra com a node consagrat del teu mapa, sense perdre la genealogia.`);
       renderPanel();
     });
     box.appendChild(button);

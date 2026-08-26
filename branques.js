@@ -15,6 +15,12 @@
   const write=(key,value,limit=18)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
   const clean=(v,max=220)=>typeof v==='string'?v.replace(/[<>\\u0000-\\u001f\\u007f]/g,'').trim().slice(0,max):'';
   const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)};
+  const announce=(title,text)=>{
+    if(!relationOutput)return;
+    relationOutput.replaceChildren();
+    const strong=document.createElement('strong');strong.textContent=clean(title,120);
+    relationOutput.append(strong,document.createElement('br'),document.createTextNode(clean(text,420)));
+  };
 
   const canons=()=>read(CANON_KEY);
   const branches=()=>read(BRANCH_KEY);
@@ -120,7 +126,7 @@
       ...branch,
       constitution,
       constitutionVersion:nextVersion,
-      constitutionHistory:[...branch.constitutionHistory,historyEntry].slice(-8),
+      constitutionHistory:[...branch.constitutionHistory,historyEntry],
       updatedAt:new Date().toISOString()
     };
     saveBranches(list.map(b=>b.id===branchId?updated:b));
@@ -220,7 +226,7 @@
     mutate.disabled=!canMutate(normalized);
     mutate.addEventListener('click',()=>{
       const current=activeBranch(),updated=mutateConstitution(current?.id);
-      if(relationOutput&&updated)relationOutput.innerHTML=`<strong>Genealogia de lleis</strong><br>«${updated.title}» passa a la constitució v${updated.constitutionVersion}. La versió anterior queda conservada.`;
+      if(updated)announce('Genealogia de lleis',`«${updated.title}» passa a la constitució v${updated.constitutionVersion}. La versió anterior queda conservada.`);
     });
     box.appendChild(mutate);
   };
@@ -248,7 +254,7 @@
       const found=document.createElement('button');found.type='button';found.className='grow-germ branch-found';found.textContent='Fundar una branca';
       found.addEventListener('click',()=>{
         const root=activeCanon(),created=foundBranch(root);
-        if(relationOutput&&created)relationOutput.innerHTML=`<strong>Nova branca</strong><br>«${created.title}» neix amb constitució, genealogia i capacitat de descendència.`;
+        if(created)announce('Nova branca',`«${created.title}» neix amb constitució, genealogia i capacitat de descendència.`);
       });
       box.appendChild(found);
     }else{
@@ -264,7 +270,7 @@
       const graftButton=document.createElement('button');graftButton.type='button';graftButton.className='grow-germ';graftButton.textContent='Empeltar en branca';
       graftButton.addEventListener('click',()=>{
         const current=activeCanon(),updated=graft(select.value,current?.id);
-        if(relationOutput&&updated)relationOutput.innerHTML=`<strong>Empelt canònic</strong><br>«${current.title}» entra a «${updated.title}». La branca té ara ${updated.members.length} membres.`;
+        if(updated)announce('Empelt canònic',`«${current.title}» entra a «${updated.title}». La branca té ara ${updated.members.length} membres.`);
       });
       graftBox.append(select,graftButton);box.appendChild(graftBox);
     }else if(candidates.length){
