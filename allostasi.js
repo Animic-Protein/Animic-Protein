@@ -6,7 +6,8 @@
   const KEYS={
     branches:'animic-protein-branches-v1',
     homeo:'animic-protein-constitutional-homeostasis-v1',
-    allostasis:'animic-protein-constitutional-allostasis-v1'
+    allostasis:'animic-protein-constitutional-allostasis-v1',
+    consolidation:'animic-protein-constitutional-consolidation-v1'
   };
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
@@ -19,9 +20,10 @@
     const homeo=read(KEYS.homeo).find(h=>h.id===branch.id)||{history:[]};
     const successful=(homeo.history||[]).filter(e=>e.mode&&e.mode!=='reset'&&(Number(e.amount)||0)>0).length;
     const pressureMutations=(branch.constitutionHistory||[]).filter(v=>/pressió/i.test(String(v.reason||''))).length;
-    const resilience=Math.floor(successful/3);
-    const sensitization=pressureMutations;
-    const adjustment=clamp(resilience-sensitization,-2,2);
+    const consolidated=read(KEYS.consolidation).find(c=>c.id===branch.id);
+    const resilience=consolidated?Math.max(0,Number(consolidated.resilience)||0):Math.floor(successful/3);
+    const sensitization=consolidated?Math.max(0,Number(consolidated.sensitization)||0):pressureMutations;
+    const adjustment=consolidated?clamp(Number(consolidated.bias)||0,-2,2):clamp(resilience-sensitization,-2,2);
     return {
       id:branch.id,
       adjustment,
@@ -104,7 +106,7 @@
     panel.addEventListener('click',()=>window.setTimeout(render,0));
   }
 
-  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
+  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded','animic:consolidation-updated'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
   window.addEventListener('storage',publish);
   render();
   publish();
