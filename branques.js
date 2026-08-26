@@ -14,6 +14,13 @@
   const canons=()=>read(CANON_KEY);
   const branches=()=>read(BRANCH_KEY);
   const saveBranches=value=>write(BRANCH_KEY,value,18);
+  const normalizeBranch=branch=>({
+    ...branch,
+    constitutionVersion:Math.max(1,Number(branch.constitutionVersion)||1),
+    constitutionHistory:Array.isArray(branch.constitutionHistory)?branch.constitutionHistory:[]
+  });
+  const mutationRequirement=branch=>normalizeBranch(branch).constitutionVersion+2;
+  const canMutate=branch=>(branch?.members?.length||0)>=mutationRequirement(branch);
 
   const activeId=()=>document.querySelector('#living-map [data-node].is-active')?.dataset?.node||null;
   const activeCanon=()=>canons().find(x=>x.id===activeId())||null;
@@ -41,6 +48,8 @@
       desc:`Branca consagrada nascuda del node «${clean(root.title,100)}».`,
       members:[root.id],
       constitution:constitutionFor(root),
+      constitutionVersion:1,
+      constitutionHistory:[],
       createdAt:now,
       updatedAt:now,
       scope:'local'
@@ -49,6 +58,43 @@
     try{window.dispatchEvent(new CustomEvent('animic:branch-founded',{detail:entry}))}catch{}
     render();
     return entry;
+  };
+
+  const evolveArticle=(article,version,members)=>{
+    const suffix={
+      origen:`La genealogia ja no descriu només l’origen: incorpora ${members} formes consagrades i reconeix que cada descendent també reescriu la memòria de la branca.`,
+      relacio:'Una relació esdevé constitutiva quan altera com la branca escolta, decideix o es connecta amb altres formes del Còdex.',
+      transformacio:'Una transformació deixa de ser episòdica quan produeix una conseqüència transmissible als descendents i pot ser reconeguda en versions futures.',
+      mutacio:'Tota mutació constitucional ha de conservar la versió anterior, declarar-ne la causa i romandre reversible com a memòria, encara que no ho sigui com a estat present.'
+    }[article.id]||'La branca reformula aquest article sense esborrar la formulació precedent.';
+    return {...article,text:`${article.text} ${suffix}`,mutatedIn:version};
+  };
+
+  const mutateConstitution=branchId=>{
+    const list=branches(),raw=list.find(b=>b.id===branchId);if(!raw)return null;
+    const branch=normalizeBranch(raw),members=branch.members?.length||0;
+    if(!canMutate(branch))return null;
+    const previousVersion=branch.constitutionVersion;
+    const nextVersion=previousVersion+1;
+    const historyEntry={
+      version:previousVersion,
+      constitution:(branch.constitution||[]).map(article=>({...article})),
+      archivedAt:new Date().toISOString(),
+      reason:`Mutació activada per descendència: ${members} membres consagrats.`
+    };
+    const index=(nextVersion-2)%Math.max(1,(branch.constitution||[]).length);
+    const constitution=(branch.constitution||[]).map((article,i)=>i===index?evolveArticle(article,nextVersion,members):article);
+    const updated={
+      ...branch,
+      constitution,
+      constitutionVersion:nextVersion,
+      constitutionHistory:[...branch.constitutionHistory,historyEntry].slice(-8),
+      updatedAt:new Date().toISOString()
+    };
+    saveBranches(list.map(b=>b.id===branchId?updated:b));
+    try{window.dispatchEvent(new CustomEvent('animic:constitution-mutated',{detail:updated}))}catch{}
+    render();
+    return updated;
   };
 
   const graft=(branchId,canonId)=>{
@@ -90,7 +136,7 @@
       btn.style.left=`${p.left}%`;btn.style.top=`${p.top}%`;
       const mark=document.createElement('span');mark.className='branch-mark';mark.textContent='⌁';
       const strong=document.createElement('strong');strong.textContent=branch.title.replace(/^Branca\\s*·\\s*/,'');
-      const small=document.createElement('small');small.textContent=`branca · ${branch.members?.length||0} descendents`;
+      const small=document.createElement('small');small.textContent=`branca · ${branch.members?.length||0} descendents · v${normalizeBranch(branch).constitutionVersion}`;
       btn.append(mark,strong,small);btn.addEventListener('click',()=>activateNode(btn));layer.appendChild(btn);
     });
     requestAnimationFrame(drawRelations);
@@ -98,15 +144,39 @@
 
   const appendConstitution=(box,branch)=>{
     const details=document.createElement('details');details.className='branch-constitution';
-    const summary=document.createElement('summary');summary.textContent='Constitució viva';
+    const normalized=normalizeBranch(branch);
+    const summary=document.createElement('summary');summary.textContent=`Constitució viva · v${normalized.constitutionVersion}`;
     details.appendChild(summary);
-    (branch.constitution||[]).forEach(article=>{
+    (normalized.constitution||[]).forEach(article=>{
       const section=document.createElement('section');
       const strong=document.createElement('strong');strong.textContent=article.label;
       const p=document.createElement('p');p.textContent=article.text;
       section.append(strong,p);details.appendChild(section);
     });
     box.appendChild(details);
+
+    if(normalized.constitutionHistory.length){
+      const genealogy=document.createElement('details');genealogy.className='law-genealogy';
+      const gSummary=document.createElement('summary');gSummary.textContent=`Genealogia de lleis · ${normalized.constitutionHistory.length} versions conservades`;
+      genealogy.appendChild(gSummary);
+      normalized.constitutionHistory.slice().reverse().forEach(version=>{
+        const item=document.createElement('div');item.className='law-version';
+        const strong=document.createElement('strong');strong.textContent=`Versió ${version.version}`;
+        const p=document.createElement('p');p.textContent=version.reason||'Versió constitucional anterior.';
+        item.append(strong,p);genealogy.appendChild(item);
+      });
+      box.appendChild(genealogy);
+    }
+
+    const requirement=mutationRequirement(normalized);
+    const mutate=document.createElement('button');mutate.type='button';mutate.className='grow-germ mutate-constitution';
+    mutate.textContent=canMutate(normalized)?'Mutar constitució':`Mutació en ${requirement} membres`;
+    mutate.disabled=!canMutate(normalized);
+    mutate.addEventListener('click',()=>{
+      const current=activeBranch(),updated=mutateConstitution(current?.id);
+      if(relationOutput&&updated)relationOutput.innerHTML=`<strong>Genealogia de lleis</strong><br>«${updated.title}» passa a la constitució v${updated.constitutionVersion}. La versió anterior queda conservada.`;
+    });
+    box.appendChild(mutate);
   };
 
   const renderPanel=()=>{
@@ -165,6 +235,7 @@
   }
   window.addEventListener('animic:canonicalized',render);
   window.addEventListener('animic:branch-founded',render);
+  window.addEventListener('animic:constitution-mutated',render);
   window.addEventListener('storage',render);
   window.addEventListener('resize',()=>window.setTimeout(renderLayer,0));
   window.addEventListener('orientationchange',()=>window.setTimeout(renderLayer,220));
