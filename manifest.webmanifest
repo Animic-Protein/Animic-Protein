@@ -1,0 +1,14 @@
+{
+  "name": "Còdex Viu d’Anímic Protein",
+  "short_name": "Còdex Viu",
+  "description": "Música, pensament, símbols i organisme interactiu.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1512",
+  "theme_color": "#0d1512",
+  "lang": "ca",
+  "icons": [
+    {"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
