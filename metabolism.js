@@ -12,7 +12,7 @@
 
   const composts=()=>read(GERM_KEY).filter(g=>g&&g.life==='compost');
   const label=g=>clean(g?.title||g?.id||'compost',90).replace(/^Llavor\s*·\s*/i,'');
-  const metaboliteText=(a,b)=>{
+  const mutationLevel=(a,b)=>{\n    const uses=(Number(a.uses)||0)+(Number(b.uses)||0);\n    const mode=uses%3;\n    if(mode===1)return {id:'superficial',label:'Mutació superficial',note:'Canvia una propietat sense alterar l’arquitectura general.'};\n    if(mode===2)return {id:'estructural',label:'Mutació estructural',note:'Reorganitza relacions internes i obliga el sistema a redistribuir-se.'};\n    return {id:'constitucional',label:'Mutació constitucional',note:'Pot proposar una regla nova i modificar com el Còdex decidirà futures transformacions.'};\n  };\n\n  const metaboliteText=(a,b)=>{
     const uses=(Number(a.uses)||0)+(Number(b.uses)||0);
     const mode=uses%3;
     if(mode===0)return `Fermenta «${label(a)}» amb «${label(b)}»: conserva el conflicte entre totes dues formes i converteix-lo en una regla nova.`;
@@ -33,11 +33,11 @@
     if(prior){emitMetabolized(prior);return prior;}
     const now=new Date().toISOString();
     const seedId=`seed-${id}`;
-    const text=clean(metaboliteText(a,b),500);
-    const seed={id:seedId,text,source:`Metabolisme · ${label(a)} × ${label(b)}`,sourceId:'compost',createdAt:now,metabolismId:id,parentComposts:pair};
+    const text=clean(metaboliteText(a,b),500);\n    const level=mutationLevel(a,b);
+    const seed={id:seedId,text,source:`Metabolisme · ${label(a)} × ${label(b)}`,sourceId:'compost',createdAt:now,metabolismId:id,parentComposts:pair,mutationLevel:level.id};
     const seeds=read(SEED_KEY);
     if(!seeds.some(s=>s.id===seedId))write(SEED_KEY,[...seeds,seed],12);
-    const event={id,parents:pair,seedId,text,createdAt:now};
+    const event={id,parents:pair,seedId,text,createdAt:now,mutationLevel:level.id,mutationLabel:level.label,mutationNote:level.note};
     write(METAB_KEY,[...history,event],24);
     emitMetabolized(event);
     return event;
@@ -76,7 +76,7 @@
       if(!ga||!gb||ga.id===gb.id){if(out)out.textContent='Tria dos composts diferents.';return}
       const result=metabolize(ga,gb);
       if(!result)return;
-      if(out)out.textContent=`Metabòlit creat: ${result.text}`;
+      if(out)out.textContent=`${result.mutationLabel||'Mutació'} · ${result.text}`;
       const dialog=document.getElementById('sembra');
       if(dialog&&typeof dialog.showModal==='function'&&!dialog.open)window.setTimeout(()=>dialog.showModal(),180);
     });
