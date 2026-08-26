@@ -7,7 +7,8 @@
     branches:'animic-protein-branches-v1',
     homeo:'animic-protein-constitutional-homeostasis-v1',
     allostasis:'animic-protein-constitutional-allostasis-v1',
-    consolidation:'animic-protein-constitutional-consolidation-v1'
+    consolidation:'animic-protein-constitutional-consolidation-v1',
+    resonance:'animic-protein-constitutional-resonance-v1'
   };
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
@@ -23,10 +24,15 @@
     const consolidated=read(KEYS.consolidation).find(c=>c.id===branch.id);
     const resilience=consolidated?Math.max(0,Number(consolidated.resilience)||0):Math.floor(successful/3);
     const sensitization=consolidated?Math.max(0,Number(consolidated.sensitization)||0):pressureMutations;
-    const adjustment=consolidated?clamp(Number(consolidated.bias)||0,-2,2):clamp(resilience-sensitization,-2,2);
+    const ownAdjustment=consolidated?clamp(Number(consolidated.bias)||0,-2,2):clamp(resilience-sensitization,-2,2);
+    const resonance=read(KEYS.resonance).find(r=>r.id===branch.id)||{influence:0};
+    const relationalInfluence=clamp(Number(resonance.influence)||0,-1,1);
+    const adjustment=clamp(ownAdjustment+relationalInfluence,-2,2);
     return {
       id:branch.id,
       adjustment,
+      ownAdjustment,
+      relationalInfluence,
       resilience,
       sensitization,
       successfulHomeostasis:successful,
@@ -76,7 +82,7 @@
     const adjust=document.createElement('div');
     const aStrong=document.createElement('strong');
     aStrong.textContent=(state.adjustment>0?'+':'')+String(state.adjustment);
-    const aSpan=document.createElement('span');aSpan.textContent='adaptació';
+    const aSpan=document.createElement('span');aSpan.textContent=state.relationalInfluence?'adaptació + ressonància':'adaptació';
     adjust.append(aStrong,aSpan);
 
     const adapted=document.createElement('div');
@@ -88,7 +94,8 @@
     const memory=document.createElement('div');memory.className='allostasis-memory';
     const r=document.createElement('span');r.textContent='Resiliència: '+state.resilience;
     const s=document.createElement('span');s.textContent='Sensibilització: '+state.sensitization;
-    memory.append(r,s);box.appendChild(memory);
+    const x=document.createElement('span');x.textContent='Ressonància: '+((state.relationalInfluence>0?'+':'')+state.relationalInfluence);
+    memory.append(r,s,x);box.appendChild(memory);
 
     const note=document.createElement('p');note.className='allostasis-note';
     note.textContent=state.adjustment>0
@@ -106,7 +113,7 @@
     panel.addEventListener('click',()=>window.setTimeout(render,0));
   }
 
-  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded','animic:consolidation-updated'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
+  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded','animic:consolidation-updated','animic:resonance-updated'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
   window.addEventListener('storage',publish);
   render();
   publish();

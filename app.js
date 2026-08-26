@@ -33,7 +33,8 @@ const secondary=[
   './histeresi.js',
   './allostasi.js',
   './consolidacio.js',
-  './reconsolidacio.js'
+  './reconsolidacio.js',
+  './ressonancia.js'
 ];
 
 const boot=async()=>{
