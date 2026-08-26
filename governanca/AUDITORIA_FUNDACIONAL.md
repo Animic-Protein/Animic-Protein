@@ -17,6 +17,7 @@ L’objectiu no és congelar el Còdex, sinó garantir que pugui mutar sense per
 - Manifest PWA amb `start_url` i `scope` a `./`.
 - Service worker amb precàrrega dels actius essencials.
 - Mapa Viu, INTER NOS i Germinació conserven memòria local limitada a 24 entrades.
+- `LICENSE_STATUS: FINAL-RR-1.0`: drets reservats i explotació comercial només amb permís escrit previ.
 
 ## Correccions aplicades
 
@@ -67,7 +68,6 @@ Qualsevol mutació futura hauria de preservar aquests mínims:
 
 ## Deute no bloquejant
 
-- Crear una icona PNG específica per a `apple-touch-icon` per obtenir una integració iOS més fiable.
 - Afegir proves automatitzades de navegació i accessibilitat al workflow de Pages.
 - Fer una prova visual periòdica en Safari/iPhone després de canvis importants de CSS o PWA.
 

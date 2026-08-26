@@ -66,6 +66,19 @@ for(const file of ['governanca/ARQUITECTURA.md','governanca/FUSIO_REPOSITORIS.md
   }
 }
 
+if(!exists('LICENSE.md')){
+  failures.push('Falta la llicència canònica LICENSE.md.');
+}else{
+  const license=read('LICENSE.md');
+  for(const marker of ['LICENSE_STATUS: FINAL-RR-1.0','Copyright © 2026 Dàrius Balboa','permís escrit previ','Contribucions']){
+    if(!license.includes(marker))failures.push('LICENSE.md no conté el marcador canònic: '+marker);
+  }
+  if(/LICENSE_STATUS:\s*PENDING/i.test(license))failures.push('La llicència encara consta com a pendent.');
+}
+if(!exists('governanca/DECISIO_LLICENCIA_2026-08-27.md')){
+  failures.push('Falta l’acta de decisió de la llicència definitiva.');
+}
+
 const allJs=fs.readdirSync(root).filter(n=>n.endsWith('.js'));
 if(!allJs.includes('core.js')||!allJs.includes('germinacio.js'))failures.push('Falten fitxers crítics del nucli.');
 

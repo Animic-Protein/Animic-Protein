@@ -23,6 +23,19 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 
 Estat: **tronc canònic públic i en evolució**.
 
+## Llicència
+
+`LICENSE_STATUS: FINAL-RR-1.0`
+
+El Còdex i el seu codi es publiquen sota la
+[Llicència canònica de drets reservats 1.0](LICENSE.md). L’accés públic no
+autoritza la reutilització ni l’explotació comercial: qualsevol ús comercial
+requereix permís escrit previ. No és una llicència Creative Commons ni de codi
+obert.
+
+La raó i la traça de la decisió es conserven a
+`governanca/DECISIO_LLICENCIA_2026-08-27.md`.
+
 ## Repositori canònic
 
 Aquest és l’únic tronc actiu del Còdex Viu. La publicació anterior

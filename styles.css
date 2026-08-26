@@ -58,6 +58,7 @@ h1{font-size:clamp(3rem,9vw,7.5rem);line-height:.92;max-width:10ch;margin:.2em 0
 .inscription blockquote{font-size:clamp(2rem,5vw,4rem);margin:0 auto .4em;max-width:18ch;font-style:italic}
 .inscription p{color:var(--muted)}
 footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0 3rem;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+.license-link{color:var(--metal);text-underline-offset:.2em}
 dialog{width:min(680px,calc(100% - 28px));border:1px solid var(--line);border-radius:22px;background:#111b16;color:var(--ink);padding:2rem;box-shadow:0 30px 90px rgba(0,0,0,.5)}
 dialog::backdrop{background:rgba(3,8,5,.72);backdrop-filter:blur(8px)}
 .close{float:right;background:none;border:0;color:var(--muted);font-size:2rem;cursor:pointer}
