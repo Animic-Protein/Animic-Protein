@@ -1,7 +1,7 @@
-const CACHE = 'codex-viu-canonical-v1';
+const CACHE = 'codex-viu-canonical-v2';
 const ASSETS = [
   './', './index.html', './styles.css', './cartographia.css',
-  './germinacio.css', './app.js', './core.js', './germinacio.js',
+  './germinacio.css', './app.js', './foundation.js', './core.js', './germinacio.js',
   './manifest.webmanifest', './assets/icon.svg'
 ];
 
@@ -22,8 +22,10 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        }
         return response;
       })
       .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html')))
