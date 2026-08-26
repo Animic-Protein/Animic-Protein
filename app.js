@@ -24,22 +24,19 @@ const secondary=[
   './homeostasis.js',
   './lineage.js',
   './breathing.js',
-  './attention.js'
+  './attention.js',
+  './context-propi.js'
 ];
 
 const boot=async()=>{
   for(const src of critical) await loadScript(src);
   window.AnimicFoundation?.afterBoot?.();
-
   const loadSecondary=async()=>{
     for(const src of secondary){
       try{ await loadScript(src); }
       catch(error){ console.warn('[Còdex Viu] Capa opcional no carregada:',src,error); }
     }
   };
-
-  // A Safari/iOS evitem carregar totes les capes al mateix instant:
-  // primer queda navegable el nucli i després s'afegeixen les capes vives.
   if(isIOS){
     window.setTimeout(loadSecondary,1800);
   }else if('requestIdleCallback' in window){
