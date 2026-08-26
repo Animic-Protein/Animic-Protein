@@ -60,7 +60,7 @@
     layer.innerHTML='';
     readGerms().forEach((g,index)=>{
       const p=position(g,index),btn=document.createElement('button'),life=g.life||'germen';
-      btn.type='button';btn.className=`germinated-node life-${life}`;btn.dataset.node=g.id;btn.dataset.title=g.title;btn.dataset.desc=g.desc;btn.style.left=`${p.left}%`;btn.style.top=`${p.top}%`;
+      btn.type='button';btn.className=`germinated-node life-${life}`;btn.dataset.node=g.id;btn.dataset.title=g.title;btn.dataset.desc=g.desc;btn.style.left=`${p.left}%`;btn.style.top=`${p.top}%`;if(life==='compost'){btn.disabled=true;btn.dataset.inert='true';btn.setAttribute('aria-label',`${g.title} · Compost · forma no relacionable`)}
       const mark=document.createElement('span');mark.className='germ-mark';mark.textContent=life==='germen'?'✦':life==='brot'?'❖':life==='arrelat'?'✺':'·';
       const strong=document.createElement('strong');strong.textContent=g.title;
       const small=document.createElement('small');small.textContent=`${lifeLabels[life]} · ${g.uses||0} relacions`;
@@ -76,8 +76,10 @@
   };
   const originalRemember=remember;
   remember=(a,b,r)=>{
+    const relationId=idFor(a?.dataset?.node,b?.dataset?.node);
+    const existed=readMemory().some(x=>x.id===relationId);
     const entry=originalRemember(a,b,r);
-    [a,b].forEach(n=>{if(n?.dataset?.node?.startsWith('germen-'))incrementUse(n.dataset.node)});
+    if(!existed)[a,b].forEach(n=>{if(n?.dataset?.node?.startsWith('germen-'))incrementUse(n.dataset.node)});
     return entry;
   };
   const originalChangeState=changeState;
