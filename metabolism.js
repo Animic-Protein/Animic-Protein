@@ -20,13 +20,17 @@
     return `Descompon «${label(a)}» i «${label(b)}» fins trobar-ne el mínim comú viu; torna'l a sembrar sense reconstruir les formes originals.`;
   };
 
+  const emitMetabolized=event=>{
+    try{window.dispatchEvent(new CustomEvent('animic:metabolized',{detail:event}))}catch{}
+  };
+
   const metabolize=(a,b)=>{
     if(!a||!b||a.id===b.id)return null;
     const pair=[a.id,b.id].sort();
     const id=`metab-${hash(pair.join('|'))}`;
     const history=read(METAB_KEY);
     const prior=history.find(x=>x.id===id);
-    if(prior)return prior;
+    if(prior){emitMetabolized(prior);return prior;}
     const now=new Date().toISOString();
     const seedId=`seed-${id}`;
     const text=clean(metaboliteText(a,b),500);
@@ -35,6 +39,7 @@
     if(!seeds.some(s=>s.id===seedId))write(SEED_KEY,[...seeds,seed],12);
     const event={id,parents:pair,seedId,text,createdAt:now};
     write(METAB_KEY,[...history,event],24);
+    emitMetabolized(event);
     return event;
   };
 
