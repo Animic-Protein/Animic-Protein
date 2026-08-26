@@ -23,3 +23,12 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 > *Bene navigavi, cum naufragium feci.*
 
 Estat: **fundació tècnica en curs**.
+
+## Repositori canònic
+
+Aquest és l’únic tronc actiu del Còdex Viu. La publicació anterior
+`C-dex-viu` ha estat integrada sota `arxiu/C-dex-viu-v2.2/` per conservar-ne
+la forma i la procedència sense mantenir dues fonts de veritat.
+
+La traça de la fusió es conserva a
+`governanca/FUSIO_REPOSITORIS.md`.
