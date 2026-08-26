@@ -28,7 +28,8 @@ const secondary=[
   './context-propi.js',
   './promocio.js',
   './branques.js',
-  './pressio.js'
+  './pressio.js',
+  './homeostasi-constitucional.js'
 ];
 
 const boot=async()=>{
