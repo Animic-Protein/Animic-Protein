@@ -9,6 +9,7 @@
   const HOMEOSTASIS_KEY='animic-protein-constitutional-homeostasis-v1';
   const HYSTERESIS_KEY='animic-protein-constitutional-hysteresis-v1';
   const ALLOSTASIS_KEY='animic-protein-constitutional-allostasis-v1';
+  const MEMORY_KEY='animic-protein-inter-nos-v2';
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const write=(key,value,limit=18)=>{try{localStorage.setItem(key,JSON.stringify(value.slice(-limit)))}catch{}};
@@ -128,9 +129,18 @@
     return updated;
   };
 
+  const hasMeaningfulRelation=(branch,canonId)=>{
+    if(!branch||!canonId)return false;
+    const targets=new Set([branch.id,branch.rootId,...(branch.members||[])]);
+    return read(MEMORY_KEY).some(r=>{
+      if(!r||r.state==='compostada')return false;
+      return (r.aId===canonId&&targets.has(r.bId))||(r.bId===canonId&&targets.has(r.aId));
+    });
+  };
+
   const graft=(branchId,canonId)=>{
     const list=branches(),branch=list.find(b=>b.id===branchId),canon=canons().find(c=>c.id===canonId);
-    if(!branch||!canon)return null;
+    if(!branch||!canon||!hasMeaningfulRelation(branch,canonId))return null;
     const members=Array.from(new Set([...(branch.members||[]),canon.id]));
     const updated={...branch,members,updatedAt:new Date().toISOString()};
     saveBranches(list.map(b=>b.id===branchId?updated:b));
@@ -167,7 +177,8 @@
       btn.style.left=`${p.left}%`;btn.style.top=`${p.top}%`;
       const mark=document.createElement('span');mark.className='branch-mark';mark.textContent='⌁';
       const strong=document.createElement('strong');strong.textContent=branch.title.replace(/^Branca\\s*·\\s*/,'');
-      const small=document.createElement('small');small.textContent=`branca · ${branch.members?.length||0} descendents · v${normalizeBranch(branch).constitutionVersion}`;
+      const descendants=Math.max(0,(branch.members?.length||0)-1);
+      const small=document.createElement('small');small.textContent=`branca · ${descendants} descendents · v${normalizeBranch(branch).constitutionVersion}`;
       btn.append(mark,strong,small);btn.addEventListener('click',()=>activateNode(btn));layer.appendChild(btn);
     });
     requestAnimationFrame(drawRelations);
@@ -244,7 +255,8 @@
       const badge=document.createElement('span');badge.className='branch-badge';badge.textContent='Arrel de branca';box.appendChild(badge);
     }
 
-    const available=branches().filter(b=>!(b.members||[]).includes(canon.id));
+    const candidates=branches().filter(b=>!(b.members||[]).includes(canon.id));
+    const available=candidates.filter(b=>hasMeaningfulRelation(b,canon.id));
     if(available.length){
       const graftBox=document.createElement('div');graftBox.className='branch-graft';
       const select=document.createElement('select');select.setAttribute('aria-label','Branca on empeltar el node');
@@ -255,6 +267,10 @@
         if(relationOutput&&updated)relationOutput.innerHTML=`<strong>Empelt canònic</strong><br>«${current.title}» entra a «${updated.title}». La branca té ara ${updated.members.length} membres.`;
       });
       graftBox.append(select,graftButton);box.appendChild(graftBox);
+    }else if(candidates.length){
+      const guard=document.createElement('p');guard.className='branch-note';
+      guard.textContent='Per empeltar aquest node cal crear abans un INTER NOS viu amb la branca, la seva arrel o algun dels seus membres.';
+      box.appendChild(guard);
     }
 
     const note=document.createElement('p');note.className='branch-note';note.textContent='Les branques són cànon local del navegador: la seva constitució i descendència queden traçades, però la incorporació global continua sent editorial.';box.appendChild(note);
