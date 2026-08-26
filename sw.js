@@ -1,4 +1,4 @@
-const CACHE = 'codex-viu-canonical-v2';
+const CACHE = 'codex-viu-canonical-v3';
 const ASSETS = [
   './', './index.html', './styles.css', './cartographia.css',
   './germinacio.css', './app.js', './foundation.js', './core.js', './germinacio.js',
@@ -28,6 +28,11 @@ self.addEventListener('fetch', event => {
         }
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html')))
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        if (event.request.mode === 'navigate') return caches.match('./index.html');
+        return Response.error();
+      })
   );
 });
