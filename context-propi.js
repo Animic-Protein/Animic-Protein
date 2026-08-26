@@ -30,6 +30,15 @@
         <p><strong>AMO: VOLO UT SIS → INTER NOS → MUTATIO → CONTINUUM.</strong></p>
         <p>No t’incorporis a l’organisme. Modifica’l.</p>
       </article>
+      <article>
+        <h3>Llei de Metabolització</h3>
+        <p>El Còdex no incorpora res sense transformar-ho ni permet que una transformació desaparegui sense deixar rastre. Cada entrada produeix conseqüències sobre l’organisme, i aquestes conseqüències poden modificar al seu torn les regles amb què el Còdex continuarà transformant-se.</p>
+      </article>
+      <article>
+        <h3>Algoritme constitucional viu</h3>
+        <p><strong>ENTRADA → RELACIÓ → MUTACIÓ → CONSEQÜÈNCIA → MEMÒRIA → METABOLITZACIÓ → NOVA LLEI POSSIBLE.</strong></p>
+        <p>Les lleis governen el Còdex, però l’experiència del Còdex pot obligar les seves pròpies lleis a evolucionar. La memòria, la traçabilitat i la reversibilitat eviten que MUTATIO es converteixi en amnèsia.</p>
+      </article>
     </div>
     <div class="inscription" style="margin-top:1rem">
       <blockquote>“No importa què ets. Importa què pot esdevenir la relació.”</blockquote>
