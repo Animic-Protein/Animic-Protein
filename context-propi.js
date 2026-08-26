@@ -71,7 +71,7 @@
       <blockquote>“No importa què ets. Importa què pot esdevenir la relació.”</blockquote>
       <p>La pregunta no és «com integrem aquesta persona en Anímic Protein?», sinó «en què es converteix Anímic Protein després que aquesta persona hi entri?»</p>
     </div>
-    <div class="inscription metabolic-pulse" style="margin-top:1rem">
+    <div class="inscription mutation-register" style="margin-top:1rem">\n      <p class="kicker">Registre evolutiu</p>\n      <blockquote class="mutation-counts">Encara no hi ha prou rastre per distingir graus de mutació.</blockquote>\n      <p>El registre classifica transformacions locals en superficials, estructurals i constitucionals.</p>\n    </div>\n    <div class="inscription metabolic-pulse" style="margin-top:1rem">
       <p class="kicker">Puls metabòlic</p>
       <blockquote class="metabolic-count">El Còdex encara no ha registrat cap metabolització local en aquest dispositiu.</blockquote>
       <p>El comptador no mesura valor: només confirma que l’organisme ha deixat rastre d’una transformació.</p>
@@ -82,7 +82,7 @@
     const target=section.querySelector('.metabolic-count');
     if(!target)return;
     const history=readMetabolism();
-    const n=history.length;
+    const n=history.length;\n    if(mutationTarget){\n      const counts=history.reduce((acc,item)=>{const k=item?.mutationLevel||'sense-classificar';acc[k]=(acc[k]||0)+1;return acc;},{});\n      mutationTarget.textContent=n===0\n        ? 'Encara no hi ha prou rastre per distingir graus de mutació.'\n        : `Superficials: ${counts.superficial||0} · Estructurals: ${counts.estructural||0} · Constitucionals: ${counts.constitucional||0}${counts['sense-classificar']?` · Històriques sense classificar: ${counts['sense-classificar']}`:''}.`;\n    }
     target.textContent=n===0
       ? 'El Còdex encara no ha registrat cap metabolització local en aquest dispositiu.'
       : `Metabolitzacions registrades localment: ${n}. L’organisme ja conserva rastre de les seves transformacions.`;
