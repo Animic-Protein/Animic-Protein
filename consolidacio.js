@@ -6,7 +6,8 @@
   const KEYS={
     branches:'animic-protein-branches-v1',
     homeo:'animic-protein-constitutional-homeostasis-v1',
-    consolidation:'animic-protein-constitutional-consolidation-v1'
+    consolidation:'animic-protein-constitutional-consolidation-v1',
+    reconsolidation:'animic-protein-constitutional-reconsolidation-v1'
   };
 
   const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
@@ -38,7 +39,9 @@
 
     const resilience=Math.floor(resilienceEvidence/2.2);
     const sensitization=Math.ceil(sensitivityEvidence);
-    const bias=clamp(resilience-sensitization,-2,2);
+    const recon=read(KEYS.reconsolidation).find(r=>r.id===branch.id)||{offset:0};
+    const reconOffset=clamp(Number(recon.offset)||0,-2,2);
+    const bias=clamp(resilience-sensitization+reconOffset,-2,2);
 
     const trait=bias>=2?'resilient'
       :bias===1?'resilient-lleu'
@@ -52,6 +55,7 @@
       sensitivityEvidence:Number(sensitivityEvidence.toFixed(2)),
       resilience,
       sensitization,
+      reconOffset,
       bias,
       trait,
       updatedAt:new Date().toISOString()
@@ -114,7 +118,7 @@
 
     const b=document.createElement('div');
     const bs=document.createElement('strong');bs.textContent=(state.bias>0?'+':'')+String(state.bias);
-    const bl=document.createElement('span');bl.textContent='biaix consolidat';
+    const bl=document.createElement('span');bl.textContent=state.reconOffset?'biaix + reconsolidació':'biaix consolidat';
     b.append(bs,bl);
 
     grid.append(r,s,b);box.appendChild(grid);
@@ -131,7 +135,7 @@
     panel.addEventListener('click',()=>window.setTimeout(render,0));
   }
 
-  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
+  ['animic:homeostasis-updated','animic:constitution-mutated','animic:branch-founded','animic:reconsolidation-updated'].forEach(name=>window.addEventListener(name,()=>window.setTimeout(publish,0)));
   window.addEventListener('storage',publish);
   render();
   publish();
