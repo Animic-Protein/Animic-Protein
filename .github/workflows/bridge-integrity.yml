@@ -1,0 +1,31 @@
+name: Bridge · Site ↔ GitHub
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "pont-site.json"
+      - "governanca/PONT_SITE_GITHUB.md"
+      - "scripts/check-bridge.mjs"
+      - ".github/workflows/bridge-integrity.yml"
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bridge-integrity
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verifica PONS·AP·I
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Contrasta els dos extrems
+        run: node scripts/check-bridge.mjs

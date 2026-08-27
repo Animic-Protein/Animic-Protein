@@ -1,0 +1,24 @@
+{
+  "protocol": "PONS-AP-1.0",
+  "project": "Anímic Protein — Còdex Viu",
+  "canonical_statement": "La Site viu; GitHub recorda.",
+  "site": {
+    "url": "https://animic-protein.animic-protein.chatgpt.site",
+    "manifest_url": "https://animic-protein.animic-protein.chatgpt.site/.well-known/animic-bridge.json",
+    "role": "superficie_viva",
+    "edition": "2.3-metabolismus"
+  },
+  "repository": {
+    "url": "https://github.com/Animic-Protein/Animic-Protein.github.io",
+    "pages_url": "https://animic-protein.github.io/",
+    "role": "memoria_publica",
+    "branch": "main"
+  },
+  "governance": {
+    "automatic_canonical_status": false,
+    "human_editorial_decision_required": true,
+    "traceability_required": true,
+    "reversibility_required": true,
+    "divergence_check": "github-actions"
+  }
+}
