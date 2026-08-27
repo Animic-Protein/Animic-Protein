@@ -1,0 +1,36 @@
+{
+  "protocol": "AP-FUSION-BETA",
+  "version": "2.4-beta.1",
+  "edition": "Coniunctio",
+  "status": "beta-reversible-non-canonical",
+  "generated_at": "2026-08-27",
+  "site_beta": {
+    "role": "organism-laboratory",
+    "version": 1,
+    "url": "https://animic-protein-fusio-beta.animic-protein.chatgpt.site",
+    "access": "owner-only"
+  },
+  "sources": {
+    "site": {
+      "role": "living-surface",
+      "version": 91,
+      "url": "https://animic-protein.animic-protein.chatgpt.site"
+    },
+    "github": {
+      "role": "versioned-memory",
+      "branch": "main",
+      "url": "https://github.com/Animic-Protein/Animic-Protein.github.io"
+    }
+  },
+  "coordinates": ["content", "continent", "context", "provenance"],
+  "continents": [
+    {"id":"01","name":"Llavor / Mutatio","context":"reversible-maturation"},
+    {"id":"02","name":"Pensament","context":"principles-limits-genealogies"},
+    {"id":"03","name":"Escolta","context":"sound-silence-latency"},
+    {"id":"04","name":"Moviment","context":"body-gesture-return"},
+    {"id":"05","name":"Univers visual","context":"image-symbol-provenance"},
+    {"id":"06","name":"Continuum","context":"memory-sediment-reactivation"},
+    {"id":"07","name":"Metacodex","context":"governance-schema-versions"}
+  ],
+  "canonical_replacement": false
+}
