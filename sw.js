@@ -1,8 +1,9 @@
-const CACHE = 'codex-viu-canonical-v34';
+const CACHE = 'codex-viu-canonical-v35';
 const ASSETS = [
   './', './index.html', './styles.css', './rosa.css', './cartographia.css',
   './germinacio.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './metabolism.js', './homeostasis.js', './lineage.js', './breathing.js', './attention.js', './context-propi.js',
   './rosa.js', './promocio.js', './promocio.css', './branques.js', './branques.css', './pressio.js', './pressio.css', './homeostasi-constitucional.js', './homeostasi-constitucional.css', './histeresi.js', './histeresi.css', './allostasi.js', './allostasi.css', './consolidacio.js', './consolidacio.css', './reconsolidacio.js', './reconsolidacio.css', './ressonancia.js', './ressonancia.css',
+  './pont-site.json',
   './manifest.webmanifest', './LICENSE.md', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'
 ];
 
