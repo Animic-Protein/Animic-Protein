@@ -45,3 +45,14 @@ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size
   .rosa-branch{width:108px;min-height:66px;padding:.55rem}.rosa-branch small{display:none}
   .rosa-center{width:102px;height:102px}
 }
+
+.rosa-constellation{position:absolute;inset:0;z-index:2;pointer-events:none}
+.rosa-satellite{position:absolute;left:50%;top:50%;width:88px;min-height:54px;border:1px solid currentColor;border-radius:999px;background:rgba(5,14,12,.95);color:var(--ink);font:inherit;font-size:.72rem;padding:.45rem .55rem;cursor:pointer;pointer-events:auto;opacity:0;transform:translate(-50%,-50%) scale(.55);transition:.28s ease;box-shadow:0 0 18px rgba(0,0,0,.25)}
+.rosa-constellation.is-visible .rosa-satellite{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1)}
+.rosa-satellite:hover,.rosa-satellite.is-selected{box-shadow:0 0 0 3px color-mix(in srgb,currentColor 18%,transparent),0 0 24px color-mix(in srgb,currentColor 34%,transparent)}
+.rosa-node-readout{margin-top:1rem;padding:1rem;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.025)}
+.rosa-node-readout h3{margin:.2rem 0 .35rem;font-size:1.15rem}.rosa-node-readout p:last-child{margin:.2rem 0 0;color:var(--muted);line-height:1.45}
+@media(max-width:760px){
+  .rosa-satellite{width:76px;min-height:48px;font-size:.66rem}
+  .rosa-constellation.is-visible .rosa-satellite{transform:translate(calc(-50% + var(--mx,var(--x))),calc(-50% + var(--my,var(--y)))) scale(1)}
+}
