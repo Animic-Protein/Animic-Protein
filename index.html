@@ -10,6 +10,7 @@
   <title>Anímic Protein · Còdex Viu</title>
   <meta name="description" content="Còdex Viu d’Anímic Protein — música, pensament, símbols i organisme interactiu." />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="rosa.css" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
@@ -197,15 +198,44 @@
     <p>Un portal d’acció immediata sobre el Còdex: pregunta, mutació, silenci i retorn.</p>
   </dialog>
 
-  <dialog id="rosa">
-    <button class="close" aria-label="Tancar">×</button>
-    <p class="kicker">Rosa de l’Escolta</p>
-    <h2>Portals secundaris</h2>
-    <div class="rose-links">
-      <a href="#cambres">Harmonia</a>
-      <a href="#cambres">Retrodansa</a>
-      <a href="#principis">Silenci</a>
-      <a href="#cambres">Univers visual</a>
+  <dialog id="rosa" class="rosa-dialog">
+    <button class="close rosa-close" aria-label="Tancar">×</button>
+    <div class="rosa-shell">
+      <section class="rosa-stage" aria-label="Instrument Rosa de l’Escolta">
+        <div class="rosa-instrument">
+          <button class="rosa-center" type="button" aria-expanded="false" aria-label="Activar o tornar al centre de la Rosa">
+            CENTRE
+          </button>
+          <button class="rosa-branch" type="button" data-branch="harmonia">
+            <strong>Harmonia Viva</strong><small>Llei · tensió · escolta</small>
+          </button>
+          <button class="rosa-branch" type="button" data-branch="retrodansa">
+            <strong>Retrodansa</strong><small>Temps · memòria · retorn</small>
+          </button>
+          <button class="rosa-branch" type="button" data-branch="visual">
+            <strong>Univers visual</strong><small>Imatge · símbol · forma</small>
+          </button>
+          <button class="rosa-branch" type="button" data-branch="silenci">
+            <strong>Silenci</strong><small>Buit fecund · escolta</small>
+          </button>
+        </div>
+      </section>
+      <aside class="rosa-console">
+        <p class="kicker">TM-01 · Taller de Manifestació</p>
+        <p class="rosa-status" data-rosa-status>Rosa en repòs</p>
+        <h2 data-rosa-title>Centre · Origen</h2>
+        <p class="rosa-description" data-rosa-desc>Activa la Rosa i tria una direcció. Sempre pots tornar al centre.</p>
+        <div class="rosa-actions">
+          <a class="rosa-enter" aria-disabled="true">Entrar al portal</a>
+          <button type="button" data-rosa-reset>Tornar al centre</button>
+        </div>
+        <div class="rosa-steps">
+          <span><b>1</b> Toca el centre per obrir els camins.</span>
+          <span><b>2</b> Tria una direcció.</span>
+          <span><b>3</b> Entra al portal de la branca.</span>
+          <span><b>4</b> Torna al centre per reorientar-te.</span>
+        </div>
+      </aside>
     </div>
   </dialog>
 
