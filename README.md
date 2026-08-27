@@ -23,6 +23,19 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 
 Estat: **tronc canònic públic i en evolució**.
 
+## Pont Site ↔ GitHub
+
+El Còdex té dos òrgans coordinats, amb funcions diferents:
+
+- [La Site viva](https://animic-protein.animic-protein.chatgpt.site/) és la superfície interactiva i metabòlica.
+- Aquest repositori és la memòria pública, auditable i restaurable.
+- `pont-site.json` i la comprovació `Bridge · Site ↔ GitHub` vigilen que els dos extrems es reconeguin.
+- Sincronitzar no concedeix estat canònic: tota Mutatio continua exigint decisió editorial humana, procedència i reversibilitat.
+
+Protocol: [`PONS·AP·I`](governanca/PONT_SITE_GITHUB.md).
+
+> **La Site viu; GitHub recorda.**
+
 ## Llicència
 
 `LICENSE_STATUS: FINAL-RR-1.0`
