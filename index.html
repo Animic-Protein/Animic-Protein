@@ -203,6 +203,7 @@
     <div class="rosa-shell">
       <section class="rosa-stage" aria-label="Instrument Rosa de l’Escolta">
         <div class="rosa-instrument">
+          <div class="rosa-constellation" data-rosa-constellation aria-live="polite" aria-label="Constel·lació secundària"></div>
           <button class="rosa-center" type="button" aria-expanded="false" aria-label="Activar o tornar al centre de la Rosa">
             CENTRE
           </button>
@@ -225,6 +226,11 @@
         <p class="rosa-status" data-rosa-status>Rosa en repòs</p>
         <h2 data-rosa-title>Centre · Origen</h2>
         <p class="rosa-description" data-rosa-desc>Activa la Rosa i tria una direcció. Sempre pots tornar al centre.</p>
+        <div class="rosa-node-readout" data-rosa-node-readout hidden>
+          <p class="kicker">Node secundari</p>
+          <h3 data-rosa-node-title></h3>
+          <p data-rosa-node-desc></p>
+        </div>
         <div class="rosa-actions">
           <a class="rosa-enter" aria-disabled="true">Entrar al portal</a>
           <button type="button" data-rosa-reset>Tornar al centre</button>
