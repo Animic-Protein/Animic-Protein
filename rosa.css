@@ -56,3 +56,68 @@ linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size
   .rosa-satellite{width:76px;min-height:48px;font-size:.66rem}
   .rosa-constellation.is-visible .rosa-satellite{transform:translate(calc(-50% + var(--mx,var(--x))),calc(-50% + var(--my,var(--y)))) scale(1)}
 }
+
+
+.rosa-workbench{
+  margin-top:1rem;
+  padding:1rem;
+  border:1px solid rgba(211,173,97,.22);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(211,173,97,.06),rgba(255,255,255,.02));
+}
+.rosa-workbench h3{margin:.2rem 0 .4rem;font-size:1.15rem}
+.rosa-workbench-output{min-height:3.2em;margin:.35rem 0 .85rem;color:var(--muted);line-height:1.45}
+.rosa-workbench-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rosa-workbench-actions button{
+  border:1px solid rgba(211,173,97,.3);
+  background:rgba(255,255,255,.02);
+  color:var(--ink);
+  padding:.72rem .8rem;
+  border-radius:12px;
+  font:inherit;
+  cursor:pointer;
+}
+.rosa-workbench-actions button:first-child{
+  background:rgba(211,173,97,.14);
+  border-color:rgba(211,173,97,.55);
+}
+.rosa-workbench-actions button[hidden]{display:none}
+
+#rosa.is-silence .rosa-stage{filter:saturate(.45) brightness(.58)}
+#rosa.is-silence .rosa-instrument{box-shadow:0 0 0 18px rgba(169,148,239,.018),0 0 88px rgba(0,0,0,.72) inset}
+#rosa.is-silence .rosa-branch,
+#rosa.is-silence .rosa-satellite{opacity:.12!important;transition:opacity .5s ease}
+#rosa.is-silence .rosa-center{box-shadow:0 0 0 1px rgba(169,148,239,.3),0 0 28px rgba(169,148,239,.12)}
+
+.rosa-instrument.lens-structure{
+  background:
+    linear-gradient(rgba(111,215,207,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(111,215,207,.04) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.rosa-instrument.lens-resonance{
+  box-shadow:
+    0 0 0 12px rgba(111,215,207,.035),
+    0 0 0 28px rgba(111,215,207,.018),
+    0 0 80px rgba(111,215,207,.14) inset;
+}
+.rosa-instrument.lens-resonance .rosa-center{
+  box-shadow:0 0 0 8px rgba(111,215,207,.08),0 0 56px rgba(111,215,207,.28);
+}
+.rosa-instrument.lens-trace .rosa-satellite,
+.rosa-instrument.lens-trace .rosa-branch{
+  text-shadow:10px 0 18px currentColor;
+}
+.rosa-instrument.lens-trace:before,
+.rosa-instrument.lens-trace:after{opacity:.45}
+.rosa-instrument.lens-bare{
+  border-color:rgba(255,255,255,.12);
+  box-shadow:none;
+}
+.rosa-instrument.lens-bare:before,
+.rosa-instrument.lens-bare:after{opacity:.15}
+.rosa-instrument.lens-bare .rosa-center{box-shadow:none;background:#0a1411}
+
+@media(max-width:760px){
+  .rosa-workbench-actions{grid-template-columns:1fr}
+}
