@@ -3,7 +3,7 @@ const loadScript=(src)=>new Promise((resolve,reject)=>{
 });
 const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 const critical=['./foundation.js','./core.js','./germinacio.js','./phase3.js','./seed-bridge.js'];
-const secondary=['./compost-cycle.js','./metabolism.js','./homeostasis.js','./lineage.js','./breathing.js','./attention.js','./context-propi.js','./promocio.js','./branques.js','./pressio.js','./homeostasi-constitucional.js','./histeresi.js','./allostasi.js','./consolidacio.js','./reconsolidacio.js','./ressonancia.js','./rosa.js','./rosa-enhanced.js','./rosa-inter-nos.js','./memoria-radicum.js','./probatio-radicum.js'];
+const secondary=['./compost-cycle.js','./metabolism.js','./homeostasis.js','./lineage.js','./breathing.js','./attention.js','./context-propi.js','./promocio.js','./branques.js','./pressio.js','./homeostasi-constitucional.js','./histeresi.js','./allostasi.js','./consolidacio.js','./reconsolidacio.js','./ressonancia.js','./rosa.js','./rosa-enhanced.js','./rosa-inter-nos.js','./memoria-radicum.js','./probatio-radicum.js','./lex-radicum.js'];
 const boot=async()=>{
   for(const src of critical)await loadScript(src);window.AnimicFoundation?.afterBoot?.();
   const loadSecondary=async()=>{for(const src of secondary){try{await loadScript(src)}catch(error){console.warn('[Còdex Viu] Capa opcional no carregada:',src,error)}}};
