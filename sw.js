@@ -1,8 +1,8 @@
-const CACHE = 'codex-viu-canonical-v48';
+const CACHE = 'codex-viu-canonical-v49';
 const ASSETS = [
   './', './index.html', './styles.css', './rosa.css', './rosa-enhanced.css', './rosa-inter-nos.css', './cartographia.css',
-  './germinacio.css', './radices-brodsky.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './metabolism.js', './homeostasis.js', './lineage.js',
-  './rosa.js', './rosa-enhanced.js', './rosa-inter-nos.js', './memoria-radicum.js', './probatio-radicum.js', './lex-radicum.js', './constitutio-vitae.js', './promocio.js', './promocio.css', './branques.js', './branques.css', './pressio.js', './pressio.css', './homeostasi-constitucional.js', './homeostasi-constitucional.css', './histeresi.js', './histeresi.css', './allostasi.js', './allostasi.css', './consolidacio.js', './consolidacio.css', './reconsolidacio.js', './reconsolidacio.css', './breathing.js', './attention.js', './context-propi.js', './radices-brodsky.js', './ressonancia.js', './ressonancia.css',
+  './germinacio.css', './radices-brodsky.css', './temps-nu.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './metabolism.js', './homeostasis.js', './lineage.js',
+  './rosa.js', './rosa-enhanced.js', './rosa-inter-nos.js', './memoria-radicum.js', './probatio-radicum.js', './lex-radicum.js', './constitutio-vitae.js', './promocio.js', './promocio.css', './branques.js', './branques.css', './pressio.js', './pressio.css', './homeostasi-constitucional.js', './homeostasi-constitucional.css', './histeresi.js', './histeresi.css', './allostasi.js', './allostasi.css', './consolidacio.js', './consolidacio.css', './reconsolidacio.js', './reconsolidacio.css', './breathing.js', './attention.js', './context-propi.js', './radices-brodsky.js', './temps-nu.js', './ressonancia.js', './ressonancia.css',
   './pont-site.json', './arrels/joseph-brodsky-creativitat.md', './arrels/joseph-brodsky-elogi-avorriment.md',
   './manifest.webmanifest', './LICENSE.md', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'
 ];
