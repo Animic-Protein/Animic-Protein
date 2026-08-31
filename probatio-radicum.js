@@ -6,13 +6,16 @@ const write=v=>{try{localStorage.setItem(MEMORY_KEY,JSON.stringify(v.slice(-24))
 const test=pattern=>{
  const seeds=Array.isArray(pattern.seeds)?[...new Set(pattern.seeds.filter(Boolean))]:[];
  const evidence={
-  perceptibleDifference:pattern.count>=3,
+  perceptibleDifference:pattern.state!=='dormant'&&pattern.count>=3,
   traceability:seeds.length>=3,
   relation:Boolean(pattern.key&&pattern.label&&seeds.length),
   reversibility:pattern.state!=='law'
  };
  const passed=Object.values(evidence).every(Boolean);
- return {...pattern,evidence,state:passed?'observed':'emergent',probatioAt:new Date().toISOString()};
+ const state=pattern.state==='dormant'?'dormant':passed?'observed':'emergent';
+ const oldObserved=pattern.firstObservedAt;
+ const now=new Date().toISOString();
+ return {...pattern,evidence,state,firstObservedAt:state==='observed'?(oldObserved||now):oldObserved,lastEvaluatedAt:now};
 };
 const evaluate=()=>{
  const patterns=read().map(test);write(patterns);

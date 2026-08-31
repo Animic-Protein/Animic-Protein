@@ -4,7 +4,6 @@ const LEX_KEY='animic-protein-lex-radicum-v1';
 const CONSTITUTIO_KEY='animic-protein-constitutio-vitae-v1';
 const read=key=>{try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
 const write=value=>{try{localStorage.setItem(CONSTITUTIO_KEY,JSON.stringify(value.slice(-24)))}catch{}};
-const snapshot=law=>({status:law.status,version:law.version,support:law.support,evidence:law.evidence,lastConfirmedAt:law.lastConfirmedAt});
 const updateHistory=(old,type,detail,now)=>[...(old?.history||[]),{type,detail,at:now}].slice(-24);
 const evaluate=()=>{
  const laws=read(LEX_KEY);
@@ -17,12 +16,18 @@ const evaluate=()=>{
   let history=old?.history||[];
   let contradictions=old?.contradictions||[];
   const support=Math.max(0,Number(law.support)||0);
-  const traceable=Array.isArray(law.seeds)&&law.seeds.filter(Boolean).length>=3;
+  const traceable=Array.isArray(law.seeds)&&new Set(law.seeds.filter(Boolean)).size>=3;
   const valid=law.reversible===true&&traceable&&Object.values(law.evidence||{}).every(Boolean);
 
   if(old&&old.status==='active'&&status==='repealed')history=updateHistory(old,'repeal','Pèrdua de vigència o d’evidència suficient.',now);
   if(old&&old.status==='repealed'&&status==='active')history=updateHistory(old,'reactivation','Recupera evidència i torna a vigència.',now);
-  if(status==='active'&&!valid){status='contested';contradictions=[...contradictions,{id:`contra-${Date.now().toString(36)}`,reason:'La Lex activa ha perdut una de les garanties constitucionals.',at:now}].slice(-12);history=updateHistory(old,'contradiction','Garantia constitucional insuficient.',now);}
+  if(status==='active'&&!valid){
+    status='contested';
+    if(old?.status!=='contested'){
+      contradictions=[...contradictions,{id:`contra-${Date.now().toString(36)}`,reason:'La Lex activa ha perdut una de les garanties constitucionals.',at:now}].slice(-12);
+      history=updateHistory(old,'contradiction','Garantia constitucional insuficient.',now);
+    }
+  }
   if(status==='active'&&old&&support>Math.max(0,Number(old.support)||0)+2){version+=1;history=updateHistory(old,'amendment',`Suport augmentat de ${old.support||0} a ${support}.`,now);}
 
   const item={...law,status,version,history,contradictions,constitutionAt:old?.constitutionAt||now,updatedAt:now};

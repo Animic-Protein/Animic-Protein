@@ -13,6 +13,7 @@
   const selectedElements=[];
   let currentRelation=null;
   const normalize=el=>({label:(el.dataset?.title||el.textContent||'Node').trim().replace(/\s+/g,' '),key:(el.dataset?.node||el.dataset?.rosaKey||el.textContent||'node').trim().toLowerCase().replace(/\s+/g,'-')});
+  const canonicalPair=(a,b)=>[a,b].sort((x,y)=>x.key.localeCompare(y.key));
   const readSeeds=()=>{try{const v=JSON.parse(localStorage.getItem(SEED_KEY)||'[]');return Array.isArray(v)?v:[]}catch{return[]}};
   const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)};
 
@@ -25,15 +26,19 @@
     const options=[`Què canvia en ${a.label} quan és escoltat des de ${b.label}?`,`${a.label} aporta forma; ${b.label} aporta desviació. Conserva només la diferència perceptible.`,`Fes una prova reversible: deixa que ${a.label} imposi una regla i que ${b.label} la contradigui una sola vegada.`,`Busca el tercer element que només apareix quan ${a.label} i ${b.label} coexisteixen.`];
     return options[[...`${a.key}|${b.key}`].reduce((n,c)=>n+c.charCodeAt(0),0)%options.length];
   };
+  const relationId=(a,b,text)=>`seed-inter-nos-${hash(`${a.key}|${b.key}|${text}`)}`;
 
   const render=()=>{
     dialog.querySelectorAll('.is-inter-nos-selected').forEach(el=>el.classList.remove('is-inter-nos-selected'));
     selectedElements.forEach(el=>el?.isConnected&&el.classList.add('is-inter-nos-selected'));
-    currentRelation=null;seedButton.hidden=true;
+    currentRelation=null;seedButton.hidden=true;seedButton.textContent='Sembrar relació';seedButton.disabled=false;
     if(!selected.length){panel.hidden=true;return;}
     panel.hidden=false;
     if(selected.length===1){title.textContent=`${selected[0].label} + …`;output.textContent='Tria un segon node de la Rosa. INTER NOS no suma: posa dues realitats en tensió perquè aparegui una tercera relació.';return;}
-    const [a,b]=selected,text=relationText(a,b);currentRelation={a,b,text};title.textContent=`${a.label} ↔ ${b.label}`;output.textContent=text;seedButton.hidden=false;dialog.dispatchEvent(new CustomEvent('rosa:inter-nos',{detail:{a,b,text}}));
+    const [a,b]=canonicalPair(...selected),text=relationText(a,b),id=relationId(a,b,text),alreadySeeded=readSeeds().some(seed=>seed.id===id);
+    currentRelation={a,b,text,id};title.textContent=`${a.label} ↔ ${b.label}`;output.textContent=text;seedButton.hidden=false;
+    if(alreadySeeded){seedButton.textContent='Relació sembrada';seedButton.disabled=true;}
+    dialog.dispatchEvent(new CustomEvent('rosa:inter-nos',{detail:{a,b,text,id}}));
   };
 
   const addNode=el=>{const node=normalize(el);if(selected.some(x=>x.key===node.key))return;if(selected.length===2){selected.shift();selectedElements.shift();}selected.push(node);selectedElements.push(el);render();};
@@ -41,7 +46,7 @@
 
   seedButton.addEventListener('click',()=>{
     if(!currentRelation)return;
-    const {a,b,text}=currentRelation,now=new Date().toISOString(),id=`seed-inter-nos-${hash(`${a.key}|${b.key}|${text}`)}`;
+    const {a,b,text,id}=currentRelation,now=new Date().toISOString();
     const seeds=readSeeds();
     if(!seeds.some(seed=>seed.id===id)){
       const seed={id,text,source:`INTER NOS · ${a.label} ↔ ${b.label}`,sourceId:a.key,originA:{key:a.key,label:a.label},originB:{key:b.key,label:b.label},kind:'inter-nos',createdAt:now};
@@ -52,7 +57,7 @@
     const status=dialog.querySelector('[data-rosa-status]');if(status)status.textContent='INTER NOS · relació convertida en llavor';
   });
 
-  clear.addEventListener('click',()=>{selected.length=0;selectedElements.length=0;seedButton.textContent='Sembrar relació';seedButton.disabled=false;render();const status=dialog.querySelector('[data-rosa-status]');if(status)status.textContent='INTER NOS · relació netejada';});
-  dialog.addEventListener('close',()=>{selected.length=0;selectedElements.length=0;seedButton.textContent='Sembrar relació';seedButton.disabled=false;render();});
-  window.dispatchEvent(new CustomEvent('rosa:inter-nos-ready',{detail:{version:'1.1.0',seeding:true}}));
+  clear.addEventListener('click',()=>{selected.length=0;selectedElements.length=0;render();const status=dialog.querySelector('[data-rosa-status]');if(status)status.textContent='INTER NOS · relació netejada';});
+  dialog.addEventListener('close',()=>{selected.length=0;selectedElements.length=0;render();});
+  window.dispatchEvent(new CustomEvent('rosa:inter-nos-ready',{detail:{version:'1.2.0',seeding:true,symmetric:true}}));
 })();

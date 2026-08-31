@@ -22,10 +22,11 @@ const constitutio = read('constitutio-vitae.js');
 const assertions = [
   [rosa.includes("kind:'inter-nos'"), 'INTER NOS ha de crear llavors tipades'],
   [rosa.includes('originA') && rosa.includes('originB'), 'INTER NOS ha de conservar els dos orígens'],
-  [memoria.includes('MIN_RECURRENCES=3'), 'Memoria Radicum ha de mantenir el llindar de recurrència'],
-  [probatio.includes("state:passed?'observed':'emergent'"), 'Probatio ha de separar observat d’emergent'],
+  [rosa.includes('canonicalPair'), 'INTER NOS ha de tractar A↔B simètricament'],
+  [memoria.includes('MIN_RECURRENCES=3') && memoria.includes("state:'dormant'"), 'Memoria Radicum ha de conservar recurrència i dormició'],
+  [probatio.includes("?'observed':'emergent'") && probatio.includes("pattern.state==='dormant'"), 'Probatio ha de separar observat, emergent i dormant'],
   [lex.includes("status:'active'") && lex.includes("status:'dormant'"), 'Lex Radicum ha de ser reversible'],
-  [constitutio.includes("status='contested'") && constitutio.includes("status='repealed'"), 'Constitutio Vitae ha de suportar contradicció i derogació'],
+  [constitutio.includes("status='contested'") && constitutio.includes("?'repealed':'active'"), 'Constitutio Vitae ha de suportar contradicció i derogació'],
   [constitutio.includes("'amendment'") && constitutio.includes("'reactivation'"), 'Constitutio Vitae ha de conservar esmena i reactivació']
 ];
 

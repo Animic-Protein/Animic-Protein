@@ -9,19 +9,23 @@
   const lineage=seed=>[seed?.originA,seed?.originB].filter(Boolean).map(x=>({key:token(x.key||x.label),label:String(x.label||x.key||'Node')}));
 
   const analyse=()=>{
-    const seeds=read(SEED_KEY).filter(seed=>seed?.kind==='inter-nos');
+    const seeds=read(SEED_KEY).filter(seed=>seed?.kind==='inter-nos'&&seed?.id);
     const counts=new Map();
     seeds.forEach(seed=>lineage(seed).forEach(node=>{
       if(!node.key)return;
-      const item=counts.get(node.key)||{key:node.key,label:node.label,count:0,seeds:[]};
-      item.count+=1;item.seeds.push(seed.id);counts.set(node.key,item);
+      const item=counts.get(node.key)||{key:node.key,label:node.label,seeds:new Map()};
+      item.seeds.set(seed.id,seed.createdAt||null);counts.set(node.key,item);
     }));
     const previous=read(MEMORY_KEY);
     const now=new Date().toISOString();
-    const patterns=[...counts.values()].filter(item=>item.count>=MIN_RECURRENCES).map(item=>{
+    const active=[...counts.values()].filter(item=>item.seeds.size>=MIN_RECURRENCES).map(item=>{
       const old=previous.find(p=>p.key===item.key);
-      return {...item,id:`radix-${item.key}`,state:old?.state||'emergent',firstSeenAt:old?.firstSeenAt||now,lastSeenAt:now};
+      const seedIds=[...item.seeds.keys()];
+      const dates=[...item.seeds.values()].filter(Boolean).sort();
+      return {key:item.key,label:item.label,count:seedIds.length,seeds:seedIds,id:`radix-${item.key}`,state:old?.state==='dormant'?'emergent':old?.state||'emergent',firstSeenAt:old?.firstSeenAt||dates[0]||now,lastSeenAt:dates.at(-1)||now};
     });
+    const dormant=previous.filter(old=>!active.some(item=>item.id===old.id)).map(old=>({...old,state:'dormant',dormantAt:old.dormantAt||now}));
+    const patterns=[...dormant,...active].slice(-24);
     write(MEMORY_KEY,patterns);
     window.AnimicMemoriaRadicum={patterns,threshold:MIN_RECURRENCES,analyse};
     window.dispatchEvent(new CustomEvent('codex:radicum-updated',{detail:{patterns,threshold:MIN_RECURRENCES}}));
