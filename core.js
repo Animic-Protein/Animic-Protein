@@ -28,28 +28,69 @@ const idFor=(a,b)=>[a,b].sort().join('::');
 const cleanText=(v,max=500)=>typeof v==='string'?v.replace(/[<>\u0000-\u001f\u007f]/g,'').trim().slice(0,max):'';
 const safeNodeId=v=>typeof v==='string'&&/^[a-z0-9:_-]{1,120}$/i.test(v)?v:'';
 const safeState=v=>RELATION_STATES.includes(v)?v:'emergent';
+const isGermId=id=>typeof id==='string'&&id.startsWith('germen-');
+const generatedTitles=new Set(['Relació emergent','Relació sembrada','Memòria de la llavor']);
+const isGeneratedRelation=entry=>generatedTitles.has(entry?.title)||String(entry?.title||'').startsWith('INTER NOS ·');
+const dynamicRelationCopy=entry=>{
+  const state=safeState(entry?.state);
+  const A=cleanText(entry?.a,120)||'Primer node';
+  const B=cleanText(entry?.b,120)||'Segon node';
+  const versionsWithSeed=(entry?.aId==='versions'||entry?.bId==='versions')&&(isGermId(entry?.aId)||isGermId(entry?.bId));
+  if(versionsWithSeed){
+    const text={
+      canonica:'Versions conserva la genealogia de la llavor sense immobilitzar-ne la mutació: origen, canvis d’estat i retorn continuen traçables.',
+      emergent:'Versions i la llavor obren una hipòtesi viva: recordar cada mutació sense convertir-la en una forma tancada.',
+      sembrada:'La relació ja ha produït una llavor. Versions en conserva l’origen i els canvis perquè MUTATIO no esdevingui amnèsia.',
+      compostada:'La relació ha tornat al compost, però Versions en preserva el rastre perquè pugui nodrir una forma futura.'
+    }[state];
+    const action={
+      canonica:'Traça canònica: conserva origen, transformacions i reversibilitat.',
+      emergent:'Pregunta viva: com pot Versions recordar la llavor sense impedir que continuï mutant?',
+      sembrada:'Acció viva: registra l’origen, el canvi d’estat i la possibilitat de retorn de la llavor.',
+      compostada:'Memòria de compost: conserva què ha deixat de funcionar i quin nutrient retorna al sistema.'
+    }[state];
+    return{title:'Memòria de la llavor',text,action,state};
+  }
+  const text={
+    canonica:`${A} i ${B} mantenen una relació reconeguda dins del Còdex i n’assumeixen les conseqüències.`,
+    emergent:`${A} i ${B} obren una hipòtesi viva. La relació encara s’ha de provar per diferència perceptible, traçabilitat, vincle explícit i reversibilitat.`,
+    sembrada:`La relació entre ${A} i ${B} ja ha produït una llavor. Ara cal observar quina transformació real provoca dins del Còdex.`,
+    compostada:`La relació entre ${A} i ${B} ha tornat al compost. El rastre es conserva com a nutrient i aprenentatge.`
+  }[state];
+  const action={
+    canonica:'Acció canònica: mantén-ne la traça i revisa-la quan canviï alguna de les parts.',
+    emergent:`Pregunta viva: què hauria de canviar en «${A}» perquè «${B}» deixés de ser extern?`,
+    sembrada:'Acció viva: deixa que la llavor germini, relaciona-la i observa què modifica.',
+    compostada:'Acció de compost: conserva el rastre útil i allibera la forma que ja no funciona.'
+  }[state];
+  return{title:`INTER NOS · ${A} ↔ ${B}`,text,action,state};
+};
 function readMemory(){
   try{
     const v=JSON.parse(localStorage.getItem(MEMORY_KEY)||'[]');
     if(!Array.isArray(v))return[];
-    return v.map(x=>({
-      id:cleanText(x?.id,180),
-      a:cleanText(x?.a,120),
-      b:cleanText(x?.b,120),
-      aId:safeNodeId(x?.aId),
-      bId:safeNodeId(x?.bId),
-      title:cleanText(x?.title,180),
-      text:cleanText(x?.text,700),
-      action:cleanText(x?.action,420),
-      state:safeState(x?.state),
-      timestamp:cleanText(x?.timestamp,80)
-    })).filter(x=>x.id&&x.aId&&x.bId);
+    return v.map(x=>{
+      const entry={
+        id:cleanText(x?.id,180),
+        a:cleanText(x?.a,120),
+        b:cleanText(x?.b,120),
+        aId:safeNodeId(x?.aId),
+        bId:safeNodeId(x?.bId),
+        title:cleanText(x?.title,180),
+        text:cleanText(x?.text,700),
+        action:cleanText(x?.action,420),
+        state:safeState(x?.state),
+        timestamp:cleanText(x?.timestamp,80)
+      };
+      if(!entry.id||!entry.aId||!entry.bId)return null;
+      return isGeneratedRelation(entry)?{...entry,...dynamicRelationCopy(entry)}:entry;
+    }).filter(Boolean);
   }catch{return[]}
 }
 function writeMemory(v){try{localStorage.setItem(MEMORY_KEY,JSON.stringify(v.slice(-24)))}catch{}}
-function resultFor(a,b){const c=canonicalRelations[keyFor(a.dataset.node,b.dataset.node)];if(c)return{...c,state:'canonica'};const A=a.dataset.title||a.textContent.trim(),B=b.dataset.title||b.textContent.trim();return{title:'Relació emergent',text:`${A} i ${B} encara no tenen una relació canònica. El Còdex la tracta com una hipòtesi viva, no com una absència.`,action:`Pregunta viva: què hauria de canviar en «${A}» perquè «${B}» deixés de ser extern?`,state:'emergent'}}
-function remember(a,b,r){const m=readMemory(),id=idFor(a.dataset.node,b.dataset.node),old=m.find(x=>x.id===id),entry={id,a:a.dataset.title||a.textContent.trim(),b:b.dataset.title||b.textContent.trim(),aId:a.dataset.node,bId:b.dataset.node,title:r.title,text:r.text,action:r.action,state:old?.state||r.state||'emergent',timestamp:new Date().toISOString()};writeMemory([...m.filter(x=>x.id!==id),entry]);renderMemory();drawRelations();return entry}
-function changeState(id,state){writeMemory(readMemory().map(x=>x.id===id?{...x,state,timestamp:new Date().toISOString()}:x));renderMemory();drawRelations()}
+function resultFor(a,b){const c=canonicalRelations[keyFor(a.dataset.node,b.dataset.node)];if(c)return{...c,state:'canonica'};return dynamicRelationCopy({aId:a.dataset.node,bId:b.dataset.node,a:a.dataset.title||a.textContent.trim(),b:b.dataset.title||b.textContent.trim(),state:'emergent'})}
+function remember(a,b,r){const m=readMemory(),id=idFor(a.dataset.node,b.dataset.node),old=m.find(x=>x.id===id),base={id,a:a.dataset.title||a.textContent.trim(),b:b.dataset.title||b.textContent.trim(),aId:a.dataset.node,bId:b.dataset.node,title:r.title,text:r.text,action:r.action,state:old?.state||r.state||'emergent',timestamp:new Date().toISOString()},entry=isGeneratedRelation(base)?{...base,...dynamicRelationCopy(base)}:base;writeMemory([...m.filter(x=>x.id!==id),entry]);renderMemory();drawRelations();return entry}
+function changeState(id,state){writeMemory(readMemory().map(x=>{if(x.id!==id)return x;const next={...x,state:safeState(state),timestamp:new Date().toISOString()};return isGeneratedRelation(next)?{...next,...dynamicRelationCopy(next)}:next}));renderMemory();drawRelations()}
 const nextState=s=>RELATION_STATES[(Math.max(0,RELATION_STATES.indexOf(s))+1)%RELATION_STATES.length];
 function ensureLayer(){if(!map)return null;let s=map.querySelector('.relation-layer');if(!s){s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.classList.add('relation-layer');s.setAttribute('aria-hidden','true');map.prepend(s)}return s}
 function center(n){const m=map.getBoundingClientRect(),r=n.getBoundingClientRect();return{x:r.left-m.left+r.width/2,y:r.top-m.top+r.height/2}}
