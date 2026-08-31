@@ -23,6 +23,7 @@
   const caption=dialog.querySelector('[data-tn-stage-caption]');
   const workbench=dialog.querySelector('[data-tn-workbench]');
   const viewButtons=[...dialog.querySelectorAll('[data-tn-view]')];
+  const routeSteps=[...dialog.querySelectorAll('[data-tn-step]')];
 
   let view='centre';
   let timer=null;
@@ -56,7 +57,8 @@
         mutation:mutations[value.mutation]?value.mutation:'timbre',
         threshold:Number.isInteger(value.threshold)&&value.threshold>=1&&value.threshold<=9?value.threshold:null,
         mode:value.mode==='demo'?'demo':'lliure',
-        createdAt:typeof value.createdAt==='string'?value.createdAt:''
+        createdAt:typeof value.createdAt==='string'?value.createdAt:'',
+        version:typeof value.version==='string'?value.version:'TEMPS·NU·IV'
       };
     }catch{return null}
   };
@@ -181,18 +183,27 @@
       el('p','temps-nu-copy','Tria què canviarà exclusivament a la vuitena volta.')
     );
     const choices=el('div','temps-nu-mutations');
+    choices.setAttribute('role','group');
+    choices.setAttribute('aria-label','Mutació única de la vuitena volta');
+    const choiceDetail=el('p','temps-nu-choice-detail',mutations[mutation].detail);
     Object.entries(mutations).forEach(([id,item])=>{
       const choice=button(item.label);
+      choice.dataset.tnMutation=id;
       choice.setAttribute('aria-pressed',String(id===mutation));
-      choice.title=item.detail;
-      choice.addEventListener('click',()=>{mutation=id;render()});
+      choice.setAttribute('aria-describedby','temps-nu-mutation-detail');
+      choice.addEventListener('click',()=>{
+        mutation=id;
+        choices.querySelectorAll('button').forEach(control=>control.setAttribute('aria-pressed',String(control.dataset.tnMutation===mutation)));
+        choiceDetail.textContent=item.detail;
+      });
       choices.appendChild(choice);
     });
+    choiceDetail.id='temps-nu-mutation-detail';
     const start=button('Comença la Travessa','is-primary');
     start.addEventListener('click',()=>begin());
     const actions=el('div','temps-nu-actions');
     actions.appendChild(start);
-    workbench.append(choices,actions);
+    workbench.append(choices,choiceDetail,actions);
   };
 
   const renderMemory=()=>{
@@ -206,8 +217,22 @@
       el('p','temps-nu-score',mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
       el('p','temps-nu-copy',memory.threshold?'El primer llindar es va marcar a la volta '+memory.threshold+'.':'La travessa es va completar sense marcar cap llindar.')
     );
+    if(memory.createdAt){
+      const date=new Date(memory.createdAt);
+      if(!Number.isNaN(date.getTime()))workbench.appendChild(el('p','temps-nu-memory-meta','Conservat '+date.toLocaleString('ca-ES',{dateStyle:'medium',timeStyle:'short'})+' · '+memory.version));
+    }
     const withdraw=button('Retira aquesta memòria');
-    withdraw.addEventListener('click',()=>{safeRemove();render()});
+    let withdrawalArmed=false;
+    withdraw.addEventListener('click',()=>{
+      if(!withdrawalArmed){
+        withdrawalArmed=true;
+        withdraw.textContent='Confirma la retirada definitiva';
+        withdraw.classList.add('is-danger');
+        return;
+      }
+      safeRemove();
+      render();
+    });
     const actions=el('div','temps-nu-actions');
     actions.appendChild(withdraw);
     workbench.appendChild(actions);
@@ -248,13 +273,13 @@
     }
     const fruit=button('Conserva com a fruit privat','is-primary');
     fruit.addEventListener('click',()=>{
-      safeWrite({mutation,threshold,mode:demoMode?'demo':'lliure',createdAt:new Date().toISOString(),version:'TEMPS·NU·III'});
+      safeWrite({mutation,threshold,mode:demoMode?'demo':'lliure',createdAt:new Date().toISOString(),version:'TEMPS·NU·IV'});
       view='memory';
       stop({reset:true});
       render();
     });
-    const compost=button('Retorna al Compost');
-    compost.addEventListener('click',()=>{safeRemove();returnCentre()});
+    const compost=button('Aquesta travessa al Compost');
+    compost.addEventListener('click',returnCentre);
     const actions=el('div','temps-nu-actions');
     actions.append(fruit,compost);
     workbench.appendChild(actions);
@@ -273,6 +298,14 @@
     viewButtons.forEach(control=>{
       control.disabled=running;
       control.setAttribute('aria-pressed',String(control.dataset.tnView===view));
+    });
+    const activeStep=completed?5:running?(cycle<=7?2:cycle===8?3:4):(view==='memory'?5:1);
+    routeSteps.forEach(step=>{
+      const stepNumber=Number(step.dataset.tnStep);
+      step.classList.toggle('is-current',stepNumber===activeStep);
+      step.classList.toggle('is-past',stepNumber<activeStep);
+      if(stepNumber===activeStep)step.setAttribute('aria-current','step');
+      else step.removeAttribute('aria-current');
     });
     workbench.replaceChildren();
     if(running)renderRunning();
@@ -349,6 +382,9 @@
     window.setTimeout(ensureEntry,0);
   });
   window.addEventListener('pagehide',()=>stop());
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden&&dialog.open)returnCentre();
+  });
 
   render();
   ensureEntry();

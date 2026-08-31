@@ -7,7 +7,7 @@
 - **Origen:** discurs de graduació adreçat a la promoció de 1989 de Dartmouth College
 - **Publicació posterior:** *On Grief and Reason: Essays*, Farrar, Straus and Giroux, 1995
 - **Incorporació al Còdex:** 2026-09-01
-- **Versió interactiva:** TEMPS·NU·III · Cambra nua del temps, memòria cau v51
+- **Versió interactiva:** TEMPS·NU·IV · Auditoria de la Cambra nua del temps, memòria cau v52
 - **Estat:** arrel documentada + lectura interpretativa + transformació musical pròpia
 - **Text íntegre:** no reproduït
 

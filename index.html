@@ -265,7 +265,7 @@
     <div class="temps-nu-shell">
       <section class="temps-nu-chamber-stage" aria-label="Dial de nou voltes de la Cambra nua del temps">
         <div class="temps-nu-stage-head">
-          <p class="kicker">CONT·I · TEMPS·NU·III</p>
+          <p class="kicker">CONT·I · TEMPS·NU·IV</p>
           <p>PROXIMITAT + DIFERÈNCIA + TEMPS</p>
         </div>
         <div class="temps-nu-dial" data-tn-dial>
@@ -281,7 +281,7 @@
       </section>
       <aside class="temps-nu-console">
         <p class="kicker">Cambra nua del temps</p>
-        <p class="temps-nu-status" data-tn-status aria-live="polite">Centre · cambra en repòs</p>
+        <p class="temps-nu-status" data-tn-status role="status" aria-live="polite" aria-atomic="true">Centre · cambra en repòs</p>
         <h2 id="temps-nu-dialog-title" data-tn-title>Habitar la repetició</h2>
         <p class="temps-nu-description" data-tn-description>Entra per una Demo, una Travessa lliure o la Memòria. Sempre pots tornar al centre.</p>
         <nav class="temps-nu-nav" aria-label="Camins de la Cambra nua del temps">
@@ -289,16 +289,16 @@
           <button type="button" data-tn-view="free"><strong>Travessa</strong><small>Tria la mutació</small></button>
           <button type="button" data-tn-view="memory"><strong>Memòria</strong><small>Fruit privat o retirada</small></button>
         </nav>
-        <section class="temps-nu-workbench" data-tn-workbench aria-live="polite">
+        <section class="temps-nu-workbench" data-tn-workbench>
           <p class="kicker">Centre · origen</p>
           <p>Cap so no començarà sense el teu gest. La Cambra no avalua: mostra com està existint la teva escolta.</p>
         </section>
         <div class="temps-nu-route">
-          <span><b>1</b> Aproximació</span>
-          <span><b>2</b> Escolta</span>
-          <span><b>3</b> Interferència</span>
-          <span><b>4</b> Plegament</span>
-          <span><b>5</b> Retorn</span>
+          <span data-tn-step="1"><b>1</b> Aproximació</span>
+          <span data-tn-step="2"><b>2</b> Escolta</span>
+          <span data-tn-step="3"><b>3</b> Interferència</span>
+          <span data-tn-step="4"><b>4</b> Plegament</span>
+          <span data-tn-step="5"><b>5</b> Retorn</span>
         </div>
       </aside>
     </div>
