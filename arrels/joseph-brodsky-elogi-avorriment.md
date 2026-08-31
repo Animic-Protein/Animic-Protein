@@ -7,7 +7,7 @@
 - **Origen:** discurs de graduació adreçat a la promoció de 1989 de Dartmouth College
 - **Publicació posterior:** *On Grief and Reason: Essays*, Farrar, Straus and Giroux, 1995
 - **Incorporació al Còdex:** 2026-09-01
-- **Versió interactiva:** TEMPS·NU·I, memòria cau v49
+- **Versió interactiva:** TEMPS·NU·II, memòria cau v50
 - **Estat:** arrel documentada + lectura interpretativa + transformació musical pròpia
 - **Text íntegre:** no reproduït
 
@@ -70,6 +70,19 @@ El node **Temps nu** executa el protocol com una sessió sonora d’aproximadame
 5. decideix entre conservar un fruit privat o retornar-lo al compost.
 
 El so no comença automàticament i es pot aturar en qualsevol moment. La memòria és local, explícita, revocable i mai no es publica per defecte.
+
+### Demo aplicada · Silenci
+
+La Cambra incorpora una demostració guiada i transcrita:
+
+**Re — Fa — La × 7 → Re — ∅ — La × 1 → Re — Fa — La × 1**
+
+- **Entrada q:** cèl·lula de tres atacs.
+- **Operació:** retirar l’atac central només a la vuitena volta.
+- **Sortida:** retorn íntegre de la cèl·lula a la novena.
+- **Diferència perceptible:** el retorn és materialment igual a l’entrada, però l’escolta conserva la memòria de l’absència.
+
+La traça de les nou voltes també es presenta amb text visible i etiquetes accessibles; la comprensió no depèn exclusivament del so, el color o l’animació.
 
 ## Relacions activades
 

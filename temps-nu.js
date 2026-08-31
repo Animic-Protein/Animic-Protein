@@ -24,6 +24,7 @@
   let threshold=null;
   let mutation='timbre';
   let completed=false;
+  let demoMode=false;
   let runToken=0;
 
   const el=(tag,className,text)=>{
@@ -40,6 +41,7 @@
       return{
         mutation:mutations[value.mutation]?value.mutation:'timbre',
         threshold:Number.isInteger(value.threshold)&&value.threshold>=1&&value.threshold<=9?value.threshold:null,
+        mode:value.mode==='demo'?'demo':'lliure',
         createdAt:typeof value.createdAt==='string'?value.createdAt:''
       };
     }catch{return null}
@@ -49,9 +51,9 @@
 
   const phaseFor=n=>{
     if(!n)return{index:0,title:'Cambra en repòs',detail:'Tria una mutació i entra quan vulguis.'};
-    if(n<=7)return{index:n===1?1:2,title:'Repetició estable',detail:'No embellir. Escoltar l’impuls de fugir sense obeir-lo.'};
-    if(n===8)return{index:3,title:'Mutació mínima · '+mutations[mutation].label,detail:mutations[mutation].detail};
-    return{index:4,title:'Retorn amb memòria',detail:'La forma inicial torna. Comprova si ara s’escolta diferent.'};
+    if(n<=7)return{index:n===1?1:2,title:'Repetició estable',detail:demoMode?'Re — Fa — La. Tres atacs intactes; encara no falta res.':'No embellir. Escoltar l’impuls de fugir sense obeir-lo.'};
+    if(n===8)return{index:3,title:'Mutació mínima · '+mutations[mutation].label,detail:demoMode?'Re — [absència] — La. El Fa deixa un espai audible.':mutations[mutation].detail};
+    return{index:4,title:'Retorn amb memòria',detail:demoMode?'Re — Fa — La. El Fa retorna, però l’orella recorda que podia faltar.':'La forma inicial torna. Comprova si ara s’escolta diferent.'};
   };
 
   const stopAudio=()=>{
@@ -112,7 +114,7 @@
     runToken+=1;
     if(timer){clearTimeout(timer);timer=null}
     stopAudio();
-    if(reset){cycle=0;threshold=null;completed=false}
+    if(reset){cycle=0;threshold=null;completed=false;demoMode=false}
   };
 
   const ritualLabels=['Entrar','Repetir','Llindar','Mutar','Retornar'];
@@ -130,6 +132,20 @@
     head.append(headText,el('span','temps-nu-private','Privat · no es publica'));
     box.appendChild(head);
 
+    const demo=el('section','temps-nu-demo');
+    const demoText=el('div');
+    demoText.append(
+      el('p','brodsky-subtitle','Demo aplicada · mutació de silenci'),
+      el('strong','','Re — Fa — La × 7 · Re — ∅ — La × 1 · Re — Fa — La × 1'),
+      el('p','','Escoltaràs la mateixa cèl·lula set vegades. A la vuitena desapareix l’atac central; a la novena retorna.')
+    );
+    const demoButton=el('button','','Escolta la Demo');
+    demoButton.type='button';
+    demoButton.disabled=cycle>0&&!completed;
+    demoButton.addEventListener('click',()=>begin({demo:true}));
+    demo.append(demoText,demoButton);
+    box.appendChild(demo);
+
     const ritual=el('div','temps-nu-ritual');
     const phase=phaseFor(cycle);
     ritualLabels.forEach((label,index)=>{
@@ -138,6 +154,18 @@
     });
     box.appendChild(ritual);
 
+    const trace=el('ol','temps-nu-trace');
+    trace.setAttribute('aria-label','Traça de les nou voltes');
+    for(let n=1;n<=TOTAL_CYCLES;n+=1){
+      const kind=n<=7?'Repetició':n===8?'Mutació':'Retorn';
+      const item=el('li',(n<cycle?'is-past ':'')+(n===cycle?'is-current ':'')+(n===8?'is-mutation ':'')+(n===9?'is-return':''),String(n));
+      item.title='Volta '+n+' · '+kind;
+      item.setAttribute('aria-label','Volta '+n+': '+kind);
+      if(n===cycle)item.setAttribute('aria-current','step');
+      trace.appendChild(item);
+    }
+    box.appendChild(trace);
+
     const mutationLabel=el('p','brodsky-subtitle','Una sola mutació a la volta 8');
     const mutationGrid=el('div','temps-nu-mutations');
     Object.entries(mutations).forEach(([id,item])=>{
@@ -145,7 +173,7 @@
       button.type='button';
       button.setAttribute('aria-pressed',String(id===mutation));
       button.disabled=cycle>0&&!completed;
-      button.addEventListener('click',()=>{mutation=id;render()});
+      button.addEventListener('click',()=>{mutation=id;demoMode=false;render()});
       mutationGrid.appendChild(button);
     });
     box.append(mutationLabel,mutationGrid);
@@ -162,7 +190,7 @@
     box.appendChild(stage);
 
     const actions=el('div','temps-nu-actions');
-    const start=el('button','',cycle||completed?'Reiniciar la travessa':'Entrar i escoltar');
+    const start=el('button','',cycle||completed?'Reiniciar la travessa':'Travessa lliure');
     start.type='button';
     const mark=el('button','',threshold?'Llindar: volta '+threshold:'Marca el llindar');
     mark.type='button';
@@ -170,7 +198,7 @@
     const halt=el('button','','Atura');
     halt.type='button';
     halt.disabled=!cycle||completed;
-    start.addEventListener('click',begin);
+    start.addEventListener('click',()=>begin());
     mark.addEventListener('click',()=>{threshold=cycle;render()});
     halt.addEventListener('click',()=>{stop({reset:true});render()});
     actions.append(start,mark,halt);
@@ -185,19 +213,29 @@
       const compost=el('button','','Retorna al compost');
       fruit.type=compost.type='button';
       fruit.addEventListener('click',()=>{
-        safeWrite({mutation,threshold,createdAt:new Date().toISOString(),version:'TEMPS·NU·I'});
+        safeWrite({mutation,threshold,mode:demoMode?'demo':'lliure',createdAt:new Date().toISOString(),version:'TEMPS·NU·II'});
         render();
       });
       compost.addEventListener('click',()=>{safeRemove();stop({reset:true});render()});
       decisions.append(fruit,compost);
-      box.append(result,decisions);
+      box.append(result);
+      if(demoMode){
+        const difference=el('div','temps-nu-difference');
+        difference.append(
+          el('p','brodsky-subtitle','Entrada → operació → sortida'),
+          el('strong','','q: tres atacs → q′: un atac absent → retorn: tres atacs'),
+          el('p','','Diferència perceptible: el so retornat és materialment igual a l’inicial, però la seva escolta conté la memòria del buit.')
+        );
+        box.appendChild(difference);
+      }
+      box.appendChild(decisions);
     }
 
     const memory=safeRead();
     if(memory){
       const memoryBox=el('div','temps-nu-memory');
       memoryBox.append(
-        el('strong','','Darrer fruit privat · '+mutations[memory.mutation].label),
+        el('strong','','Darrer fruit privat · '+mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
         el('p','',memory.threshold?'Llindar registrat a la volta '+memory.threshold+'.':'Travessa sense llindar marcat.')
       );
       const withdraw=el('button','temps-nu-withdraw','Retira aquesta memòria');
@@ -228,8 +266,10 @@
     timer=setTimeout(()=>advance(token),CYCLE_MS);
   };
 
-  function begin(){
+  function begin({demo=false}={}){
     stop({reset:true});
+    demoMode=demo;
+    if(demo)mutation='silenci';
     const token=runToken;
     advance(token);
   }
