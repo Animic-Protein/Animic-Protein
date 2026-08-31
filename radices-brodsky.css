@@ -1,0 +1,13 @@
+.brodsky-radix-panel{border-top:1px solid var(--line);margin-top:1rem;padding-top:1rem;color:var(--muted)}
+.brodsky-radix-panel[hidden]{display:none}
+.brodsky-radix-title,.brodsky-formula-title{margin:.25rem 0 .55rem;color:var(--ink);font-family:Georgia,'Times New Roman',serif;font-size:1.2rem;line-height:1.2}
+.brodsky-source{margin:.45rem 0;color:var(--muted);font-size:.84rem;line-height:1.45}
+.brodsky-source-link{display:inline-flex;align-items:center;min-height:44px;margin:.25rem 0 .8rem;padding:.55rem .8rem;border:1px solid rgba(211,173,97,.32);border-radius:999px;color:var(--metal);text-decoration:none;font-size:.78rem}
+.brodsky-source-link:hover{border-color:rgba(211,173,97,.65);background:rgba(211,173,97,.06)}
+.brodsky-subtitle{margin:.8rem 0 .4rem;color:var(--metal);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.12em;font-size:.68rem}
+.brodsky-fertile,.brodsky-steps{margin:.35rem 0 .8rem;padding-left:1.2rem;display:grid;gap:.38rem;line-height:1.42;font-size:.84rem}
+.brodsky-consequence{margin-top:.8rem;padding:.8rem;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.025)}
+.brodsky-consequence strong{color:var(--ink)}
+.brodsky-consequence p{margin:.35rem 0 0}
+.brodsky-formula{margin:.7rem 0;padding:.85rem 1rem;border-left:3px solid var(--metal);background:rgba(211,173,97,.06);color:var(--ink);font-family:Georgia,'Times New Roman',serif;font-size:1rem;line-height:1.45}
+@media(max-width:520px){.brodsky-radix-panel{padding-top:.85rem}.brodsky-source-link{width:100%;justify-content:center;text-align:center}}
