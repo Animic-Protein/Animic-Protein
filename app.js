@@ -35,7 +35,8 @@ const secondary=[
   './consolidacio.js',
   './reconsolidacio.js',
   './ressonancia.js',
-  './rosa.js'
+  './rosa.js',
+  './rosa-enhanced.js'
 ];
 
 const boot=async()=>{

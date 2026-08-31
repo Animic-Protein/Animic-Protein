@@ -1,0 +1,72 @@
+.rosa-enhanced-ready .rosa-instrument{
+  --rosa-pointer-x:50%;
+  --rosa-pointer-y:50%;
+  position:relative;
+  isolation:isolate;
+}
+
+.rosa-enhanced-ready .rosa-instrument::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  border-radius:inherit;
+  opacity:0;
+  background:radial-gradient(circle at var(--rosa-pointer-x) var(--rosa-pointer-y),rgba(211,173,97,.16),transparent 34%);
+  transition:opacity .22s ease;
+}
+
+.rosa-enhanced-ready .rosa-instrument.rosa-enhanced-pointer::after{
+  opacity:1;
+}
+
+.rosa-enhanced-ready :is(.rosa-center,.rosa-branch,.rosa-satellite,.rosa-workbench button,.rosa-actions button,.rosa-enter):focus-visible{
+  outline:2px solid currentColor;
+  outline-offset:4px;
+  box-shadow:0 0 0 6px rgba(255,255,255,.06);
+}
+
+.rosa-enhanced-ready .rosa-branch,
+.rosa-enhanced-ready .rosa-satellite,
+.rosa-enhanced-ready .rosa-center{
+  will-change:transform,box-shadow;
+}
+
+.rosa-enhanced-ready .rosa-branch:hover,
+.rosa-enhanced-ready .rosa-branch:focus-visible,
+.rosa-enhanced-ready .rosa-satellite:hover,
+.rosa-enhanced-ready .rosa-satellite:focus-visible{
+  filter:brightness(1.1);
+}
+
+.rosa-enhanced-ready .rosa-enhanced-pulse{
+  animation:rosa-enhanced-pulse .34s ease-out;
+}
+
+@keyframes rosa-enhanced-pulse{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.045)}
+  100%{transform:scale(1)}
+}
+
+.rosa-enhanced-ready[data-rosa-enhanced-state*="Harmonia"] .rosa-console,
+.rosa-enhanced-ready[data-rosa-enhanced-state*="Univers visual"] .rosa-console,
+.rosa-enhanced-ready[data-rosa-enhanced-state*="Retrodansa"] .rosa-console,
+.rosa-enhanced-ready[data-rosa-enhanced-state*="Silenci"] .rosa-console{
+  border-color:rgba(211,173,97,.28);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .rosa-enhanced-ready *,
+  .rosa-enhanced-ready *::before,
+  .rosa-enhanced-ready *::after{
+    scroll-behavior:auto!important;
+  }
+  .rosa-enhanced-ready .rosa-enhanced-pulse{
+    animation:none;
+  }
+  .rosa-enhanced-ready .rosa-instrument::after{
+    display:none;
+  }
+}
