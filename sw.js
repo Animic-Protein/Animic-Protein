@@ -1,4 +1,4 @@
-const CACHE = 'codex-viu-canonical-v41';
+const CACHE = 'codex-viu-canonical-v42';
 const ASSETS = [
   './', './index.html', './styles.css', './rosa.css', './rosa-enhanced.css', './rosa-inter-nos.css', './cartographia.css',
   './germinacio.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './metabolism.js', './homeostasis.js', './lineage.js',
