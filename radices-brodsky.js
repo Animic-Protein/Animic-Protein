@@ -6,7 +6,7 @@
   css.href='radices-brodsky.css';
   document.head.appendChild(css);
 
-  const TARGETS=new Set(['brodsky-creativitat','creativitum-nunc-pacevem']);
+  const TARGETS=new Set(['brodsky-creativitat','brodsky-avorriment','creativitum-nunc-pacevem','temps-nu']);
   const fertile=[
     'Des de dins, crear és sostenir incertesa i inseguretat.',
     'La perícia prepara l’encontre, però no garanteix l’esdeveniment.',
@@ -34,6 +34,14 @@
   const sourceLink=()=>{
     const link=el('a','brodsky-source-link','Obrir la fitxa de procedència');
     link.href='./arrels/joseph-brodsky-creativitat.md';
+    link.target='_blank';
+    link.rel='noopener';
+    return link;
+  };
+
+  const boredomSourceLink=()=>{
+    const link=el('a','brodsky-source-link','Obrir la fitxa de procedència');
+    link.href='./arrels/joseph-brodsky-elogi-avorriment.md';
     link.target='_blank';
     link.rel='noopener';
     return link;
@@ -76,6 +84,56 @@
     box.append(steps,sourceLink());
   };
 
+  const renderBoredom=box=>{
+    box.append(
+      el('p','memory-title','Arrel documentada · Contrapunt'),
+      el('h4','brodsky-radix-title','Brodsky · Travessar la repetició')
+    );
+    box.append(
+      el('p','brodsky-source','Síntesi interpretativa d’«In Praise of Boredom», discurs pronunciat a Dartmouth el 1989 i publicat després a On Grief and Reason. No és una reproducció del text.'),
+      boredomSourceLink(),
+      el('p','brodsky-subtitle','Allò fèrtil')
+    );
+    const list=el('ul','brodsky-fertile');
+    [
+      'La vida té la repetició com un dels seus medis principals.',
+      'La novetat compulsiva no venç el temps: només ajorna la trobada.',
+      'Travessar l’avorriment revela finitud, proporció i durada.',
+      'La precisió sobre la pròpia mesura pot produir humilitat i compassió.',
+      'La sensibilitat és la resposta finita davant un temps que ens excedeix.',
+      'La passió és valuosa quan neix de l’atenció, no del pànic a repetir.'
+    ].forEach(item=>list.appendChild(el('li','',item)));
+    box.appendChild(list);
+    const consequence=el('div','brodsky-consequence');
+    consequence.append(
+      el('strong','','Contrapunt amb «El maullido de un gato»'),
+      el('p','','Una arrel ensenya a no forçar l’arribada; l’altra, a no fugir abans que arribi. El Còdex prepara i roman: receptivitat dins del temps.')
+    );
+    box.appendChild(consequence);
+  };
+
+  const renderBareTime=box=>{
+    box.append(
+      el('p','memory-title','CONT·I · Instrument temporal'),
+      el('h4','brodsky-formula-title','Temps nu · protocol 7—1—1')
+    );
+    box.append(
+      el('p','brodsky-source','Transformació operativa d’Anímic Protein. No és una instrucció de Brodsky.'),
+      el('blockquote','brodsky-formula','La repetició no exigeix novetat: exigeix prou escolta perquè una diferència mínima pugui esdevenir necessària.'),
+      el('p','brodsky-subtitle','Partitura verbal')
+    );
+    const steps=el('ol','brodsky-steps');
+    [
+      'Tria una cèl·lula de 5–15 segons.',
+      'Repeteix-la 7 vegades sense embellir-la.',
+      'Observa quan apareix l’impuls de fugir o variar.',
+      'A la 8a volta, canvia una sola dimensió: timbre, accent, altura o silenci.',
+      'A la 9a, retorna exactament a l’origen.',
+      'Conserva la variació només si ha modificat l’escolta del retorn.'
+    ].forEach(item=>steps.appendChild(el('li','',item)));
+    box.append(steps,boredomSourceLink());
+  };
+
   const render=()=>{
     const box=ensurePanel();
     if(!box)return;
@@ -84,6 +142,8 @@
     box.hidden=!TARGETS.has(activeId);
     if(box.hidden)return;
     if(activeId==='brodsky-creativitat')renderBrodsky(box);
+    else if(activeId==='brodsky-avorriment')renderBoredom(box);
+    else if(activeId==='temps-nu')renderBareTime(box);
     else renderFormula(box);
   };
 
