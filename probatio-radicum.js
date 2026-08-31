@@ -21,6 +21,5 @@ const evaluate=()=>{
  return patterns;
 };
 window.addEventListener('codex:radicum-updated',evaluate);
-window.addEventListener('storage',event=>{if(event.key===MEMORY_KEY)evaluate();});
 evaluate();
 })();
