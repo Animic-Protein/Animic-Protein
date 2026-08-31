@@ -31,11 +31,19 @@
   };
 
   const eligibility=g=>{
-    if(!g)return {ok:false,reason:'Selecciona un node germinat.'};
-    if(g.life!=='arrelat')return {ok:false,reason:'Només un node Arrelat pot demanar entrada al cànon.'};
+    if(!g)return {ok:false,life:'germen',uses:0,missingRelations:MIN_RELATIONS,reason:'Selecciona un node germinat.'};
+    const life=g.life||'germen';
     const uses=Math.max(0,Number(g.uses)||0);
-    if(uses<MIN_RELATIONS)return {ok:false,reason:`Calen almenys ${MIN_RELATIONS} relacions viscudes; ara en té ${uses}.`};
-    return {ok:true,reason:'Compleix arrelament i relació mínima.'};
+    const lifeOk=life==='arrelat';
+    const missingRelations=Math.max(0,MIN_RELATIONS-uses);
+    return {
+      ok:lifeOk&&missingRelations===0,
+      life,
+      uses,
+      lifeOk,
+      missingRelations,
+      reason:lifeOk&&missingRelations===0?'Compleix arrelament i relació mínima.':'Encara no es pot consagrar.'
+    };
   };
 
   const canonicalize=g=>{
@@ -123,11 +131,27 @@
     const e=eligibility(g);
     const promoted=readCanon().find(x=>x.sourceGermId===g.id);
     box.innerHTML='<p class="memory-title">Promoció canònica</p>';
-    const status=document.createElement('p');
-    status.className='memory-empty';
-    status.textContent=promoted
-      ? `Consagrat com «${promoted.title}». La genealogia continua vinculada al node d’origen.`
-      : e.reason;
+    const status=document.createElement(promoted?'p':'div');
+    status.className=promoted?'memory-empty':'canon-guidance';
+    if(promoted){
+      status.textContent=`Consagrat com «${promoted.title}». La genealogia continua vinculada al node d’origen.`;
+    }else{
+      const heading=document.createElement('strong');
+      heading.textContent=e.ok?'Preparat per a la consagració':'Encara no es pot consagrar';
+      const list=document.createElement('ul');
+      const lifeItem=document.createElement('li');
+      lifeItem.className=e.lifeOk?'is-complete':'is-pending';
+      lifeItem.textContent=e.lifeOk
+        ? 'Estat: Arrelat — requisit complert.'
+        : `Estat: ${e.life==='brot'?'Brot':'Germen'} — cal arribar a Arrelat.`;
+      const relationItem=document.createElement('li');
+      relationItem.className=e.missingRelations===0?'is-complete':'is-pending';
+      relationItem.textContent=e.missingRelations===0
+        ? `Relacions: ${e.uses}/${MIN_RELATIONS} — requisit complert.`
+        : `Relacions: ${e.uses}/${MIN_RELATIONS} — ${e.missingRelations===1?'en falta una':`en falten ${e.missingRelations}`}.`;
+      list.append(lifeItem,relationItem);
+      status.append(heading,list);
+    }
     box.appendChild(status);
 
     if(promoted){
