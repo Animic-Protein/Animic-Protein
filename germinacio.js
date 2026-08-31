@@ -31,8 +31,12 @@
   };
   const updateGerm=(id,patch)=>{
     const next=readGerms().map(g=>g.id===id?{...g,...patch,updatedAt:new Date().toISOString()}:g);
-    writeGerms(next);render();
-    return next.find(g=>g.id===id);
+    const updated=next.find(g=>g.id===id);
+    writeGerms(next);
+    render();
+    const node=map?.querySelector(`[data-node="${id}"]`);
+    if(node)activateNode(node);
+    return updated;
   };
   const grow=id=>{
     const g=readGerms().find(x=>x.id===id);if(!g)return;
@@ -52,7 +56,8 @@
     const box=ensureLifePanel();if(!box)return;
     if(!g){box.innerHTML='';return}
     const life=g.life||'germen';
-    box.innerHTML=`<p class="memory-title">Cicle vital</p><div class="life-row"><span class="life-badge life-${esc(life)}">${esc(lifeLabels[life])}</span><span class="life-uses">${Math.max(0,Number(g.uses)||0)} relacions</span></div><button type="button" class="grow-germ" ${life==='compost'?'disabled':''}>${life==='compost'?'Retornat al compost':'Fer créixer'}</button><p class="life-lineage">Origen: ${esc(g.aId)} ↔ ${esc(g.bId)}</p>`;
+    const actionLabel={germen:'Passar a Brot',brot:'Arrelar el node',arrelat:'Retornar al compost',compost:'Retornat al compost'}[life];
+    box.innerHTML=`<p class="memory-title">Cicle vital</p><div class="life-row"><span class="life-badge life-${esc(life)}">${esc(lifeLabels[life])}</span><span class="life-uses">${Math.max(0,Number(g.uses)||0)} relacions</span></div><button type="button" class="grow-germ" ${life==='compost'?'disabled':''}>${esc(actionLabel)}</button><p class="life-lineage">Origen: ${esc(g.aId)} ↔ ${esc(g.bId)}</p>`;
     box.querySelector('.grow-germ')?.addEventListener('click',()=>grow(g.id));
   };
   const render=()=>{
