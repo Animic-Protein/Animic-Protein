@@ -27,3 +27,5 @@ jobs:
           find . -maxdepth 1 -type f -name '*.js' -print0 | sort -z | xargs -0 -n1 node --check
       - name: Coherència del Site
         run: node scripts/validate-site.mjs
+      - name: Vida constitucional
+        run: node scripts/audit-constitutional.mjs
