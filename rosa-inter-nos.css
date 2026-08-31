@@ -1,0 +1,7 @@
+.rosa-inter-nos{margin-top:1rem;padding:1rem;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:1rem;background:color-mix(in srgb,#0d1512 88%,transparent);backdrop-filter:blur(10px)}
+.rosa-inter-nos[hidden]{display:none}
+.rosa-inter-nos h3{margin:.25rem 0 .5rem;font-size:1.05rem}
+.rosa-inter-nos p{margin:.35rem 0;line-height:1.45}
+.rosa-inter-nos-actions{margin-top:.8rem;display:flex;gap:.5rem}
+.rosa-inter-nos-actions button{font:inherit;padding:.55rem .8rem;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit}
+.is-inter-nos-selected{outline:2px solid currentColor;outline-offset:3px}
