@@ -4,7 +4,16 @@
   const consoleEl=dialog.querySelector('.rosa-console');
   if(!consoleEl) return;
 
+  if(!document.getElementById('rosa-inter-nos-styles')){
+    const link=document.createElement('link');
+    link.id='rosa-inter-nos-styles';
+    link.rel='stylesheet';
+    link.href='./rosa-inter-nos.css';
+    document.head.appendChild(link);
+  }
+
   const selected=[];
+  const selectedElements=[];
   const normalize=el=>({
     label:(el.dataset?.title||el.textContent||'Node').trim().replace(/\s+/g,' '),
     key:(el.dataset?.node||el.dataset?.rosaKey||el.textContent||'node').trim().toLowerCase().replace(/\s+/g,'-')
@@ -40,6 +49,7 @@
 
   const render=()=>{
     dialog.querySelectorAll('.is-inter-nos-selected').forEach(el=>el.classList.remove('is-inter-nos-selected'));
+    selectedElements.forEach(el=>el?.isConnected&&el.classList.add('is-inter-nos-selected'));
     if(!selected.length){
       panel.hidden=true;
       return;
@@ -59,9 +69,9 @@
   const addNode=el=>{
     const node=normalize(el);
     if(selected.some(x=>x.key===node.key)) return;
-    if(selected.length===2) selected.shift();
+    if(selected.length===2){selected.shift();selectedElements.shift();}
     selected.push(node);
-    el.classList.add('is-inter-nos-selected');
+    selectedElements.push(el);
     render();
   };
 
@@ -73,6 +83,7 @@
 
   clear.addEventListener('click',()=>{
     selected.length=0;
+    selectedElements.length=0;
     render();
     const status=dialog.querySelector('[data-rosa-status]');
     if(status) status.textContent='INTER NOS · relació netejada';
@@ -80,6 +91,7 @@
 
   dialog.addEventListener('close',()=>{
     selected.length=0;
+    selectedElements.length=0;
     render();
   });
 
