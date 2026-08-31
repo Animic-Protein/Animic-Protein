@@ -11,6 +11,7 @@
   <meta name="description" content="Còdex Viu d’Anímic Protein — música, pensament, símbols i organisme interactiu." />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="rosa.css" />
+  <link rel="stylesheet" href="temps-nu.css" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
@@ -26,6 +27,7 @@
       <button class="portal primary" data-open="sembra">Sembra una llavor</button>
       <button class="portal z" data-open="instrument-z">Z</button>
       <button class="portal question" data-open="rosa">?</button>
+      <button class="portal time" data-open="temps-nu-dialog" aria-label="Obrir la Cambra nua del temps">TEMPS</button>
     </div>
   </header>
 
@@ -110,7 +112,7 @@
             <button type="button" data-node="vortex" data-title="Vòrtex" data-desc="Camp d’atracció on els materials entren, xoquen i canvien d’estat.">Vòrtex</button>
             <button type="button" data-node="inter-nos" data-title="Inter Nos" data-desc="Allò que neix entre dos nodes i no pertany del tot a cap d’ells.">Inter Nos</button>
             <button type="button" data-node="continuum-musicalis" data-title="Continuum musicalis" data-desc="La música no comença ni acaba: només travessa estats.">Continuum musicalis</button>
-            <button type="button" data-node="temps-nu" data-title="Temps nu" data-desc="Laboratori del Continuum: repetir, travessar el llindar, introduir una mutació mínima i retornar amb memòria.">Temps nu</button>
+            <button type="button" data-node="temps-nu" data-title="Cambra nua del temps" data-desc="Cambra navegable del Continuum: centre, repetició, llindar, mutació mínima, retorn i memòria viva.">Cambra nua del temps</button>
             <button type="button" data-node="relacions" data-title="Relacions" data-desc="Connexions canòniques, afinitats, hipòtesis i mutacions recents.">Relacions</button>
           </div>
         </section>
@@ -253,6 +255,50 @@
           <span><b>2</b> Tria una direcció o un node.</span>
           <span><b>3</b> Actua amb l’instrument contextual.</span>
           <span><b>4</b> Obre la cambra o torna al centre.</span>
+        </div>
+      </aside>
+    </div>
+  </dialog>
+
+  <dialog id="temps-nu-dialog" class="temps-nu-dialog" aria-labelledby="temps-nu-dialog-title">
+    <button class="close temps-nu-close" aria-label="Tancar la Cambra nua del temps">×</button>
+    <div class="temps-nu-shell">
+      <section class="temps-nu-chamber-stage" aria-label="Dial de nou voltes de la Cambra nua del temps">
+        <div class="temps-nu-stage-head">
+          <p class="kicker">CONT·I · TEMPS·NU·III</p>
+          <p>PROXIMITAT + DIFERÈNCIA + TEMPS</p>
+        </div>
+        <div class="temps-nu-dial" data-tn-dial>
+          <div class="temps-nu-rings" aria-hidden="true"></div>
+          <div class="temps-nu-gates" data-tn-gates aria-label="Traça de les nou voltes"></div>
+          <button class="temps-nu-center" type="button" data-tn-center aria-label="Tornar al centre de la Cambra nua del temps">
+            <small>ORIGEN</small>
+            <strong>CENTRE</strong>
+            <span>RETORN</span>
+          </button>
+        </div>
+        <p class="temps-nu-stage-caption" data-tn-stage-caption>La cambra és en repòs. Tria un camí des de la consola.</p>
+      </section>
+      <aside class="temps-nu-console">
+        <p class="kicker">Cambra nua del temps</p>
+        <p class="temps-nu-status" data-tn-status aria-live="polite">Centre · cambra en repòs</p>
+        <h2 id="temps-nu-dialog-title" data-tn-title>Habitar la repetició</h2>
+        <p class="temps-nu-description" data-tn-description>Entra per una Demo, una Travessa lliure o la Memòria. Sempre pots tornar al centre.</p>
+        <nav class="temps-nu-nav" aria-label="Camins de la Cambra nua del temps">
+          <button type="button" data-tn-view="demo"><strong>Demo</strong><small>Una absència audible</small></button>
+          <button type="button" data-tn-view="free"><strong>Travessa</strong><small>Tria la mutació</small></button>
+          <button type="button" data-tn-view="memory"><strong>Memòria</strong><small>Fruit privat o retirada</small></button>
+        </nav>
+        <section class="temps-nu-workbench" data-tn-workbench aria-live="polite">
+          <p class="kicker">Centre · origen</p>
+          <p>Cap so no començarà sense el teu gest. La Cambra no avalua: mostra com està existint la teva escolta.</p>
+        </section>
+        <div class="temps-nu-route">
+          <span><b>1</b> Aproximació</span>
+          <span><b>2</b> Escolta</span>
+          <span><b>3</b> Interferència</span>
+          <span><b>4</b> Plegament</span>
+          <span><b>5</b> Retorn</span>
         </div>
       </aside>
     </div>

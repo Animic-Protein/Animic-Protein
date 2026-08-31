@@ -20,8 +20,11 @@ for(const ref of assetRefs){
 }
 
 const html=read('index.html');
-for(const id of ['living-map','node-panel','relation-output']){
+for(const id of ['living-map','node-panel','relation-output','temps-nu-dialog']){
   if(!html.includes('id="'+id+'"')&&!html.includes("id='"+id+"'"))failures.push('index.html no conté #'+id);
+}
+for(const marker of ['data-tn-center','data-tn-workbench','data-tn-view="demo"','data-node="temps-nu"']){
+  if(!html.includes(marker))failures.push('index.html no conté el marcador de la Cambra nua del temps: '+marker);
 }
 
 const localRefs=[...html.matchAll(/(?:href|src)=["']([^"']+)["']/g)]

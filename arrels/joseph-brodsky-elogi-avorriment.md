@@ -7,7 +7,7 @@
 - **Origen:** discurs de graduació adreçat a la promoció de 1989 de Dartmouth College
 - **Publicació posterior:** *On Grief and Reason: Essays*, Farrar, Straus and Giroux, 1995
 - **Incorporació al Còdex:** 2026-09-01
-- **Versió interactiva:** TEMPS·NU·II, memòria cau v50
+- **Versió interactiva:** TEMPS·NU·III · Cambra nua del temps, memòria cau v51
 - **Estat:** arrel documentada + lectura interpretativa + transformació musical pròpia
 - **Text íntegre:** no reproduït
 
@@ -59,9 +59,9 @@ El protocol no glorifica l’avorriment ni converteix el patiment en obligació.
 
 La peça no avança acumulant novetats. Travessa estats d’escolta. Així, la repetició esdevé una lent per percebre diferències, no un material inert.
 
-## Cambra interactiva
+## Cambra nua del temps
 
-El node **Temps nu** executa el protocol com una sessió sonora d’aproximadament 22 segons. El visitant:
+El node estable **Temps nu** es manifesta com la **Cambra nua del temps**, una interfície navegable autònoma. Executa el protocol com una sessió sonora d’aproximadament 22 segons. El visitant:
 
 1. escull una sola dimensió de mutació;
 2. inicia voluntàriament el so;
@@ -83,6 +83,16 @@ La Cambra incorpora una demostració guiada i transcrita:
 - **Diferència perceptible:** el retorn és materialment igual a l’entrada, però l’escolta conserva la memòria de l’absència.
 
 La traça de les nou voltes també es presenta amb text visible i etiquetes accessibles; la comprensió no depèn exclusivament del so, el color o l’animació.
+
+### Navegació de la Cambra
+
+- **Centre:** origen, aturada i retorn segur.
+- **Demo:** recorregut guiat amb mutació de silenci.
+- **Travessa:** recorregut lliure amb Timbre, Accent, Altura o Silenci.
+- **Memòria:** lectura, retirada o absència del fruit privat.
+- **Dial de nou voltes:** set repeticions, una interferència i un retorn.
+
+La ruta visible és **Aproximació → Escolta → Interferència → Plegament → Retorn**. El retorn pot deixar memòria viva o tornar al Compost.
 
 ## Relacions activades
 

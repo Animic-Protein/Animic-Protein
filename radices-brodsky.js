@@ -115,7 +115,7 @@
   const renderBareTime=box=>{
     box.append(
       el('p','memory-title','CONT·I · Instrument temporal'),
-      el('h4','brodsky-formula-title','Temps nu · protocol 7—1—1')
+      el('h4','brodsky-formula-title','Cambra nua del temps · protocol 7—1—1')
     );
     box.append(
       el('p','brodsky-source','Transformació operativa d’Anímic Protein. No és una instrucció de Brodsky.'),

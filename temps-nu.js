@@ -12,11 +12,19 @@
     silenci:{label:'Silenci',detail:'Un atac desapareix i deixa el seu rastre.'}
   };
 
-  const css=document.createElement('link');
-  css.rel='stylesheet';
-  css.href='temps-nu.css';
-  document.head.appendChild(css);
+  const dialog=document.getElementById('temps-nu-dialog');
+  if(!dialog)return;
 
+  const gates=dialog.querySelector('[data-tn-gates]');
+  const center=dialog.querySelector('[data-tn-center]');
+  const status=dialog.querySelector('[data-tn-status]');
+  const title=dialog.querySelector('[data-tn-title]');
+  const description=dialog.querySelector('[data-tn-description]');
+  const caption=dialog.querySelector('[data-tn-stage-caption]');
+  const workbench=dialog.querySelector('[data-tn-workbench]');
+  const viewButtons=[...dialog.querySelectorAll('[data-tn-view]')];
+
+  let view='centre';
   let timer=null;
   let audio=null;
   let audioOut=null;
@@ -31,6 +39,12 @@
     const node=document.createElement(tag);
     if(className)node.className=className;
     if(text!==undefined)node.textContent=text;
+    return node;
+  };
+
+  const button=(label,className='')=>{
+    const node=el('button',className,label);
+    node.type='button';
     return node;
   };
 
@@ -50,10 +64,10 @@
   const safeRemove=()=>{try{localStorage.removeItem(MEMORY_KEY)}catch{}};
 
   const phaseFor=n=>{
-    if(!n)return{index:0,title:'Cambra en repòs',detail:'Tria una mutació i entra quan vulguis.'};
-    if(n<=7)return{index:n===1?1:2,title:'Repetició estable',detail:demoMode?'Re — Fa — La. Tres atacs intactes; encara no falta res.':'No embellir. Escoltar l’impuls de fugir sense obeir-lo.'};
-    if(n===8)return{index:3,title:'Mutació mínima · '+mutations[mutation].label,detail:demoMode?'Re — [absència] — La. El Fa deixa un espai audible.':mutations[mutation].detail};
-    return{index:4,title:'Retorn amb memòria',detail:demoMode?'Re — Fa — La. El Fa retorna, però l’orella recorda que podia faltar.':'La forma inicial torna. Comprova si ara s’escolta diferent.'};
+    if(!n)return{name:'Aproximació',detail:'La cambra és en repòs.'};
+    if(n<=7)return{name:'Escolta · repetició '+n,detail:demoMode?'Re — Fa — La. Tres atacs intactes.':'Sostén la cèl·lula sense embellir-la.'};
+    if(n===8)return{name:'Interferència · '+mutations[mutation].label,detail:demoMode?'Re — [absència] — La. El Fa deixa un espai audible.':mutations[mutation].detail};
+    return{name:'Plegament · retorn',detail:demoMode?'Re — Fa — La. El Fa retorna amb la memòria del buit.':'La forma inicial torna. Comprova si ara s’escolta diferent.'};
   };
 
   const stopAudio=()=>{
@@ -65,16 +79,16 @@
   };
 
   const tone=(ctx,when,freq,duration,gainValue,type='sine')=>{
-    const osc=ctx.createOscillator();
+    const oscillator=ctx.createOscillator();
     const gain=ctx.createGain();
-    osc.type=type;
-    osc.frequency.setValueAtTime(freq,when);
+    oscillator.type=type;
+    oscillator.frequency.setValueAtTime(freq,when);
     gain.gain.setValueAtTime(0.0001,when);
     gain.gain.exponentialRampToValueAtTime(gainValue,when+.025);
     gain.gain.exponentialRampToValueAtTime(0.0001,when+duration);
-    osc.connect(gain).connect(audioOut||ctx.destination);
-    osc.start(when);
-    osc.stop(when+duration+.03);
+    oscillator.connect(gain).connect(audioOut||ctx.destination);
+    oscillator.start(when);
+    oscillator.stop(when+duration+.03);
   };
 
   const soundCycle=n=>{
@@ -93,20 +107,19 @@
       compressor.connect(master).connect(audio.destination);
       audioOut=compressor;
     }
-    const ctx=audio;
-    if(ctx.state==='suspended')ctx.resume();
-    const start=ctx.currentTime+.04;
-    let freqs=[146.83,174.61,220];
+    if(audio.state==='suspended')audio.resume();
+    const start=audio.currentTime+.04;
+    let frequencies=[146.83,174.61,220];
     let type='sine';
-    let gains=[.035,.03,.032];
+    let levels=[.035,.03,.032];
     if(n===8){
-      if(mutation==='altura')freqs=freqs.map(f=>f*1.189207);
+      if(mutation==='altura')frequencies=frequencies.map(frequency=>frequency*1.189207);
       if(mutation==='timbre')type='triangle';
-      if(mutation==='accent')gains=[.065,.025,.028];
+      if(mutation==='accent')levels=[.065,.025,.028];
     }
-    freqs.forEach((freq,index)=>{
+    frequencies.forEach((frequency,index)=>{
       if(n===8&&mutation==='silenci'&&index===1)return;
-      tone(ctx,start+index*.54,freq,.34,gains[index],type);
+      tone(audio,start+index*.54,frequency,.34,levels[index],type);
     });
   };
 
@@ -114,138 +127,160 @@
     runToken+=1;
     if(timer){clearTimeout(timer);timer=null}
     stopAudio();
-    if(reset){cycle=0;threshold=null;completed=false;demoMode=false}
+    if(reset){
+      cycle=0;
+      threshold=null;
+      completed=false;
+      demoMode=false;
+    }
   };
 
-  const ritualLabels=['Entrar','Repetir','Llindar','Mutar','Retornar'];
+  const renderGates=()=>{
+    gates.replaceChildren();
+    for(let n=1;n<=TOTAL_CYCLES;n+=1){
+      const angle=(n-1)*40;
+      const kind=n<=7?'Repetició':n===8?'Interferència':'Retorn';
+      const slot=el('span','temps-nu-gate-slot');
+      slot.style.setProperty('--tn-angle',angle+'deg');
+      const gate=el('span','temps-nu-gate '+(n<cycle?'is-past ':'')+(n===cycle?'is-current ':'')+(n===8?'is-mutation ':'')+(n===9?'is-return':''),String(n));
+      gate.style.setProperty('--tn-counter',(-angle)+'deg');
+      gate.setAttribute('role','img');
+      gate.setAttribute('aria-label','Volta '+n+': '+kind+(n===cycle?', activa':''));
+      slot.appendChild(gate);
+      gates.appendChild(slot);
+    }
+  };
+
+  const renderCentre=()=>{
+    workbench.append(
+      el('p','kicker','Centre · origen i retorn'),
+      el('h3','','La cambra encara no ha començat'),
+      el('p','temps-nu-copy','Tria Demo per escoltar una absència guiada, Travessa per decidir la mutació o Memòria per revisar el darrer fruit privat.')
+    );
+    workbench.appendChild(el('p','temps-nu-notice','El so només s’activa amb el teu gest. Pots aturar-lo i tornar al centre en qualsevol moment.'));
+  };
+
+  const renderDemo=()=>{
+    workbench.append(
+      el('p','kicker','Demo · mutació de silenci'),
+      el('h3','','Una absència audible'),
+      el('p','temps-nu-score','Re — Fa — La × 7 · Re — ∅ — La × 1 · Re — Fa — La × 1'),
+      el('p','temps-nu-copy','A la vuitena volta desapareixerà el Fa. A la novena tornarà: el material serà igual a l’inici, però l’escolta conservarà el buit.')
+    );
+    const start=button('Comença la Demo','is-primary');
+    start.addEventListener('click',()=>begin({demo:true}));
+    const actions=el('div','temps-nu-actions');
+    actions.appendChild(start);
+    workbench.appendChild(actions);
+  };
+
+  const renderFree=()=>{
+    workbench.append(
+      el('p','kicker','Travessa lliure'),
+      el('h3','','Una sola diferència'),
+      el('p','temps-nu-copy','Tria què canviarà exclusivament a la vuitena volta.')
+    );
+    const choices=el('div','temps-nu-mutations');
+    Object.entries(mutations).forEach(([id,item])=>{
+      const choice=button(item.label);
+      choice.setAttribute('aria-pressed',String(id===mutation));
+      choice.title=item.detail;
+      choice.addEventListener('click',()=>{mutation=id;render()});
+      choices.appendChild(choice);
+    });
+    const start=button('Comença la Travessa','is-primary');
+    start.addEventListener('click',()=>begin());
+    const actions=el('div','temps-nu-actions');
+    actions.appendChild(start);
+    workbench.append(choices,actions);
+  };
+
+  const renderMemory=()=>{
+    const memory=safeRead();
+    workbench.append(el('p','kicker','Memòria viva'),el('h3','','Fruit privat'));
+    if(!memory){
+      workbench.appendChild(el('p','temps-nu-copy','No hi ha cap fruit conservat en aquest dispositiu. La cambra no publica res per defecte.'));
+      return;
+    }
+    workbench.append(
+      el('p','temps-nu-score',mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
+      el('p','temps-nu-copy',memory.threshold?'El primer llindar es va marcar a la volta '+memory.threshold+'.':'La travessa es va completar sense marcar cap llindar.')
+    );
+    const withdraw=button('Retira aquesta memòria');
+    withdraw.addEventListener('click',()=>{safeRemove();render()});
+    const actions=el('div','temps-nu-actions');
+    actions.appendChild(withdraw);
+    workbench.appendChild(actions);
+  };
+
+  const renderRunning=()=>{
+    const phase=phaseFor(cycle);
+    workbench.append(
+      el('p','kicker','Volta '+cycle+' / '+TOTAL_CYCLES),
+      el('h3','',phase.name),
+      el('p','temps-nu-score',demoMode?(cycle===8?'Re — ∅ — La':'Re — Fa — La'):'Mutació preparada · '+mutations[mutation].label),
+      el('p','temps-nu-copy',phase.detail)
+    );
+    const mark=button(threshold?'Llindar marcat · volta '+threshold:'Marca el llindar');
+    mark.disabled=cycle<1||cycle>7||Boolean(threshold);
+    mark.addEventListener('click',()=>{threshold=cycle;render()});
+    const halt=button('Atura i torna al centre');
+    halt.addEventListener('click',returnCentre);
+    const actions=el('div','temps-nu-actions');
+    actions.append(mark,halt);
+    workbench.appendChild(actions);
+  };
+
+  const renderCompleted=()=>{
+    workbench.append(
+      el('p','kicker','Retorn · memòria viva'),
+      el('h3','','La novena volta ha tornat'),
+      el('p','temps-nu-copy',threshold?'El primer impuls de fugir ha aparegut a la volta '+threshold+'. Ara decideix si la diferència mereix memòria.':'No has marcat cap llindar. També és una dada d’escolta.')
+    );
+    if(demoMode){
+      const difference=el('div','temps-nu-difference');
+      difference.append(
+        el('p','kicker','Entrada → operació → sortida'),
+        el('strong','','q: tres atacs → q′: un atac absent → retorn: tres atacs'),
+        el('p','','Diferència perceptible: el retorn conté la memòria de l’absència.')
+      );
+      workbench.appendChild(difference);
+    }
+    const fruit=button('Conserva com a fruit privat','is-primary');
+    fruit.addEventListener('click',()=>{
+      safeWrite({mutation,threshold,mode:demoMode?'demo':'lliure',createdAt:new Date().toISOString(),version:'TEMPS·NU·III'});
+      view='memory';
+      stop({reset:true});
+      render();
+    });
+    const compost=button('Retorna al Compost');
+    compost.addEventListener('click',()=>{safeRemove();returnCentre()});
+    const actions=el('div','temps-nu-actions');
+    actions.append(fruit,compost);
+    workbench.appendChild(actions);
+  };
 
   const render=()=>{
-    const panel=document.querySelector('.brodsky-radix-panel');
-    const active=document.querySelector('#living-map [data-node].is-active')?.dataset?.node;
-    if(!panel||active!==NODE_ID)return;
-    panel.querySelector('.temps-nu-instrument')?.remove();
-
-    const box=el('section','temps-nu-instrument');
-    const head=el('div','temps-nu-head');
-    const headText=el('div');
-    headText.append(el('p','brodsky-subtitle','Cambra d’escolta'),el('h5','','Temps nu · sessió 7—1—1'));
-    head.append(headText,el('span','temps-nu-private','Privat · no es publica'));
-    box.appendChild(head);
-
-    const demo=el('section','temps-nu-demo');
-    const demoText=el('div');
-    demoText.append(
-      el('p','brodsky-subtitle','Demo aplicada · mutació de silenci'),
-      el('strong','','Re — Fa — La × 7 · Re — ∅ — La × 1 · Re — Fa — La × 1'),
-      el('p','','Escoltaràs la mateixa cèl·lula set vegades. A la vuitena desapareix l’atac central; a la novena retorna.')
-    );
-    const demoButton=el('button','','Escolta la Demo');
-    demoButton.type='button';
-    demoButton.disabled=cycle>0&&!completed;
-    demoButton.addEventListener('click',()=>begin({demo:true}));
-    demo.append(demoText,demoButton);
-    box.appendChild(demo);
-
-    const ritual=el('div','temps-nu-ritual');
+    renderGates();
+    const running=cycle>0&&!completed;
     const phase=phaseFor(cycle);
-    ritualLabels.forEach((label,index)=>{
-      const step=el('span',index===phase.index?'is-current':'',label);
-      ritual.appendChild(step);
+    dialog.dataset.tnState=completed?'retorn':running?(cycle===8?'interferencia':cycle===9?'plegament':'escolta'):view;
+    center?.classList.toggle('is-active',running||completed);
+    if(caption)caption.textContent=completed?'Retorn completat. Decideix entre memòria viva i Compost.':running?phase.name+' · '+phase.detail:'Centre disponible · sempre pots tornar a l’origen.';
+    if(status)status.textContent=completed?'Retorn · decisió':running?phase.name:(view==='centre'?'Centre · cambra en repòs':view==='demo'?'Camí · Demo':view==='free'?'Camí · Travessa lliure':'Camí · Memòria');
+    if(title)title.textContent=completed?'Retorn amb memòria':running?phase.name:view==='centre'?'Habitar la repetició':view==='demo'?'Demo · absència audible':view==='free'?'Travessa · diferència mínima':'Memòria · fruit privat';
+    if(description)description.textContent=running?'La cambra mostra com està existint la teva escolta; no avalua el resultat.':view==='centre'?'Entra per una Demo, una Travessa lliure o la Memòria. Sempre pots tornar al centre.':view==='memory'?'La memòria és local, explícita i revocable.':'PROXIMITAT + DIFERÈNCIA + TEMPS';
+    viewButtons.forEach(control=>{
+      control.disabled=running;
+      control.setAttribute('aria-pressed',String(control.dataset.tnView===view));
     });
-    box.appendChild(ritual);
-
-    const trace=el('ol','temps-nu-trace');
-    trace.setAttribute('aria-label','Traça de les nou voltes');
-    for(let n=1;n<=TOTAL_CYCLES;n+=1){
-      const kind=n<=7?'Repetició':n===8?'Mutació':'Retorn';
-      const item=el('li',(n<cycle?'is-past ':'')+(n===cycle?'is-current ':'')+(n===8?'is-mutation ':'')+(n===9?'is-return':''),String(n));
-      item.title='Volta '+n+' · '+kind;
-      item.setAttribute('aria-label','Volta '+n+': '+kind);
-      if(n===cycle)item.setAttribute('aria-current','step');
-      trace.appendChild(item);
-    }
-    box.appendChild(trace);
-
-    const mutationLabel=el('p','brodsky-subtitle','Una sola mutació a la volta 8');
-    const mutationGrid=el('div','temps-nu-mutations');
-    Object.entries(mutations).forEach(([id,item])=>{
-      const button=el('button','',item.label);
-      button.type='button';
-      button.setAttribute('aria-pressed',String(id===mutation));
-      button.disabled=cycle>0&&!completed;
-      button.addEventListener('click',()=>{mutation=id;demoMode=false;render()});
-      mutationGrid.appendChild(button);
-    });
-    box.append(mutationLabel,mutationGrid);
-
-    const stage=el('div','temps-nu-stage');
-    stage.append(
-      el('p','temps-nu-cycle',cycle?'Volta '+cycle+' / '+TOTAL_CYCLES:'CONT·I · TEMPS NU'),
-      el('strong','',phase.title),
-      el('p','',phase.detail)
-    );
-    const pulse=el('span','temps-nu-pulse'+(cycle>0&&!completed?' is-running':''));
-    pulse.setAttribute('aria-hidden','true');
-    stage.appendChild(pulse);
-    box.appendChild(stage);
-
-    const actions=el('div','temps-nu-actions');
-    const start=el('button','',cycle||completed?'Reiniciar la travessa':'Travessa lliure');
-    start.type='button';
-    const mark=el('button','',threshold?'Llindar: volta '+threshold:'Marca el llindar');
-    mark.type='button';
-    mark.disabled=cycle<1||cycle>7||completed||Boolean(threshold);
-    const halt=el('button','','Atura');
-    halt.type='button';
-    halt.disabled=!cycle||completed;
-    start.addEventListener('click',()=>begin());
-    mark.addEventListener('click',()=>{threshold=cycle;render()});
-    halt.addEventListener('click',()=>{stop({reset:true});render()});
-    actions.append(start,mark,halt);
-    box.appendChild(actions);
-
-    if(completed){
-      const result=el('p','temps-nu-result',threshold
-        ? 'El primer impuls de fugir ha aparegut a la volta '+threshold+'. Decideix si la diferència mereix memòria.'
-        : 'Has travessat les nou voltes sense marcar un llindar. També és una dada d’escolta.');
-      const decisions=el('div','temps-nu-decision');
-      const fruit=el('button','','Conserva com a fruit privat');
-      const compost=el('button','','Retorna al compost');
-      fruit.type=compost.type='button';
-      fruit.addEventListener('click',()=>{
-        safeWrite({mutation,threshold,mode:demoMode?'demo':'lliure',createdAt:new Date().toISOString(),version:'TEMPS·NU·II'});
-        render();
-      });
-      compost.addEventListener('click',()=>{safeRemove();stop({reset:true});render()});
-      decisions.append(fruit,compost);
-      box.append(result);
-      if(demoMode){
-        const difference=el('div','temps-nu-difference');
-        difference.append(
-          el('p','brodsky-subtitle','Entrada → operació → sortida'),
-          el('strong','','q: tres atacs → q′: un atac absent → retorn: tres atacs'),
-          el('p','','Diferència perceptible: el so retornat és materialment igual a l’inicial, però la seva escolta conté la memòria del buit.')
-        );
-        box.appendChild(difference);
-      }
-      box.appendChild(decisions);
-    }
-
-    const memory=safeRead();
-    if(memory){
-      const memoryBox=el('div','temps-nu-memory');
-      memoryBox.append(
-        el('strong','','Darrer fruit privat · '+mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
-        el('p','',memory.threshold?'Llindar registrat a la volta '+memory.threshold+'.':'Travessa sense llindar marcat.')
-      );
-      const withdraw=el('button','temps-nu-withdraw','Retira aquesta memòria');
-      withdraw.type='button';
-      withdraw.addEventListener('click',()=>{safeRemove();render()});
-      memoryBox.appendChild(withdraw);
-      box.appendChild(memoryBox);
-    }
-
-    panel.appendChild(box);
+    workbench.replaceChildren();
+    if(running)renderRunning();
+    else if(completed)renderCompleted();
+    else if(view==='demo')renderDemo();
+    else if(view==='free')renderFree();
+    else if(view==='memory')renderMemory();
+    else renderCentre();
   };
 
   const advance=token=>{
@@ -274,10 +309,47 @@
     advance(token);
   }
 
+  function returnCentre(){
+    stop({reset:true});
+    view='centre';
+    render();
+  }
+
+  const openChamber=()=>{
+    returnCentre();
+    if(!dialog.open&&typeof dialog.showModal==='function')dialog.showModal();
+  };
+
+  const ensureEntry=()=>{
+    const panel=document.querySelector('.brodsky-radix-panel');
+    const active=document.querySelector('#living-map [data-node].is-active')?.dataset?.node;
+    if(!panel||active!==NODE_ID)return;
+    panel.querySelector('.temps-nu-entry')?.remove();
+    const entry=el('section','temps-nu-entry');
+    entry.append(
+      el('p','kicker','Portal actiu · CONT·I'),
+      el('h5','','Cambra nua del temps'),
+      el('p','','Centre, Demo, Travessa i Memòria dins una navegació pròpia.')
+    );
+    const open=button('Obrir la Cambra nua del temps','is-primary');
+    open.addEventListener('click',openChamber);
+    entry.appendChild(open);
+    panel.appendChild(entry);
+  };
+
+  viewButtons.forEach(control=>control.addEventListener('click',()=>{
+    stop({reset:true});
+    view=control.dataset.tnView||'centre';
+    render();
+  }));
+  center?.addEventListener('click',returnCentre);
+  dialog.addEventListener('close',returnCentre);
   window.addEventListener('animic:node-activated',event=>{
-    if(event.detail?.id!==NODE_ID)stop();
-    window.setTimeout(render,0);
+    if(event.detail?.id!==NODE_ID&&dialog.open)dialog.close();
+    window.setTimeout(ensureEntry,0);
   });
   window.addEventListener('pagehide',()=>stop());
+
   render();
+  ensureEntry();
 })();
