@@ -1,6 +1,6 @@
 # Fusió Total Beta · 2.4-β Coniunctio
 
-**Estat:** Beta reversible, no canònica, en draft  
+**Estat:** Edició 2.4 fusionable per derogació explícita  
 **Data d’activació:** 27 d’agost de 2026  
 **Darrera metabolització:** 1 de setembre de 2026  
 **Site de laboratori:** https://animic-protein-fusio-beta.animic-protein.chatgpt.site  
@@ -67,7 +67,7 @@ La homeòstasi pot absorbir, compensar o derivar tensió al Compost, però no po
 - **Cambra nua del temps:** diferencia temps ocupat i temps exposat.
 - **Límit:** un únic cas no basta per germinar ni establir una llei.
 
-## Llindar de sortida del draft
+## Llindar original de sortida del draft
 
 Coniunctio continuarà en draft fins que constin:
 
@@ -81,7 +81,7 @@ Coniunctio continuarà en draft fins que constin:
 - [ ] una tensió Occam–Incertesa registrada;
 - [ ] evidència que almenys un instrument evoluciona amb els casos.
 
-Fins que tots els criteris estiguin verificats, `merge_readiness.ready` roman `false`.
+Aquest era el llindar original. El deute experimental es conserva, però la seva funció de bloqueig queda derogada per la decisió explícita següent.
 
 ## Què no s’absorbeix automàticament
 
@@ -93,3 +93,23 @@ Els canvis posteriors de `main` no entren com un bloc. Rosa, Cambra nua del temp
 - Esquelet GitHub: `main` a l’inici de la branca.
 - Estat viu observat de `main`: commit `e71ff84121388189490dc01d5e173c1734b0c3e7`.
 - Implementació Sites Beta: versió 1, commit intern `0fe9656bd916cab875b065067292af108462253f`.
+
+
+## Acta de derogació i fusió · 2026-09-01
+
+La persona propietària del Còdex Viu autoritza explícitament fusionar PR #22 abans de completar el segon cas real. Aquesta decisió:
+
+- deroga exclusivament el bloqueig de fusió basat en dos casos;
+- no declara que β·02 hagi estat executada;
+- no converteix el protocol β·02 en evidència;
+- no promou Error fèrtil I a principi constitucional;
+- conserva el deute experimental dins la memòria de l’edició;
+- permet que Coniunctio entri a `main` com una arquitectura canònica encara oberta.
+
+**Balanç Occam–Incertesa:** la fusió elimina la duplicació institucional entre branca i tronc, però manté visible la incertesa empírica pendent.
+
+**Cost declarat:** Coniunctio esdevé canònica amb només un cas real metabolitzat.
+
+**Camí de retorn:** els commits previs i el PR conserven l’estat anterior; qualsevol reversió haurà d’identificar aquesta acta.
+
+**Estat resultant:** canònic per derogació explícita, amb β·02 pendent d’execució.
