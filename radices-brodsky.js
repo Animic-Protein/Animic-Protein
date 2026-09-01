@@ -6,7 +6,7 @@
   css.href='radices-brodsky.css';
   document.head.appendChild(css);
 
-  const TARGETS=new Set(['brodsky-creativitat','brodsky-avorriment','creativitum-nunc-pacevem','temps-nu']);
+  const TARGETS=new Set(['arrels','creativitum-nunc-pacevem','temps-nu']);
   const fertile=[
     'Des de dins, crear és sostenir incertesa i inseguretat.',
     'La perícia prepara l’encontre, però no garanteix l’esdeveniment.',
@@ -72,7 +72,13 @@
     );
     const warning=el('p','brodsky-source','No és una cita de Brodsky ni llatí normatiu: és una transformació poètica del Còdex.');
     const formula=el('blockquote','brodsky-formula','La creativitat entra en una pau activa amb el límit: prepara, fa, escolta i no força l’arribada.');
-    box.append(warning,formula,el('p','brodsky-subtitle','Operació'));
+    box.append(warning,formula);
+    const friction=el('div','brodsky-consequence');
+    friction.append(
+      el('strong','','Fricció viva · díptic Brodsky'),
+      el('p','','Preparar sense forçar l’arribada; romandre sense fugir de la repetició. Pacevem no resol aquesta tensió: l’habita i l’utilitza com a condició d’escolta.')
+    );
+    box.append(friction,sourceLink(),boredomSourceLink(),el('p','brodsky-subtitle','Operació'));
     const steps=el('ol','brodsky-steps');
     [
       'Prepara sense predeterminar.',
@@ -141,9 +147,10 @@
     box.replaceChildren();
     box.hidden=!TARGETS.has(activeId);
     if(box.hidden)return;
-    if(activeId==='brodsky-creativitat')renderBrodsky(box);
-    else if(activeId==='brodsky-avorriment')renderBoredom(box);
-    else if(activeId==='temps-nu')renderBareTime(box);
+    if(activeId==='arrels'){
+      renderBrodsky(box);
+      renderBoredom(box);
+    }else if(activeId==='temps-nu')renderBareTime(box);
     else renderFormula(box);
   };
 
