@@ -1,0 +1,5 @@
+.error-fertil-panel{margin-top:1rem;padding:1rem;border:1px solid rgba(211,173,97,.3);border-radius:16px;background:linear-gradient(145deg,rgba(211,173,97,.075),rgba(7,17,15,.88));box-shadow:inset 0 0 24px rgba(0,0,0,.2)}
+.error-fertil-panel[hidden]{display:none}.error-fertil-panel h4{margin:.25rem 0 .4rem;font-size:1.18rem}.error-fertil-panel p{line-height:1.48}.error-fertil-panel .ef-status{color:var(--metal);font:600 .72rem/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.11em;text-transform:uppercase}
+.error-fertil-panel blockquote{margin:.8rem 0;padding:.75rem 1rem;border-left:2px solid var(--metal);background:rgba(255,255,255,.025)}
+.error-fertil-panel details{margin-top:.8rem;border-top:1px solid rgba(255,255,255,.08);padding-top:.75rem}.error-fertil-panel summary{cursor:pointer;color:var(--metal)}.error-fertil-panel ul{padding-left:1.2rem;color:var(--muted)}
+.error-fertil-panel a{display:inline-block;margin-top:.7rem;color:var(--metal)}
