@@ -1,7 +1,8 @@
 # Fusió Total Beta · 2.4-β Coniunctio
 
-**Estat:** Beta reversible, no canònica  
+**Estat:** Beta reversible, no canònica, en draft  
 **Data d’activació:** 27 d’agost de 2026  
+**Darrera metabolització:** 1 de setembre de 2026  
 **Site de laboratori:** https://animic-protein-fusio-beta.animic-protein.chatgpt.site  
 **Site canònica preservada:** https://animic-protein.animic-protein.chatgpt.site
 
@@ -34,21 +35,61 @@ Cap contingut entra sol. Cada entrada declara quatre coordenades:
 | 06 | Continuum | memòria, sediment i reactivació |
 | 07 | Metacòdex | governança, esquema i versions |
 
-## Regla de metabolització
+## Regla de metabolització 2.4-β.2
 
-Aquesta branca no substitueix `main` i la Site Beta no substitueix el Còdex públic 2.3.
+Aquesta branca no substitueix `main` i la Site Beta no substitueix el Còdex públic.
 
 Una relació només podrà proposar-se per a una edició canònica futura si:
 
 - produeix una diferència perceptible;
 - conserva traçabilitat;
 - modifica una pràctica o una decisió posterior;
+- declara què ha fet possible i què ha impedit;
+- passa el balanç **Occam–Incertesa**;
+- registra la resposta homeostàtica;
 - i permet un retorn comprensible.
 
+**Regla conjunta:** escollir la forma més simple que preservi les incerteses fecundes o estructurals.
+
+La homeòstasi pot absorbir, compensar o derivar tensió al Compost, però no pot anul·lar indefinidament una pressió viva. Cap novetat esdevé llei només perquè sigui nova.
+
 > Què neix aquí que abans només podia existir a mig camí?
+
+## Cas real metabolitzat · β·01
+
+**Error fèrtil I** és el primer cas real de Coniunctio.
+
+- **Estat:** COMPOST actiu, provisional, reversible i no constitucional.
+- **Ruta:** Escolta → Compost → Continuum.
+- **Descoberta:** una absència pot revelar l’estructura temporal que l’execució correcta ocultava.
+- **Principi provisional:** «Quan una continuïtat falla, no la reparis immediatament: escolta què queda sostenint el temps.»
+- **Rosa de l’Escolta:** registra la mutació figura–fons com a conseqüència perceptiva.
+- **Cambra nua del temps:** diferencia temps ocupat i temps exposat.
+- **Límit:** un únic cas no basta per germinar ni establir una llei.
+
+## Llindar de sortida del draft
+
+Coniunctio continuarà en draft fins que constin:
+
+- [x] un primer cas real amb procedència;
+- [x] diferència perceptible documentada;
+- [x] decisió metabòlica reversible: Compost;
+- [x] relació activa amb Rosa i Cambra nua del temps;
+- [ ] un segon cas real independent comparable;
+- [ ] una decisió posterior modificada pel segon cas;
+- [ ] una prova explícita de retorn;
+- [ ] una tensió Occam–Incertesa registrada;
+- [ ] evidència que almenys un instrument evoluciona amb els casos.
+
+Fins que tots els criteris estiguin verificats, `merge_readiness.ready` roman `false`.
+
+## Què no s’absorbeix automàticament
+
+Els canvis posteriors de `main` no entren com un bloc. Rosa, Cambra nua del temps i els sistemes constitucionals només s’incorporen a la Beta quan una conseqüència real en justifica la funció. Això preserva la Beta com a laboratori mínim i evita confondre sincronització tècnica amb metabolització.
 
 ## Procedència tècnica
 
 - Esquelet Site: Còdex Viu públic, versió 91.
 - Esquelet GitHub: `main` a l’inici de la branca.
+- Estat viu observat de `main`: commit `e71ff84121388189490dc01d5e173c1734b0c3e7`.
 - Implementació Sites Beta: versió 1, commit intern `0fe9656bd916cab875b065067292af108462253f`.
