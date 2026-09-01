@@ -1,9 +1,15 @@
 {
   "protocol": "AP-FUSION-BETA",
-  "version": "2.4-beta.1",
+  "version": "2.4-beta.2",
   "edition": "Coniunctio",
   "status": "beta-reversible-non-canonical",
-  "generated_at": "2026-08-27",
+  "generated_at": "2026-09-01",
+  "merge_readiness": {
+    "ready": false,
+    "real_cases_required": 2,
+    "real_cases_metabolized": 1,
+    "blocking_reason": "Cal un segon cas real independent i una prova de conseqüència, retorn i evolució instrumental."
+  },
   "site_beta": {
     "role": "organism-laboratory",
     "version": 1,
@@ -19,10 +25,19 @@
     "github": {
       "role": "versioned-memory",
       "branch": "main",
+      "observed_commit": "e71ff84121388189490dc01d5e173c1734b0c3e7",
       "url": "https://github.com/Animic-Protein/Animic-Protein.github.io"
     }
   },
   "coordinates": ["content", "continent", "context", "provenance"],
+  "constitutional_gates": [
+    "perceptible-difference",
+    "traceability",
+    "consequence",
+    "occam-uncertainty-balance",
+    "homeostatic-response",
+    "reversible-return"
+  ],
   "continents": [
     {"id":"01","name":"Llavor / Mutatio","context":"reversible-maturation"},
     {"id":"02","name":"Pensament","context":"principles-limits-genealogies"},
