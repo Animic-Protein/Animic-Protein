@@ -18,6 +18,9 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 2. Tot canvi important ha de ser traçable i reversible.
 3. El que permet actuar immediatament pot esdevenir portal permanent; el que principalment es consulta pertany a la Rosa de l’Escolta.
 4. El Còdex creix per sembra, prova, metabolització i integració.
+5. La **Navalla d’Occam** i el **Principi d’incertesa** comparteixen rang constitucional: simplificar sense esterilitzar; mantenir obert sense dispersar.
+
+Protocol constitucional: [Principi d’incertesa v1.0](governanca/PRINCIPI_INCERTESA_V1.0.md).
 
 > *Bene navigavi, cum naufragium feci.*
 
