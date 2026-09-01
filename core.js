@@ -156,7 +156,7 @@ function activateNode(n){
   n.classList.add('is-active');activeNode=n;
   if(nodeTitle)nodeTitle.textContent=n.dataset.title||n.textContent.trim();
   if(nodeDesc)nodeDesc.textContent=n.dataset.desc||'Aquest node encara està germinant.';
-  if(relationStart&&relationStart!==n){const a=relationStart;relationStart=null;const r=resultFor(a,n);flash(a,n);show(remember(a,n,r))}
+  if(relationStart&&relationStart!==n){const a=relationStart;relationStart=null;const r=resultFor(a,n),entry=remember(a,n,r);flash(a,n);show(entry);try{window.dispatchEvent(new CustomEvent('animic:relation-found',{detail:{a:entry.a,b:entry.b,title:entry.title,state:entry.state}}))}catch{}}
   try{window.dispatchEvent(new CustomEvent('animic:node-activated',{detail:{id:n.dataset.node||null}}))}catch{}
 }
 if(map)map.querySelectorAll('[data-node]').forEach(n=>n.addEventListener('click',()=>activateNode(n)));
