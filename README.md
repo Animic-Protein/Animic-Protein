@@ -22,6 +22,8 @@ El Còdex Viu no és un llibre tancat: és un organisme editorial, visual, music
 
 Protocol constitucional: [Principi d’incertesa v1.0](governanca/PRINCIPI_INCERTESA_V1.0.md).
 
+Compost actiu: [Error fèrtil I — l’absència que revela el temps](governanca/COMPOST_ERROR_FERTIL_I_2026-09-01.md). Es manté com a principi provisional i reversible, no com a node constitucional.
+
 > *Bene navigavi, cum naufragium feci.*
 
 Estat: **tronc canònic públic i en evolució**.
