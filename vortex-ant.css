@@ -10,7 +10,7 @@
 .vortex-ant-whisper.is-speaking{animation:ant-whisper 5.4s ease forwards}
 @keyframes ant-step{50%{transform:rotate(13deg)}}
 @keyframes ant-cross{0%{opacity:0;transform:translate(-60px,12px) rotate(5deg)}8%{opacity:1}35%{transform:translate(30vw,-10px) rotate(-3deg)}66%{transform:translate(56vw,8px) rotate(4deg)}86%{opacity:1;transform:translate(var(--ant-end),0) rotate(-2deg)}100%{opacity:0;transform:translate(calc(var(--ant-end) + 30px),-8px) scale(.76)}}
-@keyframes ant-cross-reverse{0%{opacity:0;transform:translate(60px,12px) scaleX(-1) rotate(5deg)}8%{opacity:1}42%{transform:translate(-34vw,-9px) scaleX(-1) rotate(-3deg)}86%{opacity:1;transform:translate(calc(-1 * var(--ant-end)),0) scaleX(-1) rotate(2deg)}100%{opacity:0;transform:translate(calc(-1 * var(--ant-end) - 30px),-8px) scale(-.76,.76)}}
+@keyframes ant-cross-reverse{0%{opacity:0;transform:translate(60px,12px) scaleX(-1) rotate(5deg)}8%{opacity:1}42%{transform:translate(-34vw,-9px) scaleX(-1) rotate(-3deg)}86%{opacity:1;transform:translate(var(--ant-end-reverse),0) scaleX(-1) rotate(2deg)}100%{opacity:0;transform:translate(var(--ant-end-reverse-final),-8px) scale(-.76,.76)}}
 @keyframes breach-open{0%,50%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(18deg)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(18deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(18deg)}}
 @keyframes ant-whisper{0%,18%{opacity:0;transform:translate(-50%,10px)}28%,70%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-5px)}}
 @media(prefers-reduced-motion:reduce){.vortex-ant{display:none}.vortex-breach.is-open{animation:ant-whisper 3.2s ease forwards}.vortex-ant-whisper.is-speaking{animation-duration:3.2s}}
