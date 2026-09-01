@@ -1,14 +1,20 @@
 {
   "protocol": "AP-FUSION-BETA",
-  "version": "2.4-beta.2",
+  "version": "2.4",
   "edition": "Coniunctio",
-  "status": "beta-reversible-non-canonical",
+  "status": "canonical-by-explicit-derogation",
   "generated_at": "2026-09-01",
   "merge_readiness": {
-    "ready": false,
+    "ready": true,
     "real_cases_required": 2,
     "real_cases_metabolized": 1,
-    "blocking_reason": "Cal un segon cas real independent i una prova de conseqüència, retorn i evolució instrumental."
+    "satisfied_by": "explicit-sovereign-derogation",
+    "derogation": {
+      "date": "2026-09-01",
+      "scope": "merge-pr-22-before-second-real-case",
+      "statement": "La persona propietària autoritza fusionar PR #22 abans del segon cas real.",
+      "preserved_debt": "β·02 continua pendent d’execució i no compta com a cas real."
+    }
   },
   "site_beta": {
     "role": "organism-laboratory",
@@ -29,7 +35,12 @@
       "url": "https://github.com/Animic-Protein/Animic-Protein.github.io"
     }
   },
-  "coordinates": ["content", "continent", "context", "provenance"],
+  "coordinates": [
+    "content",
+    "continent",
+    "context",
+    "provenance"
+  ],
   "constitutional_gates": [
     "perceptible-difference",
     "traceability",
@@ -39,13 +50,41 @@
     "reversible-return"
   ],
   "continents": [
-    {"id":"01","name":"Llavor / Mutatio","context":"reversible-maturation"},
-    {"id":"02","name":"Pensament","context":"principles-limits-genealogies"},
-    {"id":"03","name":"Escolta","context":"sound-silence-latency"},
-    {"id":"04","name":"Moviment","context":"body-gesture-return"},
-    {"id":"05","name":"Univers visual","context":"image-symbol-provenance"},
-    {"id":"06","name":"Continuum","context":"memory-sediment-reactivation"},
-    {"id":"07","name":"Metacodex","context":"governance-schema-versions"}
+    {
+      "id": "01",
+      "name": "Llavor / Mutatio",
+      "context": "reversible-maturation"
+    },
+    {
+      "id": "02",
+      "name": "Pensament",
+      "context": "principles-limits-genealogies"
+    },
+    {
+      "id": "03",
+      "name": "Escolta",
+      "context": "sound-silence-latency"
+    },
+    {
+      "id": "04",
+      "name": "Moviment",
+      "context": "body-gesture-return"
+    },
+    {
+      "id": "05",
+      "name": "Univers visual",
+      "context": "image-symbol-provenance"
+    },
+    {
+      "id": "06",
+      "name": "Continuum",
+      "context": "memory-sediment-reactivation"
+    },
+    {
+      "id": "07",
+      "name": "Metacodex",
+      "context": "governance-schema-versions"
+    }
   ],
-  "canonical_replacement": false
+  "canonical_replacement": true
 }
