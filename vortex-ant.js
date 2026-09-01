@@ -27,7 +27,9 @@
     layer.style.setProperty('--breach-x',reverse?(100-x)+'vw':x+'vw');
     layer.style.setProperty('--breach-y',y+'vh');
     ant.style.setProperty('--ant-y',y+'vh');
-    ant.style.setProperty('--ant-end',(reverse?x: x)+'vw');
+    ant.style.setProperty('--ant-end',x+'vw');
+    ant.style.setProperty('--ant-end-reverse','-'+x+'vw');
+    ant.style.setProperty('--ant-end-reverse-final','-'+(x+30)+'vw');
     ant.classList.toggle('is-reverse',reverse);
     void ant.offsetWidth;
     ant.classList.add('is-crossing');
