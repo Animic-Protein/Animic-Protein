@@ -3,9 +3,10 @@
   "project": "Anímic Protein — Còdex Viu",
   "canonical_statement": "GitHub recorda; els Sites experimenten; la decisió humana metabolitza.",
   "site": {
-    "url": "https://animic-protein-fusio-total.espai-de-tre-5917.chatgpt.site",
-    "role": "laboratori_fusio_total",
-    "edition": "2.4-coniunctio"
+    "url": "https://animic-protein.animic-protein.chatgpt.site",
+    "manifest_url": "https://animic-protein.animic-protein.chatgpt.site/.well-known/animic-bridge.json",
+    "role": "superficie_viva",
+    "edition": "2.3-metabolismus"
   },
   "repository": {
     "url": "https://github.com/Animic-Protein/Animic-Protein.github.io",
@@ -29,6 +30,13 @@
     "portal_viu": {
       "url": "https://animic-protein.github.io/",
       "role": "entrada_publica_canonica"
+    }
+  },
+  "laboratories": {
+    "fusion_total_2_4": {
+      "url": "https://animic-protein-fusio-total.espai-de-tre-5917.chatgpt.site",
+      "role": "laboratori_coniunctio",
+      "canonical_status": "no_automatic"
     }
   }
 }
