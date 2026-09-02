@@ -125,3 +125,8 @@ box-shadow:0 30px 90px rgba(0,0,0,.28) inset}
   .map-core,.node-panel{grid-column:1}
   footer{flex-direction:column}
 }
+
+
+/* Fusió Total 2.4 · INTER NOS és medul·la, no cinquè portal */
+.inter-nos-bridge{width:min(1120px,calc(100% - 32px));margin:2rem auto 0;padding:clamp(1.25rem,3vw,2.2rem);display:grid;grid-template-columns:.45fr 1.2fr .85fr;gap:clamp(1rem,3vw,2.5rem);align-items:center;border:1px solid rgba(111,215,207,.25);border-radius:26px;background:radial-gradient(circle at 8% 50%,rgba(211,173,97,.12),transparent 25%),rgba(8,20,18,.84);box-shadow:0 24px 70px rgba(0,0,0,.18)}.inter-nos-bridge .eyebrow{margin:0}.inter-nos-bridge h2{font-size:clamp(1.8rem,3.6vw,3.3rem);line-height:1;margin:.15rem 0 .7rem}.inter-nos-bridge p{color:var(--muted);line-height:1.55;margin:0}.inter-nos-bridge nav{display:grid;gap:9px}.inter-nos-bridge a{display:block;padding:.8rem 1rem;border:1px solid rgba(111,215,207,.35);border-radius:999px;color:var(--ink);text-decoration:none;text-align:center}.inter-nos-bridge a:last-child{border-color:rgba(211,173,97,.4);color:var(--gold)}.inter-nos-bridge small{grid-column:1/-1;color:var(--green);letter-spacing:.04em}
+@media(max-width:780px){body{padding-bottom:68px}.actions{display:grid;grid-template-columns:1.4fr 1.4fr .7fr .7fr .9fr;position:fixed;z-index:30;left:8px;right:8px;bottom:8px;margin:0;padding:6px;border:1px solid rgba(111,215,207,.25);border-radius:16px;background:rgba(7,16,13,.94);backdrop-filter:blur(15px)}.actions .portal{min-width:0;padding:.72rem .35rem;font-size:.72rem;white-space:nowrap}.inter-nos-bridge{grid-template-columns:1fr}.inter-nos-bridge small{grid-column:auto}}
