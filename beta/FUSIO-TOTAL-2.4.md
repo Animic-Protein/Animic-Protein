@@ -113,3 +113,21 @@ La persona propietària del Còdex Viu autoritza explícitament fusionar PR #22 
 **Camí de retorn:** els commits previs i el PR conserven l’estat anterior; qualsevol reversió haurà d’identificar aquesta acta.
 
 **Estat resultant:** canònic per derogació explícita, amb β·02 pendent d’execució.
+
+
+## Compleció operativa · 2026-09-02
+
+La Fusió Total queda implementada com a Site experimental i connectada al Portal Viu. La navegació mòbil conserva quatre portes i presenta INTER NOS en una capa jeràrquica diferent: organisme transversal, no cinquè instrument.
+
+### Quatre proves de Coniunctio
+
+| Prova | Estat | Evidència actual |
+|---|---|---|
+| Diferència perceptible | activa | el mapa diferencia portals, instruments i medul·la relacional |
+| Traça i procedència | activa | pont, acta i repositori canònic enllacen els òrgans |
+| Retorn comprensible | en prova | Ressonància Retornada permet persistència, mutatio o dissolució |
+| Occam ↔ Incertesa | obert | una sola connexió retornada; cap identitat imposada |
+
+INTER NOS conserva memòria local reversible al dispositiu experimental. Aquesta memòria no es promociona automàticament al Còdex i manté el dret a deixar de ressonar.
+
+**Deute conservat:** β·02 continua pendent com a segon cas independent. Completar l’arquitectura no falseja l’evidència empírica que encara falta.
