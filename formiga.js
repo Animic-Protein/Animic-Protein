@@ -94,6 +94,7 @@
           );
         enter.addEventListener("pointerenter", hint);
         enter.addEventListener("focus", hint);
+        setTimeout(hint, 1400);
       }
       return;
     }
