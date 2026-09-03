@@ -79,7 +79,7 @@ Coniunctio continuarà en draft fins que constin:
 - [x] una decisió posterior modificada pel segon cas;
 - [x] una prova explícita de retorn com a retirada sense reparació;
 - [x] una tensió Occam–Incertesa registrada;
-- [ ] evidència que almenys un instrument evoluciona amb els casos.
+- [x] evidència que almenys un instrument evoluciona amb els casos.
 
 Aquest era el llindar original. El deute experimental es conserva, però la seva funció de bloqueig queda derogada per la decisió explícita següent.
 
@@ -144,3 +144,18 @@ INTER NOS conserva memòria local reversible al dispositiu experimental. Aquesta
 - **Retorn:** retirada final sense restaurar ni reparar el patró original.
 - **Balanç Occam–Incertesa:** el cas queda validat per la relació mínima observable, però la manca de repeticions i control impedeix generalitzar-lo.
 - **Límit:** no modifica la constitució ni promou automàticament la descoberta a principi.
+
+
+## Evolució instrumental causada per β·02 · 2026-09-03
+
+La **Cambra nua del temps** evoluciona de `TEMPS·NU·IV` a `TEMPS·NU·V · β·02`.
+
+El nou camí **Direcció absent** no il·lustra simplement l’acta: n’incorpora la conseqüència operativa. Després de fabricar expectativa, la Cambra retira la direcció, manté el rastre sense restaurar el patró i transfereix a la persona una única decisió de sessió: emetre un pols o sostenir el buit.
+
+- **Diferència funcional:** el retorn ja no és obligatòriament restauració; pot ser retirada.
+- **Memòria:** la decisió es conserva localment només si la persona ho demana.
+- **Reversibilitat:** la memòria privada es pot retirar o derivar al Compost.
+- **Occam:** evoluciona un sol instrument, el directament afectat pel cas.
+- **Incertesa:** l’instrument no qualifica la decisió ni la converteix en principi.
+
+Amb aquesta mutació queda completat el darrer llindar operatiu original de Coniunctio. La constitució continua intacta.
