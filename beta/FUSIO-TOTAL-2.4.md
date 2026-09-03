@@ -2,7 +2,7 @@
 
 **Estat:** Edició 2.4 fusionable per derogació explícita  
 **Data d’activació:** 27 d’agost de 2026  
-**Darrera metabolització:** 1 de setembre de 2026  
+**Darrera metabolització:** 3 de setembre de 2026  
 **Site de laboratori:** https://animic-protein-fusio-beta.animic-protein.chatgpt.site  
 **Site canònica preservada:** https://animic-protein.animic-protein.chatgpt.site
 
@@ -75,10 +75,10 @@ Coniunctio continuarà en draft fins que constin:
 - [x] diferència perceptible documentada;
 - [x] decisió metabòlica reversible: Compost;
 - [x] relació activa amb Rosa i Cambra nua del temps;
-- [ ] un segon cas real independent comparable;
-- [ ] una decisió posterior modificada pel segon cas;
-- [ ] una prova explícita de retorn;
-- [ ] una tensió Occam–Incertesa registrada;
+- [x] un segon cas real independent comparable;
+- [x] una decisió posterior modificada pel segon cas;
+- [x] una prova explícita de retorn com a retirada sense reparació;
+- [x] una tensió Occam–Incertesa registrada;
 - [ ] evidència que almenys un instrument evoluciona amb els casos.
 
 Aquest era el llindar original. El deute experimental es conserva, però la seva funció de bloqueig queda derogada per la decisió explícita següent.
@@ -130,4 +130,17 @@ La Fusió Total queda implementada com a Site experimental i connectada al Porta
 
 INTER NOS conserva memòria local reversible al dispositiu experimental. Aquesta memòria no es promociona automàticament al Còdex i manté el dret a deixar de ressonar.
 
-**Deute conservat:** β·02 continua pendent com a segon cas independent. Completar l’arquitectura no falseja l’evidència empírica que encara falta.
+**Deute resolt el 3 de setembre de 2026:** β·02 ha estat executada i registrada com a segon cas real independent. El vídeo original es conserva fora del repositori; l’acta pública en registra la cronologia, els límits i l’empremta SHA-256.
+
+## Cas real metabolitzat · β·02
+
+**La direcció que desapareix** és el segon cas real de Coniunctio.
+
+- **Estat:** executat, metabolitzat, reversible i no constitucional.
+- **Ruta:** Rosa de l’Escolta → Cambra nua del temps → Continuum.
+- **Evidència:** una presa contínua de 139,733 s; acta i empremta a `beta/travesses/02-direccio-que-desapareix.md`.
+- **Diferència perceptible:** en desaparèixer el flux mecànic continu, emergeix una pulsació humana discontínua.
+- **Decisió modificada:** l’absència transfereix la responsabilitat temporal a qui escolta.
+- **Retorn:** retirada final sense restaurar ni reparar el patró original.
+- **Balanç Occam–Incertesa:** el cas queda validat per la relació mínima observable, però la manca de repeticions i control impedeix generalitzar-lo.
+- **Límit:** no modifica la constitució ni promou automàticament la descoberta a principi.
