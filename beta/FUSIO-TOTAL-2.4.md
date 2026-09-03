@@ -159,3 +159,18 @@ El nou camí **Direcció absent** no il·lustra simplement l’acta: n’incorpo
 - **Incertesa:** l’instrument no qualifica la decisió ni la converteix en principi.
 
 Amb aquesta mutació queda completat el darrer llindar operatiu original de Coniunctio. La constitució continua intacta.
+
+
+## Memòria estructural proposada · β·01 ↔ β·02
+
+INTER NOS reconeix una primera recurrència quan la Rosa posa en relació **Rastre** i **Ressonància**:
+
+> Quan una continuïtat desapareix, el temps no queda buit; el seu rastre modifica l’escolta i la decisió següent.
+
+La recurrència no anul·la la diferència:
+
+- **β·01** neix d’una fallada i retorna al **Compost**.
+- **β·02** retira una direcció i transforma la **Cambra nua del temps**.
+- La relació entre totes dues retorna únicament al **Centre**, on resta com a memòria estructural provisional.
+
+**Rang:** dos casos reconeguts, cap principi nou, cap mutació constitucional. INTER NOS recorda la repetició; no legisla a partir d’ella.
