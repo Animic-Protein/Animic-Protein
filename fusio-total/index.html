@@ -1,26 +1,460 @@
 <!doctype html>
 <html lang="ca">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Anímic Protein — Fusió Total 2.4</title>
-<meta name="description" content="Portal experimental del Còdex Viu: Mapa, Sembra, Instrument Z, Rosa i INTER NOS.">
-<style>
-:root{--n:#030b13;--d:#071827;--t:#eef8ff;--m:#9bb3c2;--b:#1377ff;--c:#00c6ff;--o:#e1a526;--g:#3fff63;--l:#28506a}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;padding-bottom:72px;background:radial-gradient(circle at 15% 0,#0a2840 0,transparent 34rem),var(--n);color:var(--t);font:16px/1.5 Arial,sans-serif}button,textarea,input{font:inherit;color:inherit}header,main,footer{width:min(1100px,calc(100% - 28px));margin:auto}header{padding:8vh 0 4vh}small,.ey{color:var(--c);letter-spacing:.15em;text-transform:uppercase;font-size:.72rem}h1,h2,h3{font-family:Georgia,serif}h1{font-size:clamp(3.2rem,10vw,7.5rem);line-height:.86;letter-spacing:-.05em;margin:.2em 0}h1 em{color:var(--o);font-weight:400}.lead{max-width:660px;color:var(--m);font-size:1.15rem}.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--l);background:var(--l);border-radius:22px;overflow:hidden;margin:2rem 0}.gate{min-height:150px;border:0;background:var(--d);padding:1.2rem;display:flex;flex-direction:column;align-items:flex-start;text-align:left;cursor:pointer}.gate b{margin:auto 0 .3rem;font:1.7rem Georgia,serif}.gate.active{background:#0b2a45;box-shadow:inset 0 0 0 1px var(--c)}.panel{display:none;border:1px solid var(--l);border-radius:24px;padding:clamp(1.2rem,4vw,3rem);background:rgba(7,24,39,.82);min-height:340px}.panel.active{display:block}.map{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:2rem}.node{border:1px solid var(--l);border-radius:18px;background:#06131f;padding:1.2rem;text-align:left}.node.inter{grid-column:1/-1;border-color:var(--o);background:radial-gradient(circle at 15%,#332407,transparent 30%),#06131f}.node strong{display:block;color:var(--o);font:2rem Georgia,serif}.node span{color:var(--m)}textarea{width:100%;min-height:140px;border:1px solid var(--l);border-radius:14px;background:#02080d;padding:1rem}.act{border:1px solid var(--g);border-radius:999px;background:#0b2b1b;padding:.8rem 1rem;margin-top:1rem;cursor:pointer}.result{border-left:3px solid var(--g);padding:1rem;margin-top:1rem;background:#092117;color:var(--m)}label{display:block;margin:1.5rem 0;color:var(--m)}input{width:100%;accent-color:var(--c)}.score{font:4rem Georgia,serif;color:var(--g)}.inter-nos{margin:4rem 0;padding:clamp(1.4rem,5vw,4rem);border:1px solid var(--o);border-radius:32px;background:radial-gradient(circle at 10% 50%,#2d2109,transparent 26%),radial-gradient(circle at 90% 20%,#073449,transparent 30%),#040d14}.inter-nos h2{font-size:clamp(2.4rem,6vw,5rem);line-height:1;margin:.3em 0}.inter-nos p{max-width:760px;color:var(--m)}.memory{margin-top:2rem;padding:1.2rem;border:1px solid var(--l);border-radius:18px;background:#06131f}.choices{display:flex;gap:8px;flex-wrap:wrap}.choices button{border:1px solid var(--o);border-radius:999px;background:transparent;padding:.6rem .8rem;cursor:pointer}.law{color:var(--g)}footer{border-top:1px solid var(--l);padding:2rem 0;color:var(--m)}.mobile{position:fixed;left:8px;right:8px;bottom:8px;z-index:10;display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;padding:6px;border:1px solid var(--l);border-radius:16px;background:rgba(3,11,19,.94);backdrop-filter:blur(16px)}.mobile button{min-height:48px;border:0;border-radius:10px;background:transparent;color:var(--m);font-size:.72rem}.mobile button.active{background:#113450;color:var(--t)}.mobile .in{color:var(--o)}@media(max-width:650px){header{padding-top:5vh}.gates{grid-template-columns:1fr 1fr}.gate{min-height:125px}.map{grid-template-columns:1fr}.node.inter{grid-column:auto}}
-</style>
-</head>
-<body>
-<header><p class="ey">CODEX VIVVS · CONIVNCTIO 2.4</p><h1>Una porta.<br><em>Tot l’organisme.</em></h1><p class="lead">Mapa, instruments i memòria comparteixen una sola respiració sense perdre la seva funció pròpia.</p></header>
-<main>
-<nav class="gates" aria-label="Portals"><button class="gate active" data-tab="mapa"><small>01</small><b>Mapa viu</b><span>Veure relacions</span></button><button class="gate" data-tab="sembra"><small>02</small><b>Sembra</b><span>Introduir possibilitat</span></button><button class="gate" data-tab="z"><small>03</small><b>Instrument Z</b><span>Fer visible el canvi</span></button><button class="gate" data-tab="rosa"><small>04</small><b>?</b><span>Obrir sense clausurar</span></button></nav>
-<section class="panel active" id="mapa"><small>Cartographia mutabilis</small><h2>Mapa Viu</h2><div class="map"><article class="node inter"><strong>⌁ INTER NOS</strong><span>Medul·la relacional i memòria viva. No és un instrument més.</span></article><article class="node"><strong>✣ Rosa</strong><span>Figura ↔ fons</span></article><article class="node"><strong>Z</strong><span>Diferència perceptible</span></article><article class="node"><strong>◌ Cambra</strong><span>Temps exposat</span></article><article class="node"><strong>∞ Compost</strong><span>Error fèrtil</span></article><article class="node"><strong>◎ Homeòstasi</strong><span>Regulació</span></article></div></section>
-<section class="panel" id="sembra"><small>Semen</small><h2>Sembra una llavor</h2><textarea id="seed" placeholder="Escriu una intuïció sense convertir-la encara en llei…"></textarea><button class="act" id="keep">Conservar al viver</button><div class="result" id="seed-result" hidden></div></section>
-<section class="panel" id="z"><small>Organon differentiae</small><h2>Instrument Z</h2><label>q · Matèria <input id="q" type="range" value="68"></label><label>q′ · Mutació <input id="qp" type="range" value="54"></label><p>Diferència perceptible</p><div class="score" id="score">61%</div></section>
-<section class="panel" id="rosa"><small>Rosa · Incertesa</small><h2>?</h2><blockquote id="question">Quina part del mapa només existeix entre dues presències?</blockquote><button class="act" id="turn">Girar la Rosa</button></section>
-<section class="inter-nos" id="inter-nos"><small>Medulla relationalis · Memòria viva</small><h2>INTER NOS recorda sense sentenciar.</h2><p>Reconeix una recurrència, però no decideix què significa. Retorna una sola pregunta: <em>què ha canviat?</em></p><p><a class="act" href="../inter-nos-creative/">Entrar a INTER NOS Creative →</a></p><div class="memory"><small>Ressonància retornada</small><blockquote id="memory">Una absència va deixar el temps al descobert.</blockquote><p>Això ressona amb alguna cosa anterior. No sabem si continua essent la mateixa cosa.</p><div class="choices"><button data-memory="persistència">Persistència</button><button data-memory="mutatio">Mutatio</button><button data-memory="dissolució">Dissolució</button></div><p class="law">Recordar ≠ aprendre ≠ legislar.</p></div></section>
-</main>
-<footer>Anímic Protein · Fusió Total 2.4 · Beta governada i reversible</footer>
-<nav class="mobile" aria-label="Navegació mòbil"><button class="active" data-tab="mapa">Mapa</button><button data-tab="sembra">Sembra</button><button data-tab="z">Z</button><button data-tab="rosa">?</button><button class="in" data-jump="inter-nos">INTER NOS</button></nav>
-<script>
-const tabs=document.querySelectorAll('[data-tab]'),panels=document.querySelectorAll('.panel');tabs.forEach(b=>b.onclick=()=>{const id=b.dataset.tab;panels.forEach(p=>p.classList.toggle('active',p.id===id));tabs.forEach(x=>x.classList.toggle('active',x.dataset.tab===id));document.getElementById(id).scrollIntoView({behavior:'smooth'})});document.querySelector('[data-jump]').onclick=()=>document.getElementById('inter-nos').scrollIntoView({behavior:'smooth'});const score=()=>document.getElementById('score').textContent=Math.round((+q.value + +qp.value)/2)+'%';q.oninput=score;qp.oninput=score;keep.onclick=()=>{if(seed.value.trim()){const r=document.getElementById('seed-result');r.hidden=false;r.textContent='Llavor provisional · '+seed.value.trim();seed.value=''}};const qs=['Quina part del mapa només existeix entre dues presències?','Què continua sostenint el temps quan l’acció desapareix?','Què canviaria si no reparessis immediatament la ruptura?'];let qi=0;turn.onclick=()=>question.textContent=qs[++qi%qs.length];document.querySelectorAll('[data-memory]').forEach(b=>b.onclick=()=>{const t='La ressonància ha tornat com a '+b.dataset.memory+'.';memory.textContent=t;try{localStorage.setItem('animic-inter-nos-memory',t)}catch(e){}});try{const m=localStorage.getItem('animic-inter-nos-memory');if(m)memory.textContent=m}catch(e){}
-</script>
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Anímic Protein — Fusió Total 2.4</title>
+    <meta
+      name="description"
+      content="Portal experimental del Còdex Viu: Mapa, Sembra, Instrument Z, Rosa i INTER NOS."
+    />
+    <link rel="stylesheet" href="../formiga.css" />
+    <style>
+      :root {
+        --n: #030b13;
+        --d: #071827;
+        --t: #eef8ff;
+        --m: #9bb3c2;
+        --b: #1377ff;
+        --c: #00c6ff;
+        --o: #e1a526;
+        --g: #3fff63;
+        --l: #28506a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        padding-bottom: 72px;
+        background:
+          radial-gradient(circle at 15% 0, #0a2840 0, transparent 34rem),
+          var(--n);
+        color: var(--t);
+        font:
+          16px/1.5 Arial,
+          sans-serif;
+      }
+      button,
+      textarea,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+      header,
+      main,
+      footer {
+        width: min(1100px, calc(100% - 28px));
+        margin: auto;
+      }
+      header {
+        padding: 8vh 0 4vh;
+      }
+      small,
+      .ey {
+        color: var(--c);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Georgia, serif;
+      }
+      h1 {
+        font-size: clamp(3.2rem, 10vw, 7.5rem);
+        line-height: 0.86;
+        letter-spacing: -0.05em;
+        margin: 0.2em 0;
+      }
+      h1 em {
+        color: var(--o);
+        font-weight: 400;
+      }
+      .lead {
+        max-width: 660px;
+        color: var(--m);
+        font-size: 1.15rem;
+      }
+      .gates {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        border: 1px solid var(--l);
+        background: var(--l);
+        border-radius: 22px;
+        overflow: hidden;
+        margin: 2rem 0;
+      }
+      .gate {
+        min-height: 150px;
+        border: 0;
+        background: var(--d);
+        padding: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        cursor: pointer;
+      }
+      .gate b {
+        margin: auto 0 0.3rem;
+        font:
+          1.7rem Georgia,
+          serif;
+      }
+      .gate.active {
+        background: #0b2a45;
+        box-shadow: inset 0 0 0 1px var(--c);
+      }
+      .panel {
+        display: none;
+        border: 1px solid var(--l);
+        border-radius: 24px;
+        padding: clamp(1.2rem, 4vw, 3rem);
+        background: rgba(7, 24, 39, 0.82);
+        min-height: 340px;
+      }
+      .panel.active {
+        display: block;
+      }
+      .map {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 2rem;
+      }
+      .node {
+        border: 1px solid var(--l);
+        border-radius: 18px;
+        background: #06131f;
+        padding: 1.2rem;
+        text-align: left;
+      }
+      .node.inter {
+        grid-column: 1/-1;
+        border-color: var(--o);
+        background:
+          radial-gradient(circle at 15%, #332407, transparent 30%), #06131f;
+      }
+      .node strong {
+        display: block;
+        color: var(--o);
+        font:
+          2rem Georgia,
+          serif;
+      }
+      .node span {
+        color: var(--m);
+      }
+      textarea {
+        width: 100%;
+        min-height: 140px;
+        border: 1px solid var(--l);
+        border-radius: 14px;
+        background: #02080d;
+        padding: 1rem;
+      }
+      .act {
+        border: 1px solid var(--g);
+        border-radius: 999px;
+        background: #0b2b1b;
+        padding: 0.8rem 1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+      }
+      .result {
+        border-left: 3px solid var(--g);
+        padding: 1rem;
+        margin-top: 1rem;
+        background: #092117;
+        color: var(--m);
+      }
+      label {
+        display: block;
+        margin: 1.5rem 0;
+        color: var(--m);
+      }
+      input {
+        width: 100%;
+        accent-color: var(--c);
+      }
+      .score {
+        font:
+          4rem Georgia,
+          serif;
+        color: var(--g);
+      }
+      .inter-nos {
+        margin: 4rem 0;
+        padding: clamp(1.4rem, 5vw, 4rem);
+        border: 1px solid var(--o);
+        border-radius: 32px;
+        background:
+          radial-gradient(circle at 10% 50%, #2d2109, transparent 26%),
+          radial-gradient(circle at 90% 20%, #073449, transparent 30%), #040d14;
+      }
+      .inter-nos h2 {
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 1;
+        margin: 0.3em 0;
+      }
+      .inter-nos p {
+        max-width: 760px;
+        color: var(--m);
+      }
+      .memory {
+        margin-top: 2rem;
+        padding: 1.2rem;
+        border: 1px solid var(--l);
+        border-radius: 18px;
+        background: #06131f;
+      }
+      .choices {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .choices button {
+        border: 1px solid var(--o);
+        border-radius: 999px;
+        background: transparent;
+        padding: 0.6rem 0.8rem;
+        cursor: pointer;
+      }
+      .law {
+        color: var(--g);
+      }
+      footer {
+        border-top: 1px solid var(--l);
+        padding: 2rem 0;
+        color: var(--m);
+      }
+      .mobile {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) 1.4fr;
+        padding: 6px;
+        border: 1px solid var(--l);
+        border-radius: 16px;
+        background: rgba(3, 11, 19, 0.94);
+        backdrop-filter: blur(16px);
+      }
+      .mobile button {
+        min-height: 48px;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--m);
+        font-size: 0.72rem;
+      }
+      .mobile button.active {
+        background: #113450;
+        color: var(--t);
+      }
+      .mobile .in {
+        color: var(--o);
+      }
+      @media (max-width: 650px) {
+        header {
+          padding-top: 5vh;
+        }
+        .gates {
+          grid-template-columns: 1fr 1fr;
+        }
+        .gate {
+          min-height: 125px;
+        }
+        .map {
+          grid-template-columns: 1fr;
+        }
+        .node.inter {
+          grid-column: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p class="ey">CODEX VIVVS · CONIVNCTIO 2.4</p>
+      <h1>Una porta.<br /><em>Tot l’organisme.</em></h1>
+      <p class="lead">
+        Mapa, instruments i memòria comparteixen una sola respiració sense
+        perdre la seva funció pròpia.
+      </p>
+    </header>
+    <main>
+      <nav class="gates" aria-label="Portals">
+        <button class="gate active" data-tab="mapa">
+          <small>01</small><b>Mapa viu</b><span>Veure relacions</span></button
+        ><button class="gate" data-tab="sembra">
+          <small>02</small><b>Sembra</b
+          ><span>Introduir possibilitat</span></button
+        ><button class="gate" data-tab="z">
+          <small>03</small><b>Instrument Z</b
+          ><span>Fer visible el canvi</span></button
+        ><button class="gate" data-tab="rosa">
+          <small>04</small><b>?</b><span>Obrir sense clausurar</span>
+        </button>
+      </nav>
+      <section class="panel active" id="mapa">
+        <small>Cartographia mutabilis</small>
+        <h2>Mapa Viu</h2>
+        <div class="map">
+          <article class="node inter">
+            <strong>⌁ INTER NOS</strong
+            ><span
+              >Medul·la relacional i memòria viva. No és un instrument
+              més.</span
+            >
+          </article>
+          <article class="node">
+            <strong>✣ Rosa</strong><span>Figura ↔ fons</span>
+          </article>
+          <article class="node">
+            <strong>Z</strong><span>Diferència perceptible</span>
+          </article>
+          <article class="node">
+            <strong>◌ Cambra</strong><span>Temps exposat</span>
+          </article>
+          <article class="node">
+            <strong>∞ Compost</strong><span>Error fèrtil</span>
+          </article>
+          <article class="node">
+            <strong>◎ Homeòstasi</strong><span>Regulació</span>
+          </article>
+        </div>
+      </section>
+      <section class="panel" id="sembra">
+        <small>Semen</small>
+        <h2>Sembra una llavor</h2>
+        <textarea
+          id="seed"
+          placeholder="Escriu una intuïció sense convertir-la encara en llei…"
+        ></textarea
+        ><button class="act" id="keep">Conservar al viver</button>
+        <div class="result" id="seed-result" hidden></div>
+      </section>
+      <section class="panel" id="z">
+        <small>Organon differentiae</small>
+        <h2>Instrument Z</h2>
+        <label>q · Matèria <input id="q" type="range" value="68" /></label
+        ><label>q′ · Mutació <input id="qp" type="range" value="54" /></label>
+        <p>Diferència perceptible</p>
+        <div class="score" id="score">61%</div>
+      </section>
+      <section class="panel" id="rosa">
+        <small>Rosa · Incertesa</small>
+        <h2>?</h2>
+        <blockquote id="question">
+          Quina part del mapa només existeix entre dues presències?
+        </blockquote>
+        <button class="act" id="turn">Girar la Rosa</button>
+      </section>
+      <section class="inter-nos" id="inter-nos">
+        <small>Medulla relationalis · Memòria viva</small>
+        <h2>INTER NOS recorda sense sentenciar.</h2>
+        <p>
+          Reconeix una recurrència, però no decideix què significa. Retorna una
+          sola pregunta: <em>què ha canviat?</em>
+        </p>
+        <p>
+          <a class="act" href="../inter-nos-creative/"
+            >Entrar a INTER NOS Creative →</a
+          >
+        </p>
+        <div class="memory">
+          <small>Ressonància retornada</small>
+          <blockquote id="memory">
+            Una absència va deixar el temps al descobert.
+          </blockquote>
+          <p>
+            Això ressona amb alguna cosa anterior. No sabem si continua essent
+            la mateixa cosa.
+          </p>
+          <div class="choices">
+            <button data-memory="persistència">Persistència</button
+            ><button data-memory="mutatio">Mutatio</button
+            ><button data-memory="dissolució">Dissolució</button>
+          </div>
+          <p class="law">Recordar ≠ aprendre ≠ legislar.</p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Anímic Protein · Fusió Total 2.4 · Beta governada i reversible
+    </footer>
+    <nav class="mobile" aria-label="Navegació mòbil">
+      <button class="active" data-tab="mapa">Mapa</button
+      ><button data-tab="sembra">Sembra</button><button data-tab="z">Z</button
+      ><button data-tab="rosa">?</button
+      ><button class="in" data-jump="inter-nos">INTER NOS</button>
+    </nav>
+    <script>
+      const tabs = document.querySelectorAll("[data-tab]"),
+        panels = document.querySelectorAll(".panel");
+      tabs.forEach(
+        (b) =>
+          (b.onclick = () => {
+            const id = b.dataset.tab;
+            panels.forEach((p) => p.classList.toggle("active", p.id === id));
+            tabs.forEach((x) =>
+              x.classList.toggle("active", x.dataset.tab === id),
+            );
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+          }),
+      );
+      document.querySelector("[data-jump]").onclick = () =>
+        document
+          .getElementById("inter-nos")
+          .scrollIntoView({ behavior: "smooth" });
+      const score = () =>
+        (document.getElementById("score").textContent =
+          Math.round((+q.value + +qp.value) / 2) + "%");
+      q.oninput = score;
+      qp.oninput = score;
+      keep.onclick = () => {
+        if (seed.value.trim()) {
+          const r = document.getElementById("seed-result");
+          r.hidden = false;
+          r.textContent = "Llavor provisional · " + seed.value.trim();
+          seed.value = "";
+        }
+      };
+      const qs = [
+        "Quina part del mapa només existeix entre dues presències?",
+        "Què continua sostenint el temps quan l’acció desapareix?",
+        "Què canviaria si no reparessis immediatament la ruptura?",
+      ];
+      let qi = 0;
+      turn.onclick = () => (question.textContent = qs[++qi % qs.length]);
+      document.querySelectorAll("[data-memory]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const t =
+              "La ressonància ha tornat com a " + b.dataset.memory + ".";
+            memory.textContent = t;
+            try {
+              localStorage.setItem("animic-inter-nos-memory", t);
+            } catch (e) {}
+          }),
+      );
+      try {
+        const m = localStorage.getItem("animic-inter-nos-memory");
+        if (m) memory.textContent = m;
+      } catch (e) {}
+    </script>
+    <script src="../formiga.js"></script>
+  </body>
+</html>
