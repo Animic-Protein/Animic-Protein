@@ -5,3 +5,5 @@
 .rosa-inter-nos-actions{margin-top:.8rem;display:flex;gap:.5rem}
 .rosa-inter-nos-actions button{font:inherit;padding:.55rem .8rem;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit}
 .is-inter-nos-selected{outline:2px solid currentColor;outline-offset:3px}
+
+.rosa-inter-nos-memory{margin:.75rem 0;padding:.72rem .8rem;border-left:3px solid var(--teal);border-radius:0 10px 10px 0;background:rgba(111,215,207,.07);color:var(--muted);font-size:.76rem;line-height:1.5}
