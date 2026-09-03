@@ -163,7 +163,7 @@ Amb aquesta mutació queda completat el darrer llindar operatiu original de Coni
 
 ## Memòria estructural proposada · β·01 ↔ β·02
 
-INTER NOS reconeix una primera recurrència quan la Rosa posa en relació **Rastre** i **Ressonància**:
+**Memoria Radicum**, i no una capa paral·lela, incorpora β·01 i β·02 com a primer patró sostingut per casos reals. INTER NOS el fa visible quan la Rosa posa en relació **Rastre** i **Ressonància**:
 
 > Quan una continuïtat desapareix, el temps no queda buit; el seu rastre modifica l’escolta i la decisió següent.
 
@@ -171,6 +171,8 @@ La recurrència no anul·la la diferència:
 
 - **β·01** neix d’una fallada i retorna al **Compost**.
 - **β·02** retira una direcció i transforma la **Cambra nua del temps**.
-- La relació entre totes dues retorna únicament al **Centre**, on resta com a memòria estructural provisional.
+- La relació entre totes dues retorna únicament al **Centre**.
 
-**Rang:** dos casos reconeguts, cap principi nou, cap mutació constitucional. INTER NOS recorda la repetició; no legisla a partir d’ella.
+**Llindar:** suport 2/3. `Probatio Radicum` conserva el patró com a emergent perquè encara no arriba a tres casos traçables. `Lex Radicum` no el pot legislar.
+
+**Rang:** memòria estructural provisional, cap principi nou i cap mutació constitucional. INTER NOS recorda la repetició; no legisla a partir d’ella.
