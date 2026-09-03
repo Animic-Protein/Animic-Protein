@@ -9,16 +9,7 @@
   }
 
   const SEED_KEY='animic-protein-seed-memory-v1';
-  const STRUCTURAL_MEMORY={
-    'rastre|ressonància':{
-      id:'recurrencia-beta01-beta02',
-      cases:['β·01 · Error fèrtil I','β·02 · La direcció que desapareix'],
-      text:'Dues proves independents coincideixen: quan una continuïtat desapareix, el temps no queda buit; el seu rastre modifica l’escolta i la decisió següent.',
-      difference:'β·01 neix d’una fallada i retorna al Compost; β·02 retira una direcció i transforma la Cambra nua del temps.',
-      returnInstrument:'Centre',
-      status:'Recurrència estructural provisional · 2 casos · no constitucional'
-    }
-  };
+  const STRUCTURAL_PAIRS={'rastre|ressonància':'radix-absencia-dirigeix-temps'};
   const selected=[];
   const selectedElements=[];
   let currentRelation=null;
@@ -32,14 +23,15 @@
   consoleEl.appendChild(panel);
   const output=panel.querySelector('[data-inter-nos-output]'),title=panel.querySelector('[data-inter-nos-title]'),memory=panel.querySelector('[data-inter-nos-memory]'),clear=panel.querySelector('[data-inter-nos-clear]'),seedButton=panel.querySelector('[data-inter-nos-seed]');
 
-  const relationKey=(a,b)=>`${a.key}|${b.key}`;
   const relationText=(a,b)=>{
-    const recurrence=STRUCTURAL_MEMORY[relationKey(a,b)];
-    if(recurrence)return recurrence.text;
     const options=[`Què canvia en ${a.label} quan és escoltat des de ${b.label}?`,`${a.label} aporta forma; ${b.label} aporta desviació. Conserva només la diferència perceptible.`,`Fes una prova reversible: deixa que ${a.label} imposi una regla i que ${b.label} la contradigui una sola vegada.`,`Busca el tercer element que només apareix quan ${a.label} i ${b.label} coexisteixen.`];
     return options[[...`${a.key}|${b.key}`].reduce((n,c)=>n+c.charCodeAt(0),0)%options.length];
   };
   const relationId=(a,b,text)=>`seed-inter-nos-${hash(`${a.key}|${b.key}|${text}`)}`;
+  const structuralPattern=(a,b)=>{
+    const id=STRUCTURAL_PAIRS[`${a.key}|${b.key}`];
+    return id?window.AnimicMemoriaRadicum?.patterns?.find(pattern=>pattern.id===id)||null:null;
+  };
 
   const render=()=>{
     dialog.querySelectorAll('.is-inter-nos-selected').forEach(el=>el.classList.remove('is-inter-nos-selected'));
@@ -48,15 +40,15 @@
     if(!selected.length){panel.hidden=true;return;}
     panel.hidden=false;
     if(selected.length===1){title.textContent=`${selected[0].label} + …`;output.textContent='Tria un segon node de la Rosa. INTER NOS no suma: posa dues realitats en tensió perquè aparegui una tercera relació.';return;}
-    const [a,b]=canonicalPair(...selected),recurrence=STRUCTURAL_MEMORY[relationKey(a,b)]||null,text=relationText(a,b),id=recurrence?.id||relationId(a,b,text),alreadySeeded=readSeeds().some(seed=>seed.id===id);
-    currentRelation={a,b,text,id,recurrence};title.textContent=recurrence?`${a.label} ↔ ${b.label} · memòria`:`${a.label} ↔ ${b.label}`;output.textContent=text;seedButton.hidden=false;
-    if(recurrence){
+    const [a,b]=canonicalPair(...selected),pattern=structuralPattern(a,b),text=pattern?.statement||relationText(a,b),id=pattern?.id||relationId(a,b,text),alreadySeeded=readSeeds().some(seed=>seed.id===id);
+    currentRelation={a,b,text,id,pattern};title.textContent=pattern?`${a.label} ↔ ${b.label} · memòria`:`${a.label} ↔ ${b.label}`;output.textContent=text;seedButton.hidden=false;
+    if(pattern){
       memory.hidden=false;
-      memory.textContent=`${recurrence.status}. Diferència preservada: ${recurrence.difference} Retorn únic: ${recurrence.returnInstrument}.`;
+      memory.textContent=`Memoria Radicum · suport ${pattern.count}/${pattern.threshold}. β·01 retorna al Compost; β·02 transforma la Cambra. Retorn d’aquesta relació: ${pattern.returnInstrument}. Patró provisional, no constitucional.`;
       seedButton.textContent='Recurrència reconeguda';
       seedButton.disabled=true;
     }else if(alreadySeeded){seedButton.textContent='Relació sembrada';seedButton.disabled=true;}
-    dialog.dispatchEvent(new CustomEvent('rosa:inter-nos',{detail:{a,b,text,id,recurrence}}));
+    dialog.dispatchEvent(new CustomEvent('rosa:inter-nos',{detail:{a,b,text,id,pattern}}));
   };
 
   const addNode=el=>{const node=normalize(el);if(selected.some(x=>x.key===node.key))return;if(selected.length===2){selected.shift();selectedElements.shift();}selected.push(node);selectedElements.push(el);render();};
@@ -77,5 +69,5 @@
 
   clear.addEventListener('click',()=>{selected.length=0;selectedElements.length=0;render();const status=dialog.querySelector('[data-rosa-status]');if(status)status.textContent='INTER NOS · relació netejada';});
   dialog.addEventListener('close',()=>{selected.length=0;selectedElements.length=0;render();});
-  window.dispatchEvent(new CustomEvent('rosa:inter-nos-ready',{detail:{version:'1.3.0',seeding:true,symmetric:true,structuralMemory:true}}));
+  window.dispatchEvent(new CustomEvent('rosa:inter-nos-ready',{detail:{version:'1.3.0',seeding:true,symmetric:true,structuralMemory:'Memoria Radicum'}}));
 })();
