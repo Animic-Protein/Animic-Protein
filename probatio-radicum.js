@@ -5,11 +5,14 @@ const read=()=>{try{const v=JSON.parse(localStorage.getItem(MEMORY_KEY)||'[]');r
 const write=v=>{try{localStorage.setItem(MEMORY_KEY,JSON.stringify(v.slice(-24)))}catch{}};
 const test=pattern=>{
  const seeds=Array.isArray(pattern.seeds)?[...new Set(pattern.seeds.filter(Boolean))]:[];
+ const cases=Array.isArray(pattern.cases)?[...new Set(pattern.cases.map(item=>item?.id).filter(Boolean))]:[];
+ const supports=seeds.length?seeds:cases;
+ const threshold=Math.max(3,Number(pattern.threshold)||3);
  const evidence={
-  perceptibleDifference:pattern.state!=='dormant'&&pattern.count>=3,
-  traceability:seeds.length>=3,
-  relation:Boolean(pattern.key&&pattern.label&&seeds.length),
-  reversibility:pattern.state!=='law'
+  perceptibleDifference:pattern.state!=='dormant'&&pattern.count>=threshold,
+  traceability:supports.length>=threshold,
+  relation:Boolean(pattern.key&&pattern.label&&supports.length),
+  reversibility:pattern.state!=='law'&&pattern.constitutional!==true
  };
  const passed=Object.values(evidence).every(Boolean);
  const state=pattern.state==='dormant'?'dormant':passed?'observed':'emergent';
