@@ -81,6 +81,98 @@
       else hide();
     }).observe(derivation, { attributes: true, attributeFilter: ["class"] });
   }
+  function universe() {
+    const organ = document.querySelector("#organ"),
+      organName = document.querySelector("#organName"),
+      ant = document.querySelector("#ant"),
+      go = document.querySelector("#go");
+    if (!organ) return;
+    const revealHint = () =>
+      setTimeout(
+        () =>
+          show(
+            "indici",
+            (organName?.textContent || "Un òrgan") +
+              " s’ha fet pertinent, però encara no hi ha rastre.",
+            "#organ",
+            "Examinar l’òrgan",
+          ),
+        0,
+      );
+    document
+      .querySelectorAll("[data-gesture],#errorBtn,#lostBtn")
+      .forEach((b) => b.addEventListener("click", revealHint));
+    document.querySelector("#trace")?.addEventListener("click", () =>
+      setTimeout(() => {
+        if (ant?.classList.contains("show"))
+          show(
+            "pont",
+            "Dos rastres insinuen una relació. La Formiga assenyala un sol pas.",
+            go?.getAttribute("href") || "#organ",
+            "Entrar a l’òrgan pertinent",
+          );
+        else
+          show(
+            "cami",
+            "Hi ha un primer rastre. Cal una altra diferència abans d’afirmar relació.",
+            "#stage",
+            "Continuar la travessa",
+          );
+      }, 0),
+    );
+    document.querySelector("#reset")?.addEventListener("click", hide);
+  }
+  function fusio() {
+    const seed = document.querySelector("#seed"),
+      score = document.querySelector("#score");
+    if (!score) return;
+    document.querySelector("#keep")?.addEventListener("click", () =>
+      setTimeout(() => {
+        if (!document.querySelector("#seed-result")?.hidden)
+          show(
+            "cami",
+            "La llavor ha deixat de ser intuïció privada, però encara no és principi.",
+            "#inter-nos",
+            "Portar-la a la memòria viva",
+          );
+      }, 0),
+    );
+    document.querySelectorAll("#q,#qp").forEach((input) =>
+      input.addEventListener("change", () => {
+        const value = Number.parseInt(score.textContent, 10) || 0;
+        show(
+          value >= 55 ? "cami" : "indici",
+          value >= 55
+            ? "Instrument Z mostra una diferència prou visible per continuar."
+            : "Les dues forces encara no produeixen una diferència clara.",
+          "#z",
+          "Revisar la tensió",
+        );
+      }),
+    );
+    document
+      .querySelector("#turn")
+      ?.addEventListener("click", () =>
+        show(
+          "indici",
+          "La pregunta ha girat la percepció; encara no demana resposta.",
+          "#rosa",
+          "Sostenir la pregunta",
+        ),
+      );
+    document
+      .querySelectorAll("[data-memory]")
+      .forEach((button) =>
+        button.addEventListener("click", () =>
+          show(
+            "pont",
+            "La ressonància ja té una decisió humana i pot retornar sense legislar.",
+            "../inter-nos-creative/#interlocutor",
+            "Retornar amb INTER NOS",
+          ),
+        ),
+      );
+  }
   function portal() {
     const nodes = document.querySelectorAll("[data-node]");
     if (!nodes.length) {
@@ -131,7 +223,9 @@
   }
   document.addEventListener("DOMContentLoaded", () => {
     const p = location.pathname;
-    if (p.includes("cambra-nua-2")) sala();
+    if (p.includes("universe")) universe();
+    else if (p.includes("fusio-total")) fusio();
+    else if (p.includes("cambra-nua-2")) sala();
     else if (p.includes("inter-nos-creative")) internNos();
     else portal();
   });
