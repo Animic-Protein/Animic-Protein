@@ -6,7 +6,9 @@
     "url": "https://animic-protein.animic-protein.chatgpt.site",
     "manifest_url": "https://animic-protein.animic-protein.chatgpt.site/.well-known/animic-bridge.json",
     "role": "superficie_viva",
-    "edition": "2.3-metabolismus"
+    "edition": "2.3-metabolismus",
+    "availability": "degraded_external_route",
+    "fallback_url": "https://animic-protein.github.io/fusio-total/"
   },
   "repository": {
     "url": "https://github.com/Animic-Protein/Animic-Protein.github.io",
