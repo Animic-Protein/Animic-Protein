@@ -46,6 +46,10 @@ h1{font-size:clamp(3rem,9vw,7.5rem);line-height:.92;max-width:10ch;margin:.2em 0
 .portal.map-link{border-color:rgba(211,173,97,.38);box-shadow:0 0 24px rgba(211,173,97,.08) inset}
 .portal.z{min-width:54px;font-family:ui-monospace,monospace;font-weight:800;box-shadow:0 0 24px rgba(255,255,255,.08) inset}
 .portal.question{min-width:54px;color:#ff5570;border-color:rgba(159,35,54,.55);box-shadow:0 0 0 1px rgba(122,143,99,.16) inset}
++.portal.chamber-entry{gap:.55rem;padding:.42rem .78rem .42rem .42rem;border-color:rgba(255,255,255,.72);background:#fff;color:#101317;font-size:.72rem;font-weight:800;letter-spacing:.08em;box-shadow:0 0 0 1px rgba(8,125,255,.14),0 0 26px rgba(8,125,255,.12)}
++.portal.chamber-entry img{display:block;width:36px;height:36px;border-radius:10px;transition:transform .25s ease}
++.portal.chamber-entry:hover img{transform:scale(1.08)}
++@media(max-width:780px){.actions .portal.chamber-entry{padding:.28rem;gap:.2rem;flex-direction:column}.portal.chamber-entry img{width:28px;height:28px}.portal.chamber-entry span{font-size:.56rem;letter-spacing:.04em}}
 .panel{padding:8vh 0;border-bottom:1px solid var(--line)}
 .panel h2{font-size:clamp(2rem,4vw,4rem);margin:.2em 0 1em;max-width:16ch;line-height:1.05}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
