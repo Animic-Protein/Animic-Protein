@@ -14,7 +14,7 @@ assert.equal(local.laboratories.fusion_total_2_4.url, expectedFallback);
 assert.equal(local.organs.inter_nos.url, expectedInterNos);
 assert.equal(local.organs.inter_nos.status, "stable_v1_reopen_by_evidence");
 assert.equal(local.organs.cambra_nua_2.url, "https://animic-protein.github.io/cambra-nua-2/");
-assert.equal(local.governance.current_construction, "cambra_nua_del_temps_2");
+assert.equal(local.governance.current_construction, "cambra_nua_del_temps_2_1_sala_blanca");\nassert.equal(local.organs.cambra_nua_2.edition, "2.1-sala-blanca");\nassert.equal(local.organs.cambra_nua_2.visual_mode, "white_room_colored_light");
 assert.equal(local.repository.url, expectedRepository);
 assert.equal(local.governance.automatic_canonical_status, false);
 assert.equal(local.governance.human_editorial_decision_required, true);
@@ -30,10 +30,10 @@ assert.match(interNos, /INTERLOCUTOR/);
 assert.match(interNos, /LOCUTUS/);
 assert.match(interNos, /CONSTITUCIÓ DE RECIPROCITAT/);
 assert.match(interNos, /ORGANISME ESTABLE/);
-assert.match(cambra, /DIRECCIÓ ABSENT/);
+assert.match(cambra, /SALA BLANCA/);\nassert.match(cambra, /DIRECCIÓ ABSENT/);\nassert.match(cambra, /bottom-nav/);\nassert.match(cambra, /cambra\\.salaBlanca/);
 assert.match(cambra, /AudioContext/);
 assert.match(cambra, /inter-nos-creative/);
-console.log("Extrem canònic verificat: INTER NOS estable i Cambra Nua 2.0 connectada.");
+console.log("Extrem canònic verificat: INTER NOS estable i Cambra Nua 2.1 · Sala Blanca connectada.");
 
 let response;
 try {
