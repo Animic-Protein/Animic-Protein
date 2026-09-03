@@ -23,7 +23,7 @@
     "reversibility_required": true,
     "divergence_check": "github-actions",
     "memory_rule": "recordar_no_equival_aprendre_ni_legislar",
-    "current_construction": "cambra_nua_del_temps_2"
+    "current_construction": "cambra_nua_del_temps_2_1_sala_blanca"
   },
   "organs": {
     "inter_nos": {
@@ -38,7 +38,9 @@
     "cambra_nua_2": {
       "url": "https://animic-protein.github.io/cambra-nua-2/",
       "role": "instrument_temporal_direccio_absent",
-      "status": "active_experimental_descendant"
+      "status": "active_experimental_descendant",
+      "edition": "2.1-sala-blanca",
+      "visual_mode": "white_room_colored_light"
     }
   },
   "laboratories": {
