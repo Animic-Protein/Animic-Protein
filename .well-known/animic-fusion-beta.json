@@ -3,17 +3,17 @@
   "version": "2.4",
   "edition": "Coniunctio",
   "status": "canonical-by-explicit-derogation",
-  "generated_at": "2026-09-01",
+  "generated_at": "2026-09-03",
   "merge_readiness": {
     "ready": true,
     "real_cases_required": 2,
-    "real_cases_metabolized": 1,
-    "satisfied_by": "explicit-sovereign-derogation",
+    "real_cases_metabolized": 2,
+    "satisfied_by": "empirical-threshold-completed-after-explicit-sovereign-derogation",
     "derogation": {
       "date": "2026-09-01",
       "scope": "merge-pr-22-before-second-real-case",
       "statement": "La persona propietària autoritza fusionar PR #22 abans del segon cas real.",
-      "preserved_debt": "β·02 continua pendent d’execució i no compta com a cas real."
+      "preserved_debt": "β·02 restà pendent en el moment de la fusió; deute resolt per execució el 2026-09-03."
     }
   },
   "site_beta": {
@@ -86,5 +86,21 @@
       "context": "governance-schema-versions"
     }
   ],
-  "canonical_replacement": true
+  "canonical_replacement": true,
+  "real_cases": {
+    "beta_01": {
+      "title": "Error fèrtil I",
+      "status": "compost-active",
+      "date": "2026-09-01"
+    },
+    "beta_02": {
+      "title": "La direcció que desapareix",
+      "status": "executed-metabolized-non-constitutional",
+      "date": "2026-09-03",
+      "record": "beta/travesses/02-direccio-que-desapareix.md",
+      "evidence_file": "IMG_3746.mp4",
+      "evidence_sha256": "25943d63cf017ccbbfe21226dc49dd854755ec2f18eecc33ea8304e406210632",
+      "primary_evidence_public": false
+    }
+  }
 }
