@@ -34,6 +34,8 @@
   let mutation='timbre';
   let completed=false;
   let demoMode=false;
+  let caseMode=false;
+  let caseDecision=null;
   let runToken=0;
 
   const el=(tag,className,text)=>{
@@ -56,7 +58,8 @@
       return{
         mutation:mutations[value.mutation]?value.mutation:'timbre',
         threshold:Number.isInteger(value.threshold)&&value.threshold>=1&&value.threshold<=9?value.threshold:null,
-        mode:value.mode==='demo'?'demo':'lliure',
+        mode:['demo','beta02'].includes(value.mode)?value.mode:'lliure',
+        decision:['pulse','void'].includes(value.decision)?value.decision:null,
         createdAt:typeof value.createdAt==='string'?value.createdAt:'',
         version:typeof value.version==='string'?value.version:'TEMPS·NU·IV'
       };
@@ -67,6 +70,11 @@
 
   const phaseFor=n=>{
     if(!n)return{name:'Aproximació',detail:'La cambra és en repòs.'};
+    if(caseMode){
+      if(n<=7)return{name:'Direcció · volta '+n,detail:'La continuïtat torna i fabrica expectativa.'};
+      if(n===8)return{name:'Desaparició',detail:'La direcció cessa. No la substitueixis.'};
+      return{name:'Rastre',detail:'Escolta què continua dirigint quan el so ja no hi és.'};
+    }
     if(n<=7)return{name:'Escolta · repetició '+n,detail:demoMode?'Re — Fa — La. Tres atacs intactes.':'Sostén la cèl·lula sense embellir-la.'};
     if(n===8)return{name:'Interferència · '+mutations[mutation].label,detail:demoMode?'Re — [absència] — La. El Fa deixa un espai audible.':mutations[mutation].detail};
     return{name:'Plegament · retorn',detail:demoMode?'Re — Fa — La. El Fa retorna amb la memòria del buit.':'La forma inicial torna. Comprova si ara s’escolta diferent.'};
@@ -94,6 +102,7 @@
   };
 
   const soundCycle=n=>{
+    if(caseMode&&n>=8)return;
     const AudioContext=window.AudioContext||window.webkitAudioContext;
     if(!AudioContext)return;
     if(!audio){
@@ -134,6 +143,8 @@
       threshold=null;
       completed=false;
       demoMode=false;
+      caseMode=false;
+      caseDecision=null;
     }
   };
 
@@ -176,6 +187,24 @@
     workbench.appendChild(actions);
   };
 
+  const renderCase=()=>{
+    workbench.append(
+      el('p','kicker','Cas real β·02 · instrument evolucionat'),
+      el('h3','','Direcció absent'),
+      el('p','temps-nu-score','direcció × 7 · desaparició × 1 · rastre × 1 · decisió'),
+      el('p','temps-nu-copy','La Cambra ha après de β·02: després de la desaparició no restaura el patró. Et retorna la responsabilitat de decidir entre un únic pols i el buit.')
+    );
+    const start=button('Habita la direcció absent','is-primary');
+    start.addEventListener('click',()=>begin({caseReal:true}));
+    const acta=document.createElement('a');
+    acta.href='./beta/travesses/02-direccio-que-desapareix.md';
+    acta.textContent='Llegir l’acta β·02';
+    acta.className='temps-nu-acta-link';
+    const actions=el('div','temps-nu-actions');
+    actions.append(start,acta);
+    workbench.appendChild(actions);
+  };
+
   const renderFree=()=>{
     workbench.append(
       el('p','kicker','Travessa lliure'),
@@ -214,8 +243,8 @@
       return;
     }
     workbench.append(
-      el('p','temps-nu-score',mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
-      el('p','temps-nu-copy',memory.threshold?'El primer llindar es va marcar a la volta '+memory.threshold+'.':'La travessa es va completar sense marcar cap llindar.')
+      el('p','temps-nu-score',memory.mode==='beta02'?'β·02 · '+(memory.decision==='pulse'?'pols únic':'buit sostingut'):mutations[memory.mutation].label+' · '+(memory.mode==='demo'?'Demo':'Travessa lliure')),
+      el('p','temps-nu-copy',memory.mode==='beta02'?'La direcció no va ser restaurada; la decisió va quedar fixada en aquesta sessió.':memory.threshold?'El primer llindar es va marcar a la volta '+memory.threshold+'.':'La travessa es va completar sense marcar cap llindar.')
     );
     if(memory.createdAt){
       const date=new Date(memory.createdAt);
@@ -257,6 +286,46 @@
   };
 
   const renderCompleted=()=>{
+    if(caseMode){
+      workbench.append(
+        el('p','kicker','β·02 · decisió transferida'),
+        el('h3','','Ara la direcció és teva'),
+        el('p','temps-nu-copy',caseDecision?'Decisió fixada: '+(caseDecision==='pulse'?'emetre un únic pols.':'sostenir el buit.'):'La direcció ha desaparegut. Pren una sola decisió; després no podràs substituir-la dins aquesta sessió.')
+      );
+      if(!caseDecision){
+        const pulse=button('Emet un únic pols','is-primary');
+        pulse.addEventListener('click',()=>{
+          caseDecision='pulse';
+          const AudioContext=window.AudioContext||window.webkitAudioContext;
+          if(AudioContext){
+            audio=new AudioContext();
+            audioOut=audio.destination;
+            tone(audio,audio.currentTime+.03,146.83,.48,.045,'sine');
+            window.setTimeout(()=>stopAudio(),650);
+          }
+          render();
+        });
+        const voidButton=button('Sostén el buit');
+        voidButton.addEventListener('click',()=>{caseDecision='void';render()});
+        const actions=el('div','temps-nu-actions');
+        actions.append(pulse,voidButton);
+        workbench.appendChild(actions);
+        return;
+      }
+      const fruit=button('Conserva aquest retorn','is-primary');
+      fruit.addEventListener('click',()=>{
+        safeWrite({mutation:'silenci',threshold:null,mode:'beta02',decision:caseDecision,createdAt:new Date().toISOString(),version:'TEMPS·NU·V · β·02'});
+        view='memory';
+        stop({reset:true});
+        render();
+      });
+      const compost=button('Deriva la decisió al Compost');
+      compost.addEventListener('click',returnCentre);
+      const actions=el('div','temps-nu-actions');
+      actions.append(fruit,compost);
+      workbench.appendChild(actions);
+      return;
+    }
     workbench.append(
       el('p','kicker','Retorn · memòria viva'),
       el('h3','','La novena volta ha tornat'),
@@ -292,8 +361,8 @@
     dialog.dataset.tnState=completed?'retorn':running?(cycle===8?'interferencia':cycle===9?'plegament':'escolta'):view;
     center?.classList.toggle('is-active',running||completed);
     if(caption)caption.textContent=completed?'Retorn completat. Decideix entre memòria viva i Compost.':running?phase.name+' · '+phase.detail:'Centre disponible · sempre pots tornar a l’origen.';
-    if(status)status.textContent=completed?'Retorn · decisió':running?phase.name:(view==='centre'?'Centre · cambra en repòs':view==='demo'?'Camí · Demo':view==='free'?'Camí · Travessa lliure':'Camí · Memòria');
-    if(title)title.textContent=completed?'Retorn amb memòria':running?phase.name:view==='centre'?'Habitar la repetició':view==='demo'?'Demo · absència audible':view==='free'?'Travessa · diferència mínima':'Memòria · fruit privat';
+    if(status)status.textContent=completed?'Retorn · decisió':running?phase.name:(view==='centre'?'Centre · cambra en repòs':view==='demo'?'Camí · Demo':view==='beta02'?'Camí · β·02':view==='free'?'Camí · Travessa lliure':'Camí · Memòria');
+    if(title)title.textContent=completed?(caseMode?'β·02 · decisió':'Retorn amb memòria'):running?phase.name:view==='centre'?'Habitar la repetició':view==='demo'?'Demo · absència audible':view==='beta02'?'β·02 · direcció absent':view==='free'?'Travessa · diferència mínima':'Memòria · fruit privat';
     if(description)description.textContent=running?'La cambra mostra com està existint la teva escolta; no avalua el resultat.':view==='centre'?'Entra per una Demo, una Travessa lliure o la Memòria. Sempre pots tornar al centre.':view==='memory'?'La memòria és local, explícita i revocable.':'PROXIMITAT + DIFERÈNCIA + TEMPS';
     viewButtons.forEach(control=>{
       control.disabled=running;
@@ -311,6 +380,7 @@
     if(running)renderRunning();
     else if(completed)renderCompleted();
     else if(view==='demo')renderDemo();
+    else if(view==='beta02')renderCase();
     else if(view==='free')renderFree();
     else if(view==='memory')renderMemory();
     else renderCentre();
@@ -334,10 +404,11 @@
     timer=setTimeout(()=>advance(token),CYCLE_MS);
   };
 
-  function begin({demo=false}={}){
+  function begin({demo=false,caseReal=false}={}){
     stop({reset:true});
     demoMode=demo;
-    if(demo)mutation='silenci';
+    caseMode=caseReal;
+    if(demo||caseReal)mutation='silenci';
     const token=runToken;
     advance(token);
   }
