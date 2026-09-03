@@ -23,7 +23,7 @@ assert.equal(local.governance.reversibility_required, true);
 
 const fusion = await readFile(new URL("../fusio-total/index.html", import.meta.url), "utf8");
 const interNos = await readFile(new URL("../inter-nos-creative/index.html", import.meta.url), "utf8");
-const cambra = await readFile(new URL("../cambra-nua-2/index.html", import.meta.url), "utf8");
+const cambra = await readFile(new URL("../cambra-nua-2/index.html", import.meta.url), "utf8");\nconst portal = await readFile(new URL("../index.html", import.meta.url), "utf8");\nconst cambraIcon = await readFile(new URL("../assets/cambra-nua.svg", import.meta.url), "utf8");
 assert.match(fusion, /Fusi[oó] Total 2\.4/);
 assert.match(fusion, /inter-nos-creative/);
 assert.match(interNos, /INTERLOCUTOR/);
@@ -32,7 +32,7 @@ assert.match(interNos, /CONSTITUCIÓ DE RECIPROCITAT/);
 assert.match(interNos, /ORGANISME ESTABLE/);
 assert.match(cambra, /SALA BLANCA/);\nassert.match(cambra, /DIRECCIÓ ABSENT/);\nassert.match(cambra, /bottom-nav/);\nassert.match(cambra, /cambra\\.salaBlanca/);
 assert.match(cambra, /AudioContext/);
-assert.match(cambra, /inter-nos-creative/);
+assert.match(cambra, /inter-nos-creative/);\nassert.match(portal, /assets\\/cambra-nua\\.svg/);\nassert.match(portal, /href="\\.\\/cambra-nua-2\\/"/);\nassert.match(cambraIcon, /#087dff/);\nassert.match(cambraIcon, /#f0a51d/);\nassert.match(cambraIcon, /#00c875/);
 console.log("Extrem canònic verificat: INTER NOS estable i Cambra Nua 2.1 · Sala Blanca connectada.");
 
 let response;
