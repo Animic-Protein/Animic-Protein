@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Cambra Nua del Temps</title>
+<desc id="desc">Cambra blanca en perspectiva amb un pols cobalt, una absència ocre i un rastre verd.</desc>
+<defs>
+  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#e9ecef"/></linearGradient>
+  <radialGradient id="blue"><stop stop-color="#087dff" stop-opacity=".92"/><stop offset=".55" stop-color="#087dff" stop-opacity=".25"/><stop offset="1" stop-color="#087dff" stop-opacity="0"/></radialGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<rect x="8" y="8" width="496" height="496" rx="112" fill="#fff" stroke="#d9dcdf" stroke-width="16"/>
+<path d="M91 91H421V371H91Z" fill="#fff" stroke="#cbd0d5" stroke-width="4"/>
+<path d="M8 8 91 91V371L8 504Z" fill="#f2f4f5"/>
+<path d="M504 8 421 91V371l83 133Z" fill="#eceff1"/>
+<path d="M8 504 91 371H421l83 133Z" fill="url(#floor)"/>
+<path d="M8 8 91 91H421l83-83Z" fill="#f7f8f9"/>
+<path d="M256 91V371M91 235H421" stroke="#dfe2e5" stroke-width="3"/>
+<circle cx="218" cy="230" r="116" fill="url(#blue)" filter="url(#soft)"/>
+<circle cx="218" cy="230" r="29" fill="#087dff"/>
+<circle cx="307" cy="230" r="25" fill="none" stroke="#f0a51d" stroke-width="11" stroke-dasharray="12 11"/>
+<path d="M331 230C362 230 369 268 344 284" fill="none" stroke="#00c875" stroke-width="12" stroke-linecap="round"/>
+<circle cx="344" cy="284" r="14" fill="#00c875"/>
+</svg>
