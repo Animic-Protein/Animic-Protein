@@ -22,16 +22,23 @@
     "traceability_required": true,
     "reversibility_required": true,
     "divergence_check": "github-actions",
-    "memory_rule": "recordar_no_equival_aprendre_ni_legislar"
+    "memory_rule": "recordar_no_equival_aprendre_ni_legislar",
+    "current_construction": "cambra_nua_del_temps_2"
   },
   "organs": {
     "inter_nos": {
       "url": "https://animic-protein.github.io/inter-nos-creative/",
-      "role": "organisme_relacional_i_memoria"
+      "role": "organisme_relacional_i_memoria",
+      "status": "stable_v1_reopen_by_evidence"
     },
     "portal_viu": {
       "url": "https://animic-protein.github.io/",
       "role": "entrada_publica_canonica"
+    },
+    "cambra_nua_2": {
+      "url": "https://animic-protein.github.io/cambra-nua-2/",
+      "role": "instrument_temporal_direccio_absent",
+      "status": "active_experimental_descendant"
     }
   },
   "laboratories": {
