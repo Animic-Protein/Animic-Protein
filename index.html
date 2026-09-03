@@ -1,326 +1,160 @@
 <!doctype html>
 <html lang="ca">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0d1512" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Còdex Viu" />
-  <title>Anímic Protein · Còdex Viu</title>
-  <meta name="description" content="Còdex Viu d’Anímic Protein — música, pensament, símbols i organisme interactiu." />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="rosa.css" />
-  <link rel="stylesheet" href="temps-nu.css" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
-</head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
-  <header class="hero">
-    <p class="eyebrow">ANÍMIC PROTEIN · CÒDEX VIU</p>
-    <h1>Una obra que continua aprenent.</h1>
-    <p class="lead">No és un llibre tancat: és un organisme viu on música, pensament, símbols i escolta es transformen mútuament.</p>
-    <div class="actions">
-      <a class="portal map-link" href="#mapa-viu">Mapa viu</a>
-      <button class="portal primary" data-open="sembra">Sembra una llavor</button>
-      <button class="portal z" data-open="instrument-z">Z</button>
-      <button class="portal question" data-open="rosa">?</button>
-      <button class="portal time" data-open="temps-nu-dialog" aria-label="Obrir la Cambra nua del temps">TEMPS</button>
-    </div>
-  </header>
-
-  <section class="inter-nos-bridge" aria-labelledby="inter-nos-title">
-    <p class="eyebrow">MEDULLA RELATIONALIS · MEMÒRIA VIVA</p>
-    <div>
-      <h2 id="inter-nos-title">INTER NOS no és un instrument més.</h2>
-      <p>Travessa el mapa i els instruments: relaciona persones, casos i òrgans; pot recordar una recurrència sense convertir-la en veredicte.</p>
-    </div>
-    <nav aria-label="Entrades als organismes experimentals">
-      <a href="https://inter-nos-escolta-reciproca.espai-de-tre-5917.chatgpt.site">Entrar a INTER NOS ↗</a>
-      <a href="https://animic-protein-fusio-total.espai-de-tre-5917.chatgpt.site">Obrir Fusió Total 2.4 ↗</a>
-    </nav>
-    <small>Recordar ≠ aprendre ≠ legislar · tota ressonància continua essent provisional i reversible.</small>
-  </section>
-
-  <main>
-    <section class="map-section" id="mapa-viu" aria-labelledby="map-title">
-      <div class="map-heading">
-        <div>
-          <p class="kicker">Cartographia Mutabilis</p>
-          <h2 id="map-title">Mapa Viu</h2>
-        </div>
-        <p>Explora el Còdex com una constel·lació. Toca un node per revelar-lo; combina’n dos per activar <strong>INTER NOS</strong>.</p>
-      </div>
-
-      <div class="living-map" id="living-map">
-        <div class="map-orbit" aria-hidden="true"></div>
-        <button class="map-core" type="button" data-node="codex" data-title="Còdex viu" data-desc="Centre relacional de l’organisme. Tot pot connectar-se, mutar i tornar al compost.">
-          <span class="core-mark">✦</span>
-          <strong>Còdex viu</strong>
-          <small>Tot es relaciona</small>
-        </button>
-
-        <section class="constellation c1" data-cluster="llavor">
-          <button class="hub" type="button" data-node="llavor-mutatio" data-title="Llavor / MUTATIO" data-desc="La cambra on una idea entra, canvia de forma i torna a sembrar-se.">1 · Llavor / MUTATIO</button>
-          <div class="satellites">
-            <button type="button" data-node="sembra-llavor" data-title="Sembra una llavor" data-desc="Genera una instrucció inesperada per iniciar una mutació creativa.">Sembra una llavor</button>
-            <button type="button" data-node="cicle-idea" data-title="Cicle de la idea" data-desc="Llavor, germinació, floració, collita i compost.">Cicle de la idea</button>
-            <button type="button" data-node="compost" data-title="Compost" data-desc="Cap idea es perd: allò descartat torna com a nutrient.">Compost</button>
-            <button type="button" data-node="atzar" data-title="Atzar" data-desc="L’atzar dadaista com a motor de desviació i descoberta.">Atzar</button>
-          </div>
-        </section>
-
-        <section class="constellation c2" data-cluster="pensament">
-          <button class="hub" type="button" data-node="pensament" data-title="Pensament" data-desc="Arrels, aforismes i principis que orienten sense tancar el sentit.">2 · Pensament</button>
-          <div class="satellites">
-            <button type="button" data-node="arrels" data-title="Arrels" data-desc="Interlocutors filosòfics, científics i poètics del Còdex. Brodsky hi actua com a díptic: preparar sense forçar i romandre sense fugir.">Arrels</button>
-            <button type="button" data-node="creativitum-nunc-pacevem" data-title="Creativitum nunc Pacevem" data-desc="Fórmula apòcrifa d’Anímic Protein: pau activa amb el límit i amb la repetició; preparar, fer, escoltar, romandre i no forçar l’arribada.">Creativitum nunc Pacevem</button>
-            <button type="button" data-node="aforismes" data-title="Aforismes" data-desc="Frases de condensació: petites portes cap a sistemes més grans.">Aforismes</button>
-            <button type="button" data-node="amo" data-title="Amo: volo ut sis" data-desc="Estimo: vull que siguis. Crear les condicions perquè una realitat pugui esdevenir ella mateixa.">Amo: volo ut sis</button>
-            <button type="button" data-node="ockham" data-title="Navalla d’Okham" data-desc="Reduir sense empobrir: deixar només allò que la forma necessita.">Navalla d’Okham</button>
-            <button type="button" data-node="incertesa" data-title="Principi d’incertesa" data-desc="Fixar una dimensió pot reduir-ne una altra: preservar la incertesa fecunda i provar abans de clausurar.">Principi d’incertesa</button>
-            <button type="button" data-node="continuum-pensament" data-title="Continuum" data-desc="Cap idea no queda aïllada; travessa estats, capes i relacions.">Continuum</button>
-          </div>
-        </section>
-
-        <section class="constellation c3" data-cluster="escolta">
-          <button class="hub" type="button" data-node="escolta" data-title="Escolta" data-desc="Rosa de l’Escolta, harmonia, microtonalitat, Zajj-viu i silenci.">3 · Escolta</button>
-          <div class="satellites">
-            <button type="button" data-node="rosa-escolta" data-title="Rosa de l’Escolta" data-desc="Portal secundari per entrar a les cambres sonores i perceptives.">Rosa de l’Escolta</button>
-            <button type="button" data-node="harmonia-viva" data-title="Harmonia Viva" data-desc="Intervals, tensions, camps, pedals i formes harmòniques que respiren.">Harmonia Viva</button>
-            <button type="button" data-node="pedals" data-title="Pedals" data-desc="Arrel, dominant, doble, cromàtic, espectral i latent.">Pedals</button>
-            <button type="button" data-node="microtonalitat" data-title="Microtonalitat" data-desc="Zones entre les notes: desplaçar l’orella abans que la teoria.">Microtonalitat</button>
-            <button type="button" data-node="zajj" data-title="Zajj-viu" data-desc="Improvisació, modalitat, risc i escolta col·lectiva.">Zajj-viu</button>
-            <button type="button" data-node="silenci" data-title="Silenci" data-desc="No absència, sinó material actiu i relacional.">Silenci</button>
-          </div>
-        </section>
-
-        <section class="constellation c4" data-cluster="moviment">
-          <button class="hub" type="button" data-node="moviment" data-title="Moviment" data-desc="Cos, gest, rastre i coreografies capaces de caminar cap enrere.">4 · Moviment</button>
-          <div class="satellites">
-            <button type="button" data-node="retrodansa" data-title="Retrodansa" data-desc="Coreografia inversa: del final cap a l’origen.">Retrodansa</button>
-            <button type="button" data-node="rastre" data-title="Rastre fantasma" data-desc="Persistència perceptiva d’un moviment que ja ha desaparegut.">Rastre fantasma</button>
-            <button type="button" data-node="cos" data-title="Cos" data-desc="El cos com a lector, instrument i territori del Còdex.">Cos</button>
-            <button type="button" data-node="coreografia" data-title="Coreografia" data-desc="Organització temporal del gest, inclosa la seva inversió.">Coreografia</button>
-          </div>
-        </section>
-
-        <section class="constellation c5" data-cluster="visual">
-          <button class="hub" type="button" data-node="univers-visual" data-title="Univers visual" data-desc="Símbols, herbaris, escuts i làmines com a òrgans del mateix sistema.">5 · Univers visual</button>
-          <div class="satellites">
-            <button type="button" data-node="escut" data-title="Escut" data-desc="Heràldica viva d’Anímic Protein: brúixola, llavor, xarxa, flama i compost.">Escut</button>
-            <button type="button" data-node="herbarium" data-title="Herbarium" data-desc="Arxiu vegetal de formes, proves i espècies simbòliques.">Herbarium</button>
-            <button type="button" data-node="simbols" data-title="Símbols" data-desc="Vocabulari visual reutilitzable i mutacional.">Símbols</button>
-            <button type="button" data-node="rosetta" data-title="Rosetta" data-desc="Traducció entre llenguatges, signes i futurs recordats.">Rosetta</button>
-            <button type="button" data-node="lamines" data-title="Làmines" data-desc="Cartografies, esquemes i peces editorials del Còdex.">Làmines</button>
-          </div>
-        </section>
-
-        <section class="constellation c6" data-cluster="continuum">
-          <button class="hub" type="button" data-node="continuum" data-title="Continuum" data-desc="La xarxa que impedeix que les cambres siguin illes.">6 · Continuum</button>
-          <div class="satellites">
-            <button type="button" data-node="vortex" data-title="Vòrtex" data-desc="Camp d’atracció on els materials entren, xoquen i canvien d’estat.">Vòrtex</button>
-            <button type="button" data-node="inter-nos" data-title="Inter Nos" data-desc="Allò que neix entre dos nodes i no pertany del tot a cap d’ells.">Inter Nos</button>
-            <button type="button" data-node="continuum-musicalis" data-title="Continuum musicalis" data-desc="La música no comença ni acaba: només travessa estats.">Continuum musicalis</button>
-            <button type="button" data-node="temps-nu" data-title="Cambra nua del temps" data-desc="Cambra navegable del Continuum: centre, repetició, llindar, mutació mínima, retorn i memòria viva.">Cambra nua del temps</button>
-            <button type="button" data-node="relacions" data-title="Relacions" data-desc="Connexions canòniques, afinitats, hipòtesis i mutacions recents.">Relacions</button>
-          </div>
-        </section>
-
-        <section class="constellation c7" data-cluster="metacodex">
-          <button class="hub" type="button" data-node="metacodex" data-title="Metacòdex" data-desc="La capa que explica com el Còdex canvia sense perdre memòria.">7 · Metacòdex</button>
-          <div class="satellites">
-            <button type="button" data-node="governanca" data-title="Governança" data-desc="Regles de cura, participació, qualitat i reversibilitat.">Governança</button>
-            <button type="button" data-node="autoria" data-title="Autoria" data-desc="Traça de contribucions humanes, col·laboratives i maquinals.">Autoria</button>
-            <button type="button" data-node="versions" data-title="Versions" data-desc="Memòria dels canvis perquè MUTATIO no signifiqui amnèsia.">Versions</button>
-            <button type="button" data-node="contribucions" data-title="Contribucions" data-desc="Entrades de la comunitat que poden ser acceptades, transformades o compostades.">Contribucions</button>
-            <button type="button" data-node="tracabilitat" data-title="Traçabilitat" data-desc="Poder reconstruir d’on prové una idea i com ha mutat.">Traçabilitat</button>
-          </div>
-        </section>
-
-        <aside class="node-panel" id="node-panel" aria-live="polite">
-          <p class="kicker">Node actiu</p>
-          <h3 id="node-title">Còdex viu</h3>
-          <p id="node-desc">Toca qualsevol node per revelar-ne el sentit.</p>
-          <div class="node-actions">
-            <button type="button" id="reveal-action">Revela</button>
-            <button type="button" id="relate-action">Relaciona</button>
-            <button type="button" id="seed-action">Sembra</button>
-          </div>
-          <p class="relation-output" id="relation-output"></p>
-        </aside>
-      </div>
-    </section>
-
-    <section class="panel" id="principis">
-      <div>
-        <p class="kicker">Principis vius</p>
-        <h2>Inter‑Nos · MUTATIO · Continuum</h2>
-      </div>
-      <div class="cards">
-        <article><h3>Inter‑Nos</h3><p>Allò que neix entre nosaltres no pertany del tot a cap de nosaltres.</p></article>
-        <article><h3>MUTATIO</h3><p>Cap forma és definitiva si encara pot respirar, escoltar i canviar.</p></article>
-        <article><h3>Continuum musicalis</h3><p>La música no comença ni acaba: només travessa estats.</p></article>
-      </div>
-    </section>
-
-    <section class="panel split" id="cicle">
-      <div>
-        <p class="kicker">El cicle de la idea</p>
-        <h2>Llavor → Germinació → Floració → Collita → Compost</h2>
-      </div>
-      <p>Tot ordre esdevé caos natural i, naturalment, el caos esdevé el seu ordre.</p>
-    </section>
-
-    <section class="panel" id="cambres">
-      <p class="kicker">Cambres del Còdex</p>
-      <div class="cards chambers">
-        <article><h3>Harmonia Viva</h3><p>Intervals, camps, pedals, microtonalitat i retro‑harmonia.</p></article>
-        <article><h3>Zajj‑viu</h3><p>Improvisació, modalitat, risc i escolta col·lectiva.</p></article>
-        <article><h3>Retrodansa</h3><p>Moviment invertit: del final cap a l’origen.</p></article>
-        <article><h3>Univers visual</h3><p>Escut, cartografies, làmines, futurs recordats i símbols actius.</p></article>
-      </div>
-    </section>
-
-    <section class="panel split" id="pont-site">
-      <div>
-        <p class="kicker">PONS·AP·I · INTER NOS</p>
-        <h2>La Site viu.<br />GitHub recorda.</h2>
-      </div>
-      <div>
-        <p>Aquest tronc públic conserva memòria, governança i restauració. La Site sosté l’experiència viva, el Viver, el Miceli i l’Interlocutor.</p>
-        <a class="portal primary" href="https://animic-protein.animic-protein.chatgpt.site/#pont-site-github">Travessar cap a la Site ↗</a>
-      </div>
-    </section>
-
-    <section class="inscription">
-      <blockquote>“Bene navigavi, cum naufragium feci.”</blockquote>
-      <p>Les mans al terra, els peus al cel.</p>
-    </section>
-  </main>
-
-  <dialog id="sembra">
-    <button class="close" aria-label="Tancar">×</button>
-    <p class="kicker">Sembra una llavor</p>
-    <h2>Atzar dadaista</h2>
-    <p id="seed-output">Prem el botó i deixa que el Còdex et retorni una llavor.</p>
-    <button id="seed-button" class="portal primary">Sembrar ara</button>
-  </dialog>
-
-  <dialog id="instrument-z">
-    <button class="close" aria-label="Tancar">×</button>
-    <p class="kicker">Instrument Z</p>
-    <h2>Escoltar abans d’ordenar</h2>
-    <p>Un portal d’acció immediata sobre el Còdex: pregunta, mutació, silenci i retorn.</p>
-  </dialog>
-
-  <dialog id="rosa" class="rosa-dialog">
-    <button class="close rosa-close" aria-label="Tancar">×</button>
-    <div class="rosa-shell">
-      <section class="rosa-stage" aria-label="Instrument Rosa de l’Escolta">
-        <div class="rosa-instrument">
-          <div class="rosa-constellation" data-rosa-constellation aria-live="polite" aria-label="Constel·lació secundària"></div>
-          <button class="rosa-center" type="button" aria-expanded="false" aria-label="Activar o tornar al centre de la Rosa">
-            CENTRE
-          </button>
-          <button class="rosa-branch" type="button" data-branch="harmonia">
-            <strong>Harmonia Viva</strong><small>Llei · tensió · escolta</small>
-          </button>
-          <button class="rosa-branch" type="button" data-branch="retrodansa">
-            <strong>Retrodansa</strong><small>Temps · memòria · retorn</small>
-          </button>
-          <button class="rosa-branch" type="button" data-branch="visual">
-            <strong>Univers visual</strong><small>Imatge · símbol · forma</small>
-          </button>
-          <button class="rosa-branch" type="button" data-branch="silenci">
-            <strong>Silenci</strong><small>Buit fecund · escolta</small>
-          </button>
-        </div>
-      </section>
-      <aside class="rosa-console">
-        <p class="kicker">TM-01 · Taller de Manifestació</p>
-        <p class="rosa-status" data-rosa-status>Rosa en repòs</p>
-        <h2 data-rosa-title>Centre · Origen</h2>
-        <p class="rosa-description" data-rosa-desc>Activa la Rosa i tria una direcció. Sempre pots tornar al centre.</p>
-        <div class="rosa-node-readout" data-rosa-node-readout hidden>
-          <p class="kicker">Node secundari</p>
-          <h3 data-rosa-node-title></h3>
-          <p data-rosa-node-desc></p>
-        </div>
-        <section class="rosa-workbench" data-rosa-workbench hidden aria-live="polite">
-          <p class="kicker">Instrument actiu</p>
-          <h3 data-rosa-workbench-title></h3>
-          <p class="rosa-workbench-output" data-rosa-workbench-output></p>
-          <div class="rosa-workbench-actions">
-            <button type="button" data-rosa-workbench-action></button>
-            <button type="button" data-rosa-workbench-alt hidden></button>
-          </div>
-        </section>
-        <div class="rosa-actions">
-          <a class="rosa-enter" aria-disabled="true">Obrir cambra</a>
-          <button type="button" data-rosa-reset>Tornar al centre</button>
-        </div>
-        <div class="rosa-steps">
-          <span><b>1</b> Toca el centre per obrir els camins.</span>
-          <span><b>2</b> Tria una direcció o un node.</span>
-          <span><b>3</b> Actua amb l’instrument contextual.</span>
-          <span><b>4</b> Obre la cambra o torna al centre.</span>
-        </div>
-      </aside>
-    </div>
-  </dialog>
-
-  <dialog id="temps-nu-dialog" class="temps-nu-dialog" aria-labelledby="temps-nu-dialog-title">
-    <button class="close temps-nu-close" aria-label="Tancar la Cambra nua del temps">×</button>
-    <div class="temps-nu-shell">
-      <section class="temps-nu-chamber-stage" aria-label="Dial de nou voltes de la Cambra nua del temps">
-        <div class="temps-nu-stage-head">
-          <p class="kicker">CONT·I · TEMPS·NU·V · β·02</p>
-          <p>PROXIMITAT + DIFERÈNCIA + TEMPS</p>
-        </div>
-        <div class="temps-nu-dial" data-tn-dial>
-          <div class="temps-nu-rings" aria-hidden="true"></div>
-          <div class="temps-nu-gates" data-tn-gates aria-label="Traça de les nou voltes"></div>
-          <button class="temps-nu-center" type="button" data-tn-center aria-label="Tornar al centre de la Cambra nua del temps">
-            <small>ORIGEN</small>
-            <strong>CENTRE</strong>
-            <span>RETORN</span>
-          </button>
-        </div>
-        <p class="temps-nu-stage-caption" data-tn-stage-caption>La cambra és en repòs. Tria un camí des de la consola.</p>
-      </section>
-      <aside class="temps-nu-console">
-        <p class="kicker">Cambra nua del temps</p>
-        <p class="temps-nu-status" data-tn-status role="status" aria-live="polite" aria-atomic="true">Centre · cambra en repòs</p>
-        <h2 id="temps-nu-dialog-title" data-tn-title>Habitar la repetició</h2>
-        <p class="temps-nu-description" data-tn-description>Entra per una Demo, el cas real β·02, una Travessa lliure o la Memòria. Sempre pots tornar al centre.</p>
-        <nav class="temps-nu-nav" aria-label="Camins de la Cambra nua del temps">
-          <button type="button" data-tn-view="demo"><strong>Demo</strong><small>Una absència audible</small></button>
-          <button type="button" data-tn-view="beta02"><strong>β·02</strong><small>Direcció absent</small></button>
-          <button type="button" data-tn-view="free"><strong>Travessa</strong><small>Tria la mutació</small></button>
-          <button type="button" data-tn-view="memory"><strong>Memòria</strong><small>Fruit privat o retirada</small></button>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#02070c" />
+    <title>Anímic Protein · Còdex Viu</title>
+    <meta
+      name="description"
+      content="Còdex Viu d’Anímic Protein: entra, percep, actua i deixa rastre."
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./formiga.css" />
+    <style>
+      :root {
+        --n: #02070c;
+        --t: #f4fbff;
+        --m: #94aab7;
+        --c: #00c8ff;
+        --o: #e3a629;
+        --g: #3fff67;
+        --l: #23465d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        background:
+          radial-gradient(circle at 50% 0, #103d5e 0, transparent 36rem),
+          var(--n);
+        color: var(--t);
+        font:
+          16px/1.5 Arial,
+          sans-serif;
+      }
+      .threshold {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 8vh 22px;
+      }
+      .inner {
+        max-width: 760px;
+      }
+      .ey {
+        color: var(--c);
+        letter-spacing: 0.18em;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+      }
+      h1 {
+        font:
+          400 clamp(3.7rem, 13vw, 9rem) / 0.84 Georgia,
+          serif;
+        letter-spacing: -0.055em;
+        margin: 0.18em 0;
+      }
+      h1 em {
+        color: var(--o);
+        font-weight: 400;
+      }
+      .lead {
+        max-width: 620px;
+        margin: 1.6rem auto;
+        color: var(--m);
+        font-size: 1.12rem;
+      }
+      .enter {
+        display: grid;
+        place-items: center;
+        width: 170px;
+        height: 170px;
+        margin: 2.5rem auto 1rem;
+        border: 1px solid var(--o);
+        border-radius: 50%;
+        background: radial-gradient(circle, #17384a, #061019);
+        color: var(--t);
+        font:
+          1.35rem Georgia,
+          serif;
+        text-decoration: none;
+        box-shadow: 0 0 55px #00c8ff18;
+        transition: 0.25s;
+      }
+      .enter:hover,
+      .enter:focus-visible {
+        transform: scale(1.04);
+        border-color: var(--g);
+        outline: none;
+      }
+      .secondary {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      .secondary a {
+        color: var(--m);
+        border-bottom: 1px solid var(--l);
+        text-decoration: none;
+        padding: 0.45rem;
+      }
+      .axiom {
+        margin: 4rem auto 0;
+        color: var(--m);
+        font-size: 0.78rem;
+      }
+      .ant {
+        display: inline-block;
+        margin-right: 0.4rem;
+        opacity: 0.7;
+      }
+      @media (max-width: 520px) {
+        h1 {
+          font-size: 4rem;
+        }
+        .enter {
+          width: 145px;
+          height: 145px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="threshold">
+      <div class="inner">
+        <p class="ey">ANÍMIC PROTEIN · CÒDEX VIU · LLINDAR</p>
+        <h1>No miris tot.<br /><em>Entra.</em></h1>
+        <p class="lead">
+          L’organisme no et demana que triïs una eina. Primer percep què està
+          succeint; després només revelarà allò que pugui ser pertinent.
+        </p>
+        <a
+          class="enter"
+          href="./universe/"
+          aria-label="Entrar a la navegació presencial d’Anímic Protein"
+          >ENTRAR</a
+        >
+        <nav class="secondary" aria-label="Accés cartogràfic secundari">
+          <a href="./fusio-total/">Veure territori</a
+          ><a href="./inter-nos-creative/">INTER NOS</a
+          ><a href="./cambra-nua-2/">Cambra Nua</a>
         </nav>
-        <section class="temps-nu-workbench" data-tn-workbench>
-          <p class="kicker">Centre · origen</p>
-          <p>Cap so no començarà sense el teu gest. La Cambra no avalua: mostra com està existint la teva escolta.</p>
-        </section>
-        <div class="temps-nu-route">
-          <span data-tn-step="1"><b>1</b> Aproximació</span>
-          <span data-tn-step="2"><b>2</b> Escolta</span>
-          <span data-tn-step="3"><b>3</b> Interferència</span>
-          <span data-tn-step="4"><b>4</b> Plegament</span>
-          <span data-tn-step="5"><b>5</b> Retorn</span>
-        </div>
-      </aside>
-    </div>
-  </dialog>
-
-  <footer>
-    <span>Còdex Viu · Anímic Protein</span>
-    <span>Creat per mutar · <a class="license-link" href="./LICENSE.md">Llicència i drets</a> · <a class="license-link" href="./pont-site.json">Manifest del pont</a></span>
-  </footer>
-  <script src="app.js"></script>
-</body>
+        <p class="axiom">
+          <span class="ant" aria-hidden="true">🐜</span>Presència → insinuació →
+          gest → resposta → diferència → rastre → relació → retorn.
+        </p>
+      </div>
+    </main>
+    <script src="./formiga.js"></script>
+  </body>
 </html>

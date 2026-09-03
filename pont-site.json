@@ -6,7 +6,9 @@
     "url": "https://animic-protein.animic-protein.chatgpt.site",
     "manifest_url": "https://animic-protein.animic-protein.chatgpt.site/.well-known/animic-bridge.json",
     "role": "superficie_viva",
-    "edition": "2.3-metabolismus"
+    "edition": "2.3-metabolismus",
+    "availability": "degraded_external_route",
+    "fallback_url": "https://animic-protein.github.io/fusio-total/"
   },
   "repository": {
     "url": "https://github.com/Animic-Protein/Animic-Protein.github.io",
@@ -20,21 +22,30 @@
     "traceability_required": true,
     "reversibility_required": true,
     "divergence_check": "github-actions",
-    "memory_rule": "recordar_no_equival_aprendre_ni_legislar"
+    "memory_rule": "recordar_no_equival_aprendre_ni_legislar",
+    "current_construction": "cambra_nua_del_temps_2_1_sala_blanca"
   },
   "organs": {
     "inter_nos": {
-      "url": "https://inter-nos-escolta-reciproca.espai-de-tre-5917.chatgpt.site",
-      "role": "organisme_relacional_i_memoria"
+      "url": "https://animic-protein.github.io/inter-nos-creative/",
+      "role": "organisme_relacional_i_memoria",
+      "status": "stable_v1_reopen_by_evidence"
     },
     "portal_viu": {
       "url": "https://animic-protein.github.io/",
       "role": "entrada_publica_canonica"
+    },
+    "cambra_nua_2": {
+      "url": "https://animic-protein.github.io/cambra-nua-2/",
+      "role": "instrument_temporal_direccio_absent",
+      "status": "active_experimental_descendant",
+      "edition": "2.1-sala-blanca",
+      "visual_mode": "white_room_colored_light"
     }
   },
   "laboratories": {
     "fusion_total_2_4": {
-      "url": "https://animic-protein-fusio-total.espai-de-tre-5917.chatgpt.site",
+      "url": "https://animic-protein.github.io/fusio-total/",
       "role": "laboratori_coniunctio",
       "canonical_status": "no_automatic"
     }

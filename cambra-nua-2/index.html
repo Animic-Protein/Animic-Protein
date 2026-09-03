@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#fff" />
+    <title>Cambra Nua del Temps 2.2 · Sala Blanca</title>
+    <meta
+      name="description"
+      content="Una cambra absolutament blanca on el temps es fa visible amb llum, absència i rastre."
+    />
+    <link rel="stylesheet" href="../formiga.css" />
+    <style>
+      :root {
+        --ink: #111317;
+        --muted: #686d74;
+        --line: #d9dcdf;
+        --blue: #087dff;
+        --ochre: #f0a51d;
+        --green: #00c875;
+        --light: #087dff;
+        --lx: 50%;
+        --ly: 43%;
+        --presence: 0.42;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: #fff;
+        font:
+          16px/1.45 Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      .app {
+        min-height: 100svh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 390px;
+      }
+      .stage {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        min-height: 620px;
+        overflow: hidden;
+        background: #fff;
+        transition: background 0.8s ease;
+      }
+      .room {
+        position: absolute;
+        inset: 0;
+        cursor: crosshair;
+        isolation: isolate;
+      }
+      .back {
+        position: absolute;
+        inset: 12% 12% 16%;
+        background: #fff;
+        box-shadow: inset 0 0 80px #dfe3e855;
+      }
+      .wall,
+      .ceiling,
+      .floor {
+        position: absolute;
+      }
+      .wall.left {
+        inset: 0 88% 0 0;
+        clip-path: polygon(0 0, 100% 12%, 100% 84%, 0 100%);
+        background: linear-gradient(90deg, #eceff2, #fff);
+      }
+      .wall.right {
+        inset: 0 0 0 88%;
+        clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 84%);
+        background: linear-gradient(90deg, #fff, #eceff2);
+      }
+      .ceiling {
+        inset: 0 0 88%;
+        clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+        background: linear-gradient(#f1f2f3, #fff);
+      }
+      .floor {
+        inset: 84% 0 0;
+        clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+        background: linear-gradient(#fff, #e8eaed);
+      }
+      .seam {
+        position: absolute;
+        background: #d9dcdf88;
+      }
+      .seam.v {
+        left: 50%;
+        top: 12%;
+        bottom: 16%;
+        width: 1px;
+      }
+      .seam.h {
+        left: 12%;
+        right: 12%;
+        top: 54%;
+        height: 1px;
+      }
+      .glow {
+        position: absolute;
+        z-index: 2;
+        width: min(54vw, 680px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        left: var(--lx);
+        top: var(--ly);
+        translate: -50% -50%;
+        background: radial-gradient(circle, var(--light), transparent 67%);
+        filter: blur(18px);
+        opacity: var(--presence);
+        mix-blend-mode: multiply;
+        transition: 0.5s;
+      }
+      .glow.flash {
+        scale: 1.08;
+        opacity: 0.72;
+      }
+      .stage.absent .glow {
+        opacity: 0;
+        scale: 0.82;
+      }
+      .stage.absent .room {
+        filter: saturate(0.15);
+      }
+      .stage.absent .signal:before {
+        background: transparent;
+        box-shadow: 0 0 0 1px var(--ochre);
+      }
+      .stage.immersive + .panel {
+        display: none;
+      }
+      .app:has(.stage.immersive) {
+        grid-template-columns: 1fr;
+      }
+      .immersion {
+        pointer-events: auto;
+        border: 1px solid #cfd3d8;
+        border-radius: 999px;
+        background: #ffffffd9;
+        padding: 9px 13px;
+        color: var(--ink);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        backdrop-filter: blur(14px);
+      }
+      .phase-strip {
+        position: absolute;
+        z-index: 5;
+        left: clamp(22px, 4vw, 58px);
+        right: clamp(22px, 4vw, 58px);
+        bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        pointer-events: none;
+      }
+      .phase {
+        border-top: 2px solid #d8dce0;
+        padding-top: 7px;
+        color: var(--muted);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .phase.active {
+        border-color: var(--light);
+        color: var(--ink);
+      }
+      .sr-live {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+      .echo {
+        position: absolute;
+        z-index: 3;
+        width: 80px;
+        aspect-ratio: 1;
+        border: 1px solid var(--light);
+        border-radius: 50%;
+        left: var(--lx);
+        top: var(--ly);
+        translate: -50% -50%;
+        opacity: 0;
+      }
+      .echo.live {
+        animation: echo 1s ease-out;
+      }
+      @keyframes echo {
+        0% {
+          opacity: 0.8;
+          scale: 0.2;
+        }
+        100% {
+          opacity: 0;
+          scale: 4;
+        }
+      }
+      .stage-head {
+        position: absolute;
+        z-index: 5;
+        top: max(24px, env(safe-area-inset-top));
+        left: clamp(22px, 4vw, 58px);
+        right: 24px;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+      .eyebrow,
+      .signal,
+      .edition {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+      }
+      .stage h1 {
+        margin: 0.25rem 0;
+        font:
+          400 clamp(2.5rem, 5.6vw, 6.3rem) / 0.9 Georgia,
+          serif;
+        letter-spacing: -0.045em;
+      }
+      .signal {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .signal:before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--light);
+        box-shadow: 0 0 18px var(--light);
+      }
+      .instruction {
+        position: absolute;
+        z-index: 5;
+        left: clamp(22px, 4vw, 58px);
+        bottom: clamp(88px, 9vh, 120px);
+        max-width: 37ch;
+        font:
+          clamp(1.3rem, 2.2vw, 2rem) / 1.15 Georgia,
+          serif;
+      }
+      .coordinates {
+        position: absolute;
+        right: 26px;
+        bottom: 28px;
+        z-index: 5;
+        color: var(--muted);
+        font:
+          700 0.7rem ui-monospace,
+          monospace;
+      }
+      .panel {
+        min-height: 100svh;
+        border-left: 1px solid var(--line);
+        padding: 24px 22px 100px;
+      }
+      .panel-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 28px;
+      }
+      .panel-top a {
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 650;
+      }
+      .edition {
+        color: var(--muted);
+      }
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        padding: 4px;
+        background: #f1f2f3;
+        border-radius: 999px;
+        position: sticky;
+        top: 14px;
+        z-index: 10;
+      }
+      .tab {
+        min-height: 42px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+      }
+      .tab.active {
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 1px 6px #0002;
+      }
+      .view {
+        display: none;
+        padding-top: 28px;
+      }
+      .view.active {
+        display: block;
+      }
+      .view h2 {
+        margin: 0 0 12px;
+        font:
+          400 2.35rem/1 Georgia,
+          serif;
+      }
+      .view > p {
+        color: var(--muted);
+        margin: 0 0 26px;
+      }
+      .swatches {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+      .swatch {
+        min-height: 88px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #fff;
+        text-align: left;
+        padding: 14px;
+      }
+      .swatch:before {
+        content: "";
+        display: block;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--c);
+        box-shadow: 0 0 20px var(--c);
+        margin-bottom: 13px;
+      }
+      .swatch.active {
+        border-color: var(--c);
+        box-shadow: inset 0 0 0 1px var(--c);
+      }
+      .control {
+        margin: 24px 0;
+      }
+      .control label {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .control strong {
+        color: var(--ink);
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--light);
+      }
+      .beats {
+        display: flex;
+        gap: 7px;
+        margin: 24px 0;
+      }
+      .beat {
+        flex: 1;
+        aspect-ratio: 1;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+      .beat.omit {
+        border-color: var(--ochre);
+        border-style: dashed;
+      }
+      .beat.on {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #fff;
+        scale: 1.1;
+      }
+      .beat.ghost {
+        background: var(--ochre);
+        color: #fff;
+        box-shadow: 0 0 20px #f0a51d88;
+      }
+      .actions {
+        display: grid;
+        gap: 9px;
+      }
+      .button {
+        display: grid;
+        place-items: center;
+        min-height: 50px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        padding: 11px 16px;
+        text-decoration: none;
+      }
+      .button.secondary {
+        background: #fff;
+        color: var(--ink);
+      }
+      .button.green {
+        background: var(--green);
+        border-color: var(--green);
+        color: #052615;
+      }
+      .readout {
+        min-height: 68px;
+        margin-top: 16px;
+        padding: 14px;
+        border-left: 2px solid var(--light);
+        background: #f6f7f8;
+        color: var(--muted);
+      }
+      .decision {
+        display: grid;
+        gap: 8px;
+        margin-top: 22px;
+      }
+      .decision button {
+        min-height: 58px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        text-align: left;
+        padding: 12px;
+      }
+      .decision button.selected {
+        border-color: var(--green);
+        box-shadow: inset 4px 0 var(--green);
+      }
+      .trace {
+        display: grid;
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .trace div {
+        background: #fff;
+        padding: 14px;
+      }
+      .trace small {
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+      .trace p {
+        margin: 0.35rem 0 0;
+      }
+      .empty {
+        padding: 38px 12px;
+        text-align: center;
+        color: var(--muted);
+        border: 1px dashed var(--line);
+        border-radius: 18px;
+      }
+      .principle {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font:
+          1.15rem Georgia,
+          serif;
+      }
+      .principle b {
+        color: var(--ink);
+      }
+      .bottom-nav {
+        display: none;
+      }
+      @media (max-width: 850px) {
+        body {
+          padding-bottom: 78px;
+        }
+        .app {
+          display: block;
+        }
+        .stage {
+          position: relative;
+          height: 58svh;
+          min-height: 440px;
+        }
+        .back {
+          inset: 13% 10% 15%;
+        }
+        .wall.left {
+          right: 90%;
+        }
+        .wall.right {
+          left: 90%;
+        }
+        .glow {
+          width: 82vw;
+        }
+        .stage-head {
+          top: max(18px, env(safe-area-inset-top));
+          left: 20px;
+        }
+        .stage h1 {
+          font-size: clamp(2.5rem, 12vw, 4.5rem);
+        }
+        .signal {
+          background: #ffffffbb;
+          padding: 7px 9px;
+          border-radius: 99px;
+        }
+        .instruction {
+          left: 20px;
+          right: 20px;
+          bottom: 56px;
+          font-size: 1.35rem;
+        }
+        .coordinates {
+          right: 18px;
+          bottom: 17px;
+        }
+        .phase-strip {
+          bottom: 14px;
+          left: 20px;
+          right: 70px;
+        }
+        .phase {
+          font-size: 0.55rem;
+        }
+        .panel {
+          min-height: auto;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+          padding: 20px 16px 110px;
+        }
+        .panel-top {
+          display: none;
+        }
+        .tabs {
+          top: 10px;
+        }
+        .bottom-nav {
+          display: grid;
+          position: fixed;
+          z-index: 30;
+          grid-template-columns: repeat(5, 1fr);
+          left: 10px;
+          right: 10px;
+          bottom: max(9px, env(safe-area-inset-bottom));
+          padding: 6px;
+          border: 1px solid var(--line);
+          border-radius: 20px;
+          background: #fffffff0;
+          box-shadow: 0 8px 32px #0002;
+          backdrop-filter: blur(18px);
+        }
+        .bottom-nav button {
+          min-height: 52px;
+          border: 0;
+          background: transparent;
+          color: var(--muted);
+          font-size: 0.7rem;
+        }
+        .bottom-nav .active {
+          color: var(--ink);
+          font-weight: 700;
+        }
+        .bottom-nav i {
+          display: block;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: currentColor;
+          margin: 0 auto 4px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+        }
+        .glow {
+          transition: none;
+        }
+        .echo.live {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section
+        class="stage"
+        id="stage"
+        aria-label="Sala blanca interactiva. Toca qualsevol punt per desplaçar la llum."
+      >
+        <div class="room">
+          <div class="back"></div>
+          <div class="wall left"></div>
+          <div class="wall right"></div>
+          <div class="ceiling"></div>
+          <div class="floor"></div>
+          <div class="seam v"></div>
+          <div class="seam h"></div>
+          <div class="glow" id="glow"></div>
+          <div class="echo" id="echo"></div>
+        </div>
+        <header class="stage-head">
+          <div>
+            <div class="eyebrow">CÒDEX VIU · INSTRUMENT VII</div>
+            <h1>CAMBRA<br />NUA</h1>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start">
+            <div class="signal" id="signal" aria-live="polite">DISPONIBLE</div>
+            <button class="immersion" id="immersion" aria-pressed="false">
+              ENTRAR
+            </button>
+          </div>
+        </header>
+        <p class="instruction" id="instruction">
+          Toca la cambra. La llum no decora: revela què fa el temps.
+        </p>
+        <div class="coordinates" id="coordinates">X 50 · Y 43</div>
+        <div class="phase-strip" aria-hidden="true">
+          <div class="phase active" data-phase="available">DISPONIBILITAT</div>
+          <div class="phase" data-phase="pulse">POLS</div>
+          <div class="phase" data-phase="absence">ABSÈNCIA</div>
+          <div class="phase" data-phase="trace">RASTRE</div>
+        </div>
+        <div class="sr-live" id="live" aria-live="assertive"></div>
+      </section>
+      <aside class="panel" id="console">
+        <div class="panel-top">
+          <a href="../">← Còdex Viu</a
+          ><span class="edition">2.2 · SALA BLANCA</span>
+        </div>
+        <nav class="tabs" aria-label="Controls">
+          <button class="tab active" data-view="light">Llum</button
+          ><button class="tab" data-view="time">Temps</button
+          ><button class="tab" data-view="trace">Rastre</button
+          ><button class="tab" data-view="return">Retorn</button>
+        </nav>
+        <section class="view active" id="view-light">
+          <h2>La llum respon</h2>
+          <p>Tria una qualitat i toca l’espai per situar-la.</p>
+          <div class="swatches">
+            <button
+              class="swatch active"
+              style="--c: #087dff"
+              data-color="#087dff"
+              data-name="COBALT"
+            >
+              Cobalt · pols</button
+            ><button
+              class="swatch"
+              style="--c: #f0a51d"
+              data-color="#f0a51d"
+              data-name="OCRE"
+            >
+              Ocre · absència</button
+            ><button
+              class="swatch"
+              style="--c: #00c875"
+              data-color="#00c875"
+              data-name="VERD"
+            >
+              Verd · rastre</button
+            ><button
+              class="swatch"
+              style="--c: #fff"
+              data-color="#ffffff"
+              data-name="BLANC"
+            >
+              Blanc · restitució
+            </button>
+          </div>
+          <div class="control">
+            <label>Intensitat <strong id="intensityOut">42%</strong></label
+            ><input id="intensity" type="range" min="8" max="78" value="42" />
+          </div>
+          <p class="principle">
+            <b>La cambra és blanca.</b> El color només existeix mentre alguna
+            cosa hi succeeix.
+          </p>
+        </section>
+        <section class="view" id="view-time">
+          <h2>Fer visible el temps</h2>
+          <p>Una seqüència de llum i so omet un pols. Observa què queda.</p>
+          <div class="control">
+            <label>Tempo <strong id="tempoOut">72 BPM</strong></label
+            ><input id="tempo" type="range" min="48" max="132" value="72" />
+          </div>
+          <div class="control">
+            <label>Polsos <strong id="countOut">8</strong></label
+            ><input id="count" type="range" min="5" max="10" value="8" />
+          </div>
+          <div class="control">
+            <label>Omissió <strong id="omitOut">6</strong></label
+            ><input id="omit" type="range" min="2" max="8" value="6" />
+          </div>
+          <div class="beats" id="beats"></div>
+          <div class="actions">
+            <button class="button" id="start">Iniciar travessa</button
+            ><button class="button secondary" id="stop">Aturar</button>
+          </div>
+          <p class="readout" id="readout">
+            Cap so començarà sense el teu gest.
+          </p>
+          <div class="decision">
+            <button data-decision="Sostenir el blanc un cicle més">
+              Sostenir el blanc un cicle més</button
+            ><button data-decision="Desplaçar la llum següent">
+              Desplaçar la llum següent</button
+            ><button data-decision="Dissoldre la direcció">
+              Dissoldre la direcció
+            </button>
+          </div>
+        </section>
+        <section class="view" id="view-trace">
+          <h2>Allò que queda</h2>
+          <p>
+            La cambra recorda només en aquest dispositiu i sempre pot oblidar.
+          </p>
+          <div id="traceEmpty" class="empty">
+            Encara no hi ha rastre. Travessa una omissió i pren una decisió.
+          </div>
+          <div id="traceData" class="trace" hidden>
+            <div>
+              <small>MATERIAL</small>
+              <p id="tMaterial">—</p>
+            </div>
+            <div>
+              <small>ABSÈNCIA</small>
+              <p id="tAbsence">—</p>
+            </div>
+            <div>
+              <small>RESPOSTA DE LA SALA</small>
+              <p id="tRoom">—</p>
+            </div>
+            <div>
+              <small>DECISIÓ</small>
+              <p id="tDecision">—</p>
+            </div>
+          </div>
+          <div class="actions" style="margin-top: 16px">
+            <button class="button secondary" id="forget">
+              Dissoldre el rastre
+            </button>
+          </div>
+        </section>
+        <section class="view" id="view-return">
+          <h2>Retorn a l’organisme</h2>
+          <p>
+            La Cambra no interpreta l’experiència. Pot retornar-ne un rastre
+            provisional a INTER NOS.
+          </p>
+          <div class="actions">
+            <a class="button green" href="../inter-nos-creative/#interlocutor"
+              >Portar el rastre a INTER NOS</a
+            ><a class="button secondary" href="../">Tornar al Còdex Viu</a>
+          </div>
+          <p class="principle">
+            <b>recordar ≠ aprendre ≠ legislar.</b><br />Cap experiència modifica
+            directament el Còdex.
+          </p>
+        </section>
+      </aside>
+    </main>
+    <nav class="bottom-nav" aria-label="Navegació principal">
+      <button class="active" data-mobile="room"><i></i>Sala</button
+      ><button data-mobile="light"><i></i>Llum</button
+      ><button data-mobile="time"><i></i>Temps</button
+      ><button data-mobile="trace"><i></i>Rastre</button
+      ><button data-mobile="return"><i></i>Retorn</button>
+    </nav>
+    <script>
+      const $ = (s) => document.querySelector(s),
+        $$ = (s) => [...document.querySelectorAll(s)],
+        root = document.documentElement,
+        stage = $("#stage"),
+        signal = $("#signal"),
+        instruction = $("#instruction"),
+        coordinates = $("#coordinates"),
+        tempo = $("#tempo"),
+        count = $("#count"),
+        omit = $("#omit"),
+        beats = $("#beats"),
+        readout = $("#readout");
+      let ctx,
+        timer,
+        index = 0,
+        running = false,
+        ghost = false,
+        colorName = "COBALT",
+        decision = "";
+      function light(c, name) {
+        colorName = name;
+        root.style.setProperty("--light", c);
+        stage.classList.remove("absent");
+        signal.textContent = name;
+        $$(".swatch").forEach((x) =>
+          x.classList.toggle("active", x.dataset.color === c),
+        );
+      }
+      function move(x, y) {
+        root.style.setProperty("--lx", x + "%");
+        root.style.setProperty("--ly", y + "%");
+        coordinates.textContent =
+          "X " + Math.round(x) + " · Y " + Math.round(y);
+        $("#echo").classList.remove("live");
+        void $("#echo").offsetWidth;
+        $("#echo").classList.add("live");
+      }
+      stage.addEventListener("pointerdown", (e) => {
+        const r = stage.getBoundingClientRect();
+        move(
+          ((e.clientX - r.left) / r.width) * 100,
+          ((e.clientY - r.top) / r.height) * 100,
+        );
+        instruction.textContent =
+          "La cambra ha rebut el teu gest. Ara pots fer visible el temps.";
+      });
+      $$(".swatch").forEach(
+        (b) => (b.onclick = () => light(b.dataset.color, b.dataset.name)),
+      );
+      $("#intensity").oninput = (e) => {
+        const v = e.target.value;
+        $("#intensityOut").textContent = v + "%";
+        root.style.setProperty("--presence", v / 100);
+      };
+      function phase(name) {
+        $$("[data-phase]").forEach((x) =>
+          x.classList.toggle("active", x.dataset.phase === name),
+        );
+      }
+      $("#immersion").onclick = () => {
+        const active = stage.classList.toggle("immersive");
+        $("#immersion").textContent = active ? "SORTIR" : "ENTRAR";
+        $("#immersion").setAttribute("aria-pressed", active);
+      };
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && stage.classList.contains("immersive"))
+          $("#immersion").click();
+        if (e.code === "Space" && !e.repeat && e.target === document.body) {
+          e.preventDefault();
+          running ? stop() : start();
+        }
+      });
+      function openView(name) {
+        $$(".view").forEach((v) =>
+          v.classList.toggle("active", v.id === "view-" + name),
+        );
+        $$(".tab").forEach((t) =>
+          t.classList.toggle("active", t.dataset.view === name),
+        );
+        $$("[data-mobile]").forEach((t) =>
+          t.classList.toggle("active", t.dataset.mobile === name),
+        );
+        if (innerWidth <= 850 && name !== "room")
+          $("#console").scrollIntoView({ behavior: "smooth" });
+      }
+      $$(".tab").forEach((t) => (t.onclick = () => openView(t.dataset.view)));
+      $$("[data-mobile]").forEach(
+        (t) =>
+          (t.onclick = () =>
+            t.dataset.mobile === "room"
+              ? stage.scrollIntoView({ behavior: "smooth" })
+              : openView(t.dataset.mobile)),
+      );
+      function render() {
+        const n = +count.value,
+          o = Math.min(+omit.value, n);
+        omit.max = n;
+        omit.value = o;
+        $("#tempoOut").textContent = tempo.value + " BPM";
+        $("#countOut").textContent = n;
+        $("#omitOut").textContent = o;
+        beats.innerHTML = "";
+        for (let i = 1; i <= n; i++) {
+          const b = document.createElement("div");
+          b.className = "beat" + (i === o ? " omit" : "");
+          b.textContent = i;
+          beats.append(b);
+        }
+      }
+      [tempo, count, omit].forEach((x) => (x.oninput = render));
+      render();
+      function tone() {
+        ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator(),
+          g = ctx.createGain();
+        o.frequency.value = 520;
+        g.gain.setValueAtTime(0.0001, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.13, ctx.currentTime + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
+        o.connect(g).connect(ctx.destination);
+        o.start();
+        o.stop(ctx.currentTime + 0.11);
+      }
+      function flash() {
+        const g = $("#glow");
+        g.classList.add("flash");
+        setTimeout(() => g.classList.remove("flash"), 150);
+        $("#echo").classList.remove("live");
+        void $("#echo").offsetWidth;
+        $("#echo").classList.add("live");
+      }
+      function step() {
+        const nodes = [...beats.children],
+          n = nodes.length,
+          o = +omit.value;
+        nodes.forEach((x) => x.classList.remove("on", "ghost"));
+        index = (index % n) + 1;
+        if (index === o) {
+          ghost = true;
+          nodes[index - 1].classList.add("ghost");
+          root.style.setProperty("--light", "#f0a51d");
+          stage.classList.add("absent");
+          signal.textContent = "DIRECCIÓ ABSENT";
+          phase("absence");
+          $("#live").textContent = "Omissió. El pols esperat no arriba.";
+          instruction.textContent =
+            "La llum no arriba. Però la sala encara l’espera.";
+          readout.textContent = "No reparis l’omissió. Mira què persisteix.";
+        } else {
+          tone();
+          nodes[index - 1].classList.add("on");
+          light(
+            ghost ? "#00c875" : "#087dff",
+            ghost ? "RASTRE ACTIU" : "POLS ACTIU",
+          );
+          phase(ghost ? "trace" : "pulse");
+          $("#live").textContent = ghost
+            ? "Rastre posterior a l’absència."
+            : "Pols " + index;
+          instruction.textContent = ghost
+            ? "El verd mostra que alguna cosa continua després de l’absència."
+            : "Cada pols construeix una direcció.";
+          readout.textContent = ghost
+            ? "La sala conserva un rastre, no una conclusió."
+            : "La repetició està orientant la cambra.";
+          move(24 + ((index - 1) / (n - 1)) * 52, 43);
+          flash();
+        }
+      }
+      function stop(show = true) {
+        clearInterval(timer);
+        running = false;
+        signal.textContent = "DISPONIBLE";
+        stage.classList.remove("absent");
+        phase("available");
+        beats
+          .querySelectorAll(".beat")
+          .forEach((x) => x.classList.remove("on"));
+        if (show)
+          readout.textContent = ghost
+            ? "Travessa aturada després del rastre. Ara decideix."
+            : "Travessa aturada.";
+      }
+      function start() {
+        stop(false);
+        running = true;
+        ghost = false;
+        index = 0;
+        phase("pulse");
+        step();
+        timer = setInterval(step, 60000 / +tempo.value);
+      }
+      $("#start").onclick = start;
+      $("#stop").onclick = () => stop();
+      function showTrace(d) {
+        $("#traceEmpty").hidden = true;
+        $("#traceData").hidden = false;
+        $("#tMaterial").textContent = d.count + " polsos a " + d.tempo + " BPM";
+        $("#tAbsence").textContent = "Pols " + d.omit + " omès";
+        $("#tRoom").textContent = d.ghost
+          ? "La llum verda ha retornat després de l’ocre"
+          : "Rastre no confirmat";
+        $("#tDecision").textContent = d.decision || "Encara oberta";
+      }
+      function saveTrace() {
+        const d = {
+          tempo: tempo.value,
+          count: count.value,
+          omit: omit.value,
+          color: colorName,
+          ghost,
+          decision,
+        };
+        try {
+          localStorage.setItem("cambra.salaBlanca", JSON.stringify(d));
+        } catch (e) {}
+        showTrace(d);
+      }
+      $$("[data-decision]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            $$("[data-decision]").forEach((x) =>
+              x.classList.remove("selected"),
+            );
+            b.classList.add("selected");
+            decision = b.dataset.decision;
+            if (decision.startsWith("Sostenir")) {
+              light("#ffffff", "BLANC SOSTINGUT");
+              instruction.textContent =
+                "El blanc sosté el buit sense omplir-lo.";
+            } else if (decision.startsWith("Desplaçar")) {
+              light("#00c875", "LLUM DESPLAÇADA");
+              move(72, 36);
+              instruction.textContent =
+                "La direcció següent ha canviat de lloc.";
+            } else {
+              light("#ffffff", "DIRECCIÓ DISSOLTA");
+              root.style.setProperty("--presence", 0.08);
+              instruction.textContent = "La sala torna a estar nua.";
+            }
+            saveTrace();
+            openView("trace");
+          }),
+      );
+      $("#forget").onclick = () => {
+        try {
+          localStorage.removeItem("cambra.salaBlanca");
+        } catch (e) {}
+        $("#traceEmpty").hidden = false;
+        $("#traceData").hidden = true;
+        decision = "";
+        ghost = false;
+        light("#087dff", "DISPONIBLE");
+        root.style.setProperty("--presence", 0.42);
+        $("#intensity").value = 42;
+        $("#intensityOut").textContent = "42%";
+        phase("available");
+        instruction.textContent =
+          "La cambra ha oblidat. Torna a estar disponible.";
+      };
+      try {
+        const d = JSON.parse(localStorage.getItem("cambra.salaBlanca"));
+        if (d) showTrace(d);
+      } catch (e) {}
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && running) stop(false);
+      });
+    </script>
+    <script src="../formiga.js"></script>
+  </body>
+</html>

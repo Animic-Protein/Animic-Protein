@@ -176,3 +176,14 @@ La recurrència no anul·la la diferència:
 **Llindar:** suport 2/3. `Probatio Radicum` conserva el patró com a emergent perquè encara no arriba a tres casos traçables. `Lex Radicum` no el pot legislar.
 
 **Rang:** memòria estructural provisional, cap principi nou i cap mutació constitucional. INTER NOS recorda la repetició; no legisla a partir d’ella.
+
+### Validació sobre `main` actual · 2026-09-03
+
+La recurrència s’ha reconstruït damunt la Constitució d’Interfície, la Navegació Presencial i l’extensió gradual de la Formiga, sense substituir-ne cap capa ni retrocedir la memòria cau canònica.
+
+- **Rastre → Ressonància:** mostra «Rastre ↔ Ressonància · memòria» i reconeix el suport 2/3.
+- **Probatio Radicum:** conserva el patró com a `emergent`; relació i reversibilitat passen, diferència perceptible i traçabilitat romanen sota el llindar.
+- **Retorn:** la relació deriva exclusivament al Centre.
+- **Límit:** «Recurrència reconeguda» queda desactivat com a acció; no sembra ni legisla automàticament.
+- **Neteja:** «Netejar relació» oculta el panell, retira la memòria visible i restaura l’estat inicial.
+- **Compatibilitat:** `sw.js` queda governat per `main` (`v61`) i conserva les rutes actuals i els recursos de la Formiga.
