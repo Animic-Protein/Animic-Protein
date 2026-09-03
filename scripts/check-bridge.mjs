@@ -12,6 +12,9 @@ assert.equal(local.site.url, expectedSite);
 assert.equal(local.site.fallback_url, expectedFallback);
 assert.equal(local.laboratories.fusion_total_2_4.url, expectedFallback);
 assert.equal(local.organs.inter_nos.url, expectedInterNos);
+assert.equal(local.organs.inter_nos.status, "stable_v1_reopen_by_evidence");
+assert.equal(local.organs.cambra_nua_2.url, "https://animic-protein.github.io/cambra-nua-2/");
+assert.equal(local.governance.current_construction, "cambra_nua_del_temps_2");
 assert.equal(local.repository.url, expectedRepository);
 assert.equal(local.governance.automatic_canonical_status, false);
 assert.equal(local.governance.human_editorial_decision_required, true);
@@ -20,12 +23,17 @@ assert.equal(local.governance.reversibility_required, true);
 
 const fusion = await readFile(new URL("../fusio-total/index.html", import.meta.url), "utf8");
 const interNos = await readFile(new URL("../inter-nos-creative/index.html", import.meta.url), "utf8");
+const cambra = await readFile(new URL("../cambra-nua-2/index.html", import.meta.url), "utf8");
 assert.match(fusion, /Fusi[oó] Total 2\.4/);
 assert.match(fusion, /inter-nos-creative/);
 assert.match(interNos, /INTERLOCUTOR/);
 assert.match(interNos, /LOCUTUS/);
 assert.match(interNos, /CONSTITUCIÓ DE RECIPROCITAT/);
-console.log("Extrem canònic verificat: Fusió Total i INTER NOS Creative són presents i connectats.");
+assert.match(interNos, /ORGANISME ESTABLE/);
+assert.match(cambra, /DIRECCIÓ ABSENT/);
+assert.match(cambra, /AudioContext/);
+assert.match(cambra, /inter-nos-creative/);
+console.log("Extrem canònic verificat: INTER NOS estable i Cambra Nua 2.0 connectada.");
 
 let response;
 try {
