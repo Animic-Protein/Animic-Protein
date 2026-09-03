@@ -4,24 +4,40 @@ import { readFile } from "node:fs/promises";
 const expectedSite = "https://animic-protein.animic-protein.chatgpt.site";
 const expectedRepository = "https://github.com/Animic-Protein/Animic-Protein.github.io";
 const expectedFallback = "https://animic-protein.github.io/fusio-total/";
+const expectedInterNos = "https://animic-protein.github.io/inter-nos-creative/";
 const local = JSON.parse(await readFile(new URL("../pont-site.json", import.meta.url), "utf8"));
 
 assert.equal(local.protocol, "PONS-AP-1.0");
 assert.equal(local.site.url, expectedSite);
 assert.equal(local.site.fallback_url, expectedFallback);
 assert.equal(local.laboratories.fusion_total_2_4.url, expectedFallback);
+assert.equal(local.organs.inter_nos.url, expectedInterNos);
 assert.equal(local.repository.url, expectedRepository);
 assert.equal(local.governance.automatic_canonical_status, false);
 assert.equal(local.governance.human_editorial_decision_required, true);
 assert.equal(local.governance.traceability_required, true);
 assert.equal(local.governance.reversibility_required, true);
 
+const fusion = await readFile(new URL("../fusio-total/index.html", import.meta.url), "utf8");
+const interNos = await readFile(new URL("../inter-nos-creative/index.html", import.meta.url), "utf8");
+assert.match(fusion, /Fusi[oó] Total 2\.4/);
+assert.match(fusion, /inter-nos-creative/);
+assert.match(interNos, /INTERLOCUTOR/);
+assert.match(interNos, /LOCUTUS/);
+assert.match(interNos, /CONSTITUCIÓ DE RECIPROCITAT/);
+console.log("Extrem canònic verificat: Fusió Total i INTER NOS Creative són presents i connectats.");
+
+let response;
 try {
-  const response = await fetch(local.site.manifest_url, {
+  response = await fetch(local.site.manifest_url, {
     headers: { accept: "application/json" },
     signal: AbortSignal.timeout(15000),
   });
-  assert.equal(response.ok, true, `La Site no exposa el manifest: HTTP ${response.status}`);
+} catch (error) {
+  console.warn("Site experimental no disponible; el fallback canònic continua actiu.", error.message);
+}
+
+if (response?.ok) {
   const remote = await response.json();
   assert.equal(remote.protocol, local.protocol);
   assert.equal(remote.site.url, local.site.url);
@@ -31,9 +47,9 @@ try {
   assert.equal(remote.governance.human_editorial_decision_required, true);
   assert.equal(remote.governance.traceability_required, true);
   assert.equal(remote.governance.reversibility_required, true);
-  console.log("PONS·AP·I coherent: Site i GitHub es reconeixen.");
-} catch (error) {
-  console.warn("PONS·AP·I degradat: la ruta externa de Sites no respon; el fallback canònic continua actiu.", error.message);
+  console.log("Extrem experimental coherent: Site i GitHub es reconeixen.");
+} else if (response) {
+  console.warn(`Site experimental degradada: HTTP ${response.status}; el fallback canònic continua actiu.`);
 }
 
-console.log("Fallback Fusió Total verificat: publicació canònica, traçable i reversible.");
+console.log("PONS·AP·I coherent: publicació canònica, traçable i reversible.");
