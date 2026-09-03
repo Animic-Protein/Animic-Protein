@@ -61,7 +61,7 @@
         mode:['demo','beta02'].includes(value.mode)?value.mode:'lliure',
         decision:['pulse','void'].includes(value.decision)?value.decision:null,
         createdAt:typeof value.createdAt==='string'?value.createdAt:'',
-        version:typeof value.version==='string'?value.version:'TEMPS·NU·IV'
+        version:typeof value.version==='string'?value.version:'TEMPS·NU·V · β·02'
       };
     }catch{return null}
   };
@@ -152,7 +152,7 @@
     gates.replaceChildren();
     for(let n=1;n<=TOTAL_CYCLES;n+=1){
       const angle=(n-1)*40;
-      const kind=n<=7?'Repetició':n===8?'Interferència':'Retorn';
+      const kind=caseMode?(n<=7?'Direcció':n===8?'Desaparició':'Rastre'):(n<=7?'Repetició':n===8?'Interferència':'Retorn');
       const slot=el('span','temps-nu-gate-slot');
       slot.style.setProperty('--tn-angle',angle+'deg');
       const gate=el('span','temps-nu-gate '+(n<cycle?'is-past ':'')+(n===cycle?'is-current ':'')+(n===8?'is-mutation ':'')+(n===9?'is-return':''),String(n));
@@ -168,7 +168,7 @@
     workbench.append(
       el('p','kicker','Centre · origen i retorn'),
       el('h3','','La cambra encara no ha començat'),
-      el('p','temps-nu-copy','Tria Demo per escoltar una absència guiada, Travessa per decidir la mutació o Memòria per revisar el darrer fruit privat.')
+      el('p','temps-nu-copy','Tria Demo per escoltar una absència guiada, β·02 per habitar una direcció absent, Travessa per decidir la mutació o Memòria per revisar el darrer fruit privat.')
     );
     workbench.appendChild(el('p','temps-nu-notice','El so només s’activa amb el teu gest. Pots aturar-lo i tornar al centre en qualsevol moment.'));
   };
@@ -363,7 +363,7 @@
     if(caption)caption.textContent=completed?'Retorn completat. Decideix entre memòria viva i Compost.':running?phase.name+' · '+phase.detail:'Centre disponible · sempre pots tornar a l’origen.';
     if(status)status.textContent=completed?'Retorn · decisió':running?phase.name:(view==='centre'?'Centre · cambra en repòs':view==='demo'?'Camí · Demo':view==='beta02'?'Camí · β·02':view==='free'?'Camí · Travessa lliure':'Camí · Memòria');
     if(title)title.textContent=completed?(caseMode?'β·02 · decisió':'Retorn amb memòria'):running?phase.name:view==='centre'?'Habitar la repetició':view==='demo'?'Demo · absència audible':view==='beta02'?'β·02 · direcció absent':view==='free'?'Travessa · diferència mínima':'Memòria · fruit privat';
-    if(description)description.textContent=running?'La cambra mostra com està existint la teva escolta; no avalua el resultat.':view==='centre'?'Entra per una Demo, una Travessa lliure o la Memòria. Sempre pots tornar al centre.':view==='memory'?'La memòria és local, explícita i revocable.':'PROXIMITAT + DIFERÈNCIA + TEMPS';
+    if(description)description.textContent=running?'La cambra mostra com està existint la teva escolta; no avalua el resultat.':view==='centre'?'Entra per una Demo, el cas real β·02, una Travessa lliure o la Memòria. Sempre pots tornar al centre.':view==='memory'?'La memòria és local, explícita i revocable.':'PROXIMITAT + DIFERÈNCIA + TEMPS';
     viewButtons.forEach(control=>{
       control.disabled=running;
       control.setAttribute('aria-pressed',String(control.dataset.tnView===view));
