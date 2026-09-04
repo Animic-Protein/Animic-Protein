@@ -1,0 +1,76 @@
+import {saveArchiveEntry} from './storage.js';
+import {evolveRecord} from './model.js';
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let ctx=null,master=null,running=false,step=0,nextNoteTime=0,timer=null,bpm=94,swing=.08,probability=1,operation='acompanya',activeSlice=null,activeSliceName='MATÈRIA',activeRecord=null;
+const rows=['KICK','SNARE','CLAP','HAT','SPACE','SUB','NOISE','MATÈRIA'];
+const grid=Array.from({length:8},()=>Array(16).fill(false));
+const PRESETS={
+  'Hip-hop cru':[[0,8],[4,12],[4,12],[2,6,10,14],[],[0,8],[],[]],
+  'Electro':[[0,4,8,12],[4,12],[4,12],[2,6,10,14],[7,15],[0,8],[],[]],
+  'Dance 4/4':[[0,4,8,12],[4,12],[],[2,6,10,14],[6,14],[0,8],[],[]],
+  'Broken':[[0,7,10],[4,12],[6,14],[2,5,9,13],[11],[0,10],[15],[]],
+  '7/8':[[0,6,12],[4,10],[8],[2,5,9,13],[11],[0,12],[],[]],
+  'Absència':[[0],[12],[],[6],[],[],[],[]]
+};
+
+function ensureAudio(){
+  ctx??=new(window.AudioContext||window.webkitAudioContext)();
+  if(!master){master=ctx.createGain();master.gain.value=.72;master.connect(ctx.destination)}
+  if(ctx.state==='suspended')ctx.resume();
+}
+function envGain(t,peak=.8,decay=.18){const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.002);g.gain.exponentialRampToValueAtTime(.0001,t+decay);g.connect(master);return g}
+function osc(type,f,t,d=.15,peak=.7){const o=ctx.createOscillator(),g=envGain(t,peak,d);o.type=type;o.frequency.setValueAtTime(f,t);o.connect(g);o.start(t);o.stop(t+d+.03)}
+function noise(t,d=.12,peak=.45,filterType='highpass',freq=1200){const n=ctx.createBufferSource(),b=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*d),ctx.sampleRate),x=b.getChannelData(0);for(let i=0;i<x.length;i++)x[i]=Math.random()*2-1;n.buffer=b;const f=ctx.createBiquadFilter();f.type=filterType;f.frequency.value=freq;const g=envGain(t,peak,d);n.connect(f);f.connect(g);n.start(t);n.stop(t+d+.02)}
+function hit(row,t){
+  if(Math.random()>probability)return;
+  switch(row){
+    case 0:{const o=ctx.createOscillator(),g=envGain(t,.95,.22);o.type='sine';o.frequency.setValueAtTime(145,t);o.frequency.exponentialRampToValueAtTime(44,t+.12);o.connect(g);o.start(t);o.stop(t+.25);break}
+    case 1: noise(t,.16,.58,'bandpass',1800); osc('triangle',170,t,.08,.25);break;
+    case 2: noise(t,.11,.45,'bandpass',2600);setTimeout(()=>{},0);break;
+    case 3: noise(t,.055,.28,'highpass',6500);break;
+    case 4:{noise(t,.32,.22,'bandpass',3200);osc('sine',540,t,.28,.2);break}
+    case 5:{const o=ctx.createOscillator(),g=envGain(t,.5,.32);o.type='sine';o.frequency.setValueAtTime(58,t);o.frequency.exponentialRampToValueAtTime(42,t+.25);o.connect(g);o.start(t);o.stop(t+.34);break}
+    case 6: noise(t,.14,.32,'lowpass',900);break;
+    case 7: playActiveSlice(t);break;
+  }
+}
+function playActiveSlice(t){if(!activeSlice)return;const s=ctx.createBufferSource(),g=envGain(t,.7,Math.min(.35,activeSlice.duration));s.buffer=activeSlice;s.connect(g);s.start(t,0,Math.min(.32,activeSlice.duration));s.stop(t+Math.min(.34,activeSlice.duration))}
+function secondsPer16th(){return 60/bpm/4}
+function scheduler(){while(nextNoteTime<ctx.currentTime+.12){scheduleStep(step,nextNoteTime);const base=secondsPer16th(),odd=step%2===1;nextNoteTime+=base*(odd?1+swing:1-swing);step=(step+1)%16}timer=setTimeout(scheduler,25)}
+function scheduleStep(s,t){grid.forEach((row,r)=>{if(row[s])hit(r,t)});requestAnimationFrame(()=>{$$('.p-step.playing').forEach(x=>x.classList.remove('playing'));$$(`.p-step[data-step="${s}"]`).forEach(x=>x.classList.add('playing'))});if(operation==='talla'){const m=currentMedia();if(m)m.volume=grid.some(r=>r[s])?1:.22}}
+function start(){ensureAudio();if(running)return;running=true;step=0;nextNoteTime=ctx.currentTime+.05;scheduler();$('#pPlay').textContent='■ STOP';$('#pStatus').textContent=`Actiu · ${bpm} BPM · ${operation.toUpperCase()}`;const m=currentMedia();if(operation==='acompanya'&&m&&m.paused)m.play().catch(()=>{})}
+function stop(){running=false;clearTimeout(timer);timer=null;const m=currentMedia();if(m)m.volume=1;$('#pPlay').textContent='▶ PLAY';$('#pStatus').textContent='Aturat · patró conservat.';$$('.p-step.playing').forEach(x=>x.classList.remove('playing'))}
+function currentMedia(){return $('#stage video,#stage audio,#vstage video')}
+async function captureActiveSlice(){
+  ensureAudio();const m=currentMedia();let source=null;
+  const photo=$('#photo')?.files?.[0],file=$('#file')?.files?.[0];source=file||photo;
+  try{
+    let ab;if(source)ab=await source.arrayBuffer();else if(m?.currentSrc)ab=await (await fetch(m.currentSrc)).arrayBuffer();else throw new Error('no source');
+    const decoded=await ctx.decodeAudioData(ab.slice(0));const start=Math.max(0,Math.min(decoded.duration-.01,m?.currentTime||0)),dur=Math.min(.35,decoded.duration-start),frames=Math.max(1,Math.floor(dur*decoded.sampleRate)),slice=ctx.createBuffer(decoded.numberOfChannels,frames,decoded.sampleRate);
+    for(let c=0;c<decoded.numberOfChannels;c++)slice.copyToChannel(decoded.getChannelData(c).slice(Math.floor(start*decoded.sampleRate),Math.floor(start*decoded.sampleRate)+frames),c);
+    activeSlice=slice;activeSliceName='MATÈRIA '+start.toFixed(2)+'s';$('#pSlice').textContent=`Pad 8 ← ${activeSliceName}`;$('#pStatus').textContent='Fragment actiu capturat com a sample.';
+  }catch{$('#pStatus').textContent='No he pogut extreure àudio d’aquesta matèria en aquest navegador.'}
+}
+function applyPreset(name){grid.forEach(r=>r.fill(false));const p=PRESETS[name];p.forEach((steps,r)=>steps.forEach(s=>grid[r][s]=true));renderGrid();$('#pPreset').value=name;$('#pStatus').textContent=`Preset: ${name}.`}
+function renderGrid(){const host=$('#pGrid');if(!host)return;host.replaceChildren();rows.forEach((name,r)=>{const row=document.createElement('div');row.className='p-row';const lab=document.createElement('button');lab.className='btn p-pad';lab.textContent=name;lab.onclick=()=>{ensureAudio();hit(r,ctx.currentTime+.01)};row.append(lab);for(let s=0;s<16;s++){const b=document.createElement('button');b.className='p-step'+(grid[r][s]?' on':'');b.dataset.row=r;b.dataset.step=s;b.title=`${name} · ${s+1}`;b.onclick=()=>{grid[r][s]=!grid[r][s];b.classList.toggle('on',grid[r][s])};row.append(b)}host.append(row)})}
+function openPulsarium(){$$('.workspace').forEach(x=>x.classList.remove('active'));$('#pulsarium').classList.add('active');$('#pulsarium').scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('[data-pulse]').forEach(x=>x.classList.toggle('hot',x.dataset.pulse==='pulsarium'));$('#circulationState')&&($('#circulationState').textContent='Matèria activa a Pulsarium.');$('#antSuggest')&&($('#antSuggest').textContent='🐜 El pols pot tornar a Looperum, contaminar Videodrum o conservar-se a Archivum.')}
+async function conserve(){
+  const sourceFile=$('#file')?.files?.[0]||$('#photo')?.files?.[0]||null;let rec={id:`puls-${Date.now()}`,source:{kind:'pattern',name:'Pulsarium'},provenance:{rootRecordId:`puls-${Date.now()}`,generation:0}};
+  try{const m=currentMedia();const hostRec=window.__codexActiveRecord||null;if(hostRec)rec=evolveRecord(hostRec,'transformation',{kind:'pulsarium-pattern',bpm,swing,probability,operation,grid:grid.map(r=>r.map(Boolean))})}catch{}
+  await saveArchiveEntry({id:`puls-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,savedAt:Date.now(),record:rec,blob:sourceFile||null,name:`Pulsarium · ${$('#pPreset').value}`,kind:'pulsarium',mediaKind:sourceFile?.type?.startsWith('video/')?'video':sourceFile?.type?.startsWith('audio/')?'audio':'pattern',mime:sourceFile?.type||'application/json',note:`${bpm} BPM · swing ${Math.round(swing*100)}% · probabilitat ${Math.round(probability*100)}% · ${operation}`});
+  $('#pStatus').textContent='Patró / transformació conservat a Archivum.';window.dispatchEvent(new CustomEvent('archivum:changed',{detail:{reason:'pulsarium'}}));
+}
+function injectStyles(){const st=document.createElement('style');st.textContent=`.pulsarium-organ{border-color:#3fff6755}.p-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.p-controls label{border:1px solid var(--l);border-radius:14px;padding:10px;background:#061019}.p-controls input,.p-controls select{width:100%;margin-top:5px}.p-grid{overflow:auto;padding-bottom:6px}.p-row{display:grid;grid-template-columns:90px repeat(16,28px);gap:5px;align-items:center;margin:6px 0;min-width:620px}.p-pad{min-height:32px;padding:.3rem .5rem;font-size:.72rem}.p-step{width:28px;height:28px;border-radius:7px;border:1px solid var(--l);background:#07111b}.p-step.on{background:#163425;border-color:var(--g);box-shadow:0 0 10px #3fff6733}.p-step.playing{outline:2px solid var(--o)}@media(max-width:760px){.p-controls{grid-template-columns:1fr 1fr}}`;document.head.append(st)}
+function install(){
+  if($('#pulsarium'))return;injectStyles();
+  const organs=$('.organs');if(organs){const card=document.createElement('article');card.className='organ pulsarium-organ';card.innerHTML='<p class="ey">INSTRUMENT RÍTMIC / SAMPLER</p><h2>Pulsarium</h2><p class="mut">Pols, 8 cossos sonors, 16 passos i fragments de la matèria activa.</p><button class="btn" id="openPulsarium">Activar</button>';organs.append(card)}
+  const arch=$('#archivum'),ws=document.createElement('section');ws.className='panel workspace';ws.id='pulsarium';ws.innerHTML='<p class="ey">PULSARIUM · β·11</p><h2>El pols modifica la lectura</h2><p class="mut">8 pads · 16 passos · síntesi pròpia + sample de la matèria activa. Sense destruir l’origen.</p><div class="p-controls"><label>BPM<input id="pBpm" type="range" min="55" max="180" value="94"><span id="pBpmVal">94</span></label><label>Swing<input id="pSwing" type="range" min="0" max="40" value="8"><span id="pSwingVal">8%</span></label><label>Probabilitat<input id="pProb" type="range" min="20" max="100" value="100"><span id="pProbVal">100%</span></label><label>Preset<select id="pPreset"></select></label></div><div class="actions"><button class="btn active p-op" data-op="acompanya">ACOMPANYA</button><button class="btn p-op" data-op="talla">TALLA</button><button class="btn p-op" data-op="dispara">DISPARA</button><button class="btn p-op" data-op="contamina">CONTAMINA</button></div><div id="pGrid" class="p-grid"></div><div class="actions"><button class="btn" id="pPlay">▶ PLAY</button><button class="btn pink" id="pCapture">Captura fragment actiu → Pad 8</button><button class="btn ochre" id="pSave">Conservar → Archivum</button></div><div id="pSlice" class="status">Pad 8 espera matèria.</div><div id="pStatus" class="status">Preparat.</div>';
+  arch?.before(ws);
+  const route=$('.circulation-route');if(route){const pulse=document.createElement('span');pulse.className='pulse';pulse.dataset.pulse='pulsarium';pulse.textContent='Pulsarium';route.insertBefore(pulse,route.querySelector('[data-pulse="archivum"]'))}
+  const actions=$('#circulation .actions');if(actions){const b=document.createElement('button');b.className='btn';b.id='circulatePulse';b.textContent='→ Pulsarium';actions.insertBefore(b,$('#circulateArchive'))}
+  const sel=$('#pPreset');Object.keys(PRESETS).forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.append(o)});applyPreset('Hip-hop cru');
+  $('#openPulsarium').onclick=openPulsarium;$('#circulatePulse').onclick=openPulsarium;$('#pPlay').onclick=()=>running?stop():start();$('#pCapture').onclick=captureActiveSlice;$('#pSave').onclick=conserve;
+  $('#pBpm').oninput=e=>{bpm=+e.target.value;$('#pBpmVal').textContent=bpm};$('#pSwing').oninput=e=>{swing=+e.target.value/100;$('#pSwingVal').textContent=e.target.value+'%'};$('#pProb').oninput=e=>{probability=+e.target.value/100;$('#pProbVal').textContent=e.target.value+'%'};sel.onchange=e=>applyPreset(e.target.value);$$('.p-op').forEach(b=>b.onclick=()=>{operation=b.dataset.op;$$('.p-op').forEach(x=>x.classList.toggle('active',x===b));$('#pStatus').textContent=`Mode ${operation.toUpperCase()}.`;if(operation==='dispara')captureActiveSlice();if(operation==='contamina'){captureActiveSlice();probability=.82;$('#pProb').value=82;$('#pProbVal').textContent='82%'}})
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
