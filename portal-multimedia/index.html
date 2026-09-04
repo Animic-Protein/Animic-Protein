@@ -3,44 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#02070c" />
+  <meta name="theme-color" content="#03060b" />
   <title>Portal multimèdia · Còdex Viu</title>
   <style>
-    :root{--n:#02070c;--t:#f4fbff;--m:#94aab7;--c:#00c8ff;--o:#e3a629;--g:#3fff67;--l:#23465d}
-    *{box-sizing:border-box} body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#103d5e 0,transparent 38rem),var(--n);color:var(--t);font:16px/1.5 Arial,sans-serif}
-    main{width:min(1100px,calc(100% - 32px));margin:auto;padding:7vh 0}.ey{color:var(--c);letter-spacing:.18em;font-size:.72rem;text-transform:uppercase}.back{color:var(--m);text-decoration:none}
-    h1{font:400 clamp(3rem,9vw,7rem)/.9 Georgia,serif;letter-spacing:-.05em;margin:.2em 0}h1 em{color:var(--o);font-weight:400}.lead{max-width:720px;color:var(--m)}
-    .flow{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;color:var(--m);font-size:.78rem}.flow span{border:1px solid var(--l);border-radius:999px;padding:.35rem .65rem}.flow b{color:var(--g)}
-    .intake{margin:2.2rem 0;padding:22px;border:1px solid var(--l);border-radius:24px;background:#07121abb}.intake-actions{display:flex;gap:12px;flex-wrap:wrap}.picker{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--o);border-radius:999px;padding:.8rem 1rem;cursor:pointer}.picker.secondary{border-color:var(--c)}.picker input{position:absolute;opacity:0;pointer-events:none}.intake small{display:block;margin-top:12px;color:var(--m)}
-    .preview{margin-top:18px;display:none;grid-template-columns:minmax(0,1fr) minmax(220px,.7fr);gap:16px}.preview.active{display:grid}.media{min-height:220px;border:1px solid var(--l);border-radius:18px;display:grid;place-items:center;overflow:hidden;background:#02070c}.media img,.media video{max-width:100%;max-height:420px}.media audio{width:min(100%,520px)}.meta{padding:16px;border-left:2px solid var(--g);background:#061019}.meta p{margin:.35rem 0;color:var(--m)}
-    .organs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2.5rem}.organ{min-height:280px;padding:22px;border:1px solid var(--l);border-radius:24px;background:#061019aa;display:flex;flex-direction:column}.organ:hover{border-color:var(--c)}
-    .organ h2{font:400 2rem Georgia,serif;margin:.2rem 0}.organ p{color:var(--m)}.organ button{margin-top:auto;border:1px solid var(--l);border-radius:999px;background:transparent;color:var(--t);padding:.75rem 1rem;cursor:pointer}.organ button:hover{border-color:var(--g)}
-    .trace{margin-top:2rem;padding:18px;border-left:2px solid var(--o);background:#07121a}.trace code{color:var(--g)}.ant{opacity:.7;margin-right:.35rem}
-    @media(max-width:760px){.organs,.preview{grid-template-columns:1fr}.organ{min-height:210px}}
+    :root{
+      --n:#03060b;--ink:#07111b;--t:#f8fbff;--m:#b7c5d2;
+      --blue:#00c8ff;--ochre:#e3a629;--green:#3fff67;--coch:#ff285f;--white:#f8fbff;--line:#244a64;
+      --blue-glow:0 0 26px #00c8ff55;--ochre-glow:0 0 26px #e3a6294d;--green-glow:0 0 26px #3fff674d;--coch-glow:0 0 30px #ff285f66;--white-glow:0 0 24px #f8fbff40;
+      --deep:0 22px 46px #000b,0 8px 14px #0008;--rim:inset 0 1px 0 #ffffff26,inset 0 -1px 0 #000d;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;background:radial-gradient(circle at 18% 4%,#00c8ff20 0,transparent 28rem),radial-gradient(circle at 84% 16%,#ff285f18 0,transparent 25rem),radial-gradient(circle at 50% 82%,#e3a62910 0,transparent 30rem),var(--n);color:var(--t);font:16px/1.5 Arial,sans-serif;perspective:1200px}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 20%,#f8fbff08 48%,transparent 72%);mix-blend-mode:screen}
+    main{width:min(1100px,calc(100% - 32px));margin:auto;padding:7vh 0;transform-style:preserve-3d}.ey{color:var(--blue);letter-spacing:.18em;font-size:.72rem;text-transform:uppercase;text-shadow:var(--blue-glow)}.back{color:var(--m);text-decoration:none}.back:hover{color:var(--white);text-shadow:var(--white-glow)}
+    h1{font:400 clamp(3rem,9vw,7rem)/.9 Georgia,serif;letter-spacing:-.05em;margin:.2em 0;text-shadow:0 3px 0 #000,0 14px 28px #0008,0 0 28px #f8fbff18;transform:translateZ(20px)}h1 em{color:var(--ochre);font-weight:400;text-shadow:0 2px 0 #5e3c00,var(--ochre-glow)}.lead{max-width:720px;color:var(--m)}
+    .flow{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;color:var(--m);font-size:.78rem;transform:translateZ(8px)}.flow span{border:1px solid var(--line);border-radius:999px;padding:.35rem .65rem;background:linear-gradient(#102231,#07111b);box-shadow:var(--rim),0 8px 14px #0007}.flow span:nth-child(1){border-color:var(--blue);box-shadow:var(--rim),0 8px 18px #0009,var(--blue-glow)}.flow span:nth-child(3){border-color:var(--ochre)}.flow span:nth-child(4){border-color:var(--coch);box-shadow:var(--rim),0 8px 18px #0009,0 0 18px #ff285f28}.flow span:nth-child(5){border-color:var(--green)}.flow span:nth-child(6){border-color:#f8fbff88}.flow b{color:var(--white);text-shadow:var(--white-glow)}
+    .intake{position:relative;margin:2.2rem 0;padding:22px;border:1px solid #f8fbff30;border-radius:24px;background:linear-gradient(145deg,#0c1a26dd,#050b12ee);box-shadow:var(--rim),var(--deep);transform:translateZ(16px);overflow:hidden}.intake:after{content:"";position:absolute;inset:1px 1px auto 1px;height:42%;border-radius:23px 23px 50% 50%;background:linear-gradient(#ffffff0b,transparent);pointer-events:none}.intake h2{font:400 2rem Georgia,serif;text-shadow:0 3px 8px #000}.intake-actions{display:flex;gap:12px;flex-wrap:wrap}.picker{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--coch);border-radius:999px;padding:.8rem 1rem;cursor:pointer;background:linear-gradient(180deg,#ff426f1d,#5f0d211c);box-shadow:var(--rim),0 8px 14px #0008,var(--coch-glow);transform:translateZ(10px);transition:.22s}.picker:hover{transform:translateY(-2px) translateZ(16px);box-shadow:var(--rim),0 14px 20px #0009,var(--coch-glow)}.picker.secondary{border-color:var(--blue);background:linear-gradient(180deg,#1bd0ff1a,#06374722);box-shadow:var(--rim),0 8px 14px #0008,var(--blue-glow)}.picker input{position:absolute;opacity:0;pointer-events:none}.intake small{display:block;margin-top:12px;color:var(--m)}
+    .preview{margin-top:18px;display:none;grid-template-columns:minmax(0,1fr) minmax(220px,.7fr);gap:16px}.preview.active{display:grid}.media{min-height:220px;border:1px solid #f8fbff38;border-radius:18px;display:grid;place-items:center;overflow:hidden;background:#02070c;box-shadow:inset 0 0 55px #00c8ff0b,0 14px 24px #0009}.media img,.media video{max-width:100%;max-height:420px}.media audio{width:min(100%,520px)}.meta{padding:16px;border-left:2px solid var(--green);background:linear-gradient(135deg,#0a161d,#050b10);box-shadow:var(--rim),0 12px 20px #0008,inset 18px 0 35px #3fff6708}.meta p{margin:.35rem 0;color:var(--m)}
+    .organs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:2.8rem;transform-style:preserve-3d}.organ{position:relative;overflow:hidden;min-height:290px;padding:24px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(155deg,#102333e8 0%,#08131ddf 46%,#04090fe8 100%);display:flex;flex-direction:column;box-shadow:var(--rim),0 24px 42px #000b,0 5px 9px #000c;transform:rotateX(1.8deg) translateZ(10px);transform-origin:center bottom;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}.organ:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,#ffffff10 0,transparent 24%,transparent 76%,#0005 100%);pointer-events:none}.organ:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-65px;top:-68px;filter:blur(22px);opacity:.24;pointer-events:none}.organ:nth-child(1):after{background:var(--blue)}.organ:nth-child(2):after{background:var(--coch)}.organ:nth-child(3):after{background:var(--white)}.organ:nth-child(1){border-top-color:#00c8ff88}.organ:nth-child(2){border-top-color:#ff285f99}.organ:nth-child(3){border-top-color:#f8fbff99}.organ:hover{transform:rotateX(0) translateY(-8px) translateZ(34px) scale(1.012)}.organ:nth-child(1):hover{border-color:var(--blue);box-shadow:var(--rim),0 34px 55px #000d,0 0 30px #00c8ff3b}.organ:nth-child(2):hover{border-color:var(--coch);box-shadow:var(--rim),0 34px 55px #000d,0 0 34px #ff285f4d}.organ:nth-child(3):hover{border-color:var(--white);box-shadow:var(--rim),0 34px 55px #000d,0 0 30px #f8fbff35}.organ h2{font:400 2.15rem Georgia,serif;margin:.2rem 0;text-shadow:0 3px 4px #000,0 9px 18px #0008}.organ:nth-child(2) h2{color:#ffdbe4;text-shadow:0 3px 4px #400817,0 0 22px #ff285f55}.organ:nth-child(3) h2{color:var(--white);text-shadow:0 3px 4px #000,var(--white-glow)}.organ p{color:var(--m)}.organ button{margin-top:auto;border:1px solid #f8fbff4c;border-radius:999px;background:linear-gradient(#162633,#07111a);color:var(--t);padding:.78rem 1rem;cursor:pointer;box-shadow:var(--rim),0 8px 14px #0008;transition:.2s}.organ button:hover{border-color:var(--green);box-shadow:var(--rim),0 12px 18px #0009,var(--green-glow);transform:translateY(-2px)}
+    .trace{position:relative;margin-top:2.2rem;padding:18px;border-left:2px solid var(--ochre);background:linear-gradient(100deg,#e3a6290d,#07121a 35%,#04090f);box-shadow:var(--rim),0 15px 26px #0009,inset 12px 0 35px #e3a62908;transform:translateZ(8px)}.trace code{color:var(--green);text-shadow:var(--green-glow)}.ant{opacity:.86;margin-right:.35rem;filter:drop-shadow(0 2px 3px #000) drop-shadow(0 0 5px #f8fbff55)}
+    @media(max-width:760px){body{perspective:none}.organs,.preview{grid-template-columns:1fr}.organ{min-height:220px;transform:none}.organ:hover{transform:translateY(-4px)}h1,.intake,.flow,.trace{transform:none}}
+    @media(prefers-reduced-motion:reduce){.organ,.picker,.organ button{transition:none}.organ:hover,.picker:hover,.organ button:hover{transform:none}}
   </style>
 </head>
 <body>
 <main>
   <a class="back" href="../">← Còdex Viu</a>
   <p class="ey">ANÍMIC PROTEIN · CÒDEX VIU · PORTAL MULTIMÈDIA β·01</p>
-  <h1>Matèria que<br><em>torna.</em></h1>
+  <h1>Matèria que<br /><em>torna.</em></h1>
   <p class="lead">Un únic metabolisme per a àudio i vídeo. L’origen no es destrueix: cada gest produeix diferència, rastre i possibilitat de retorn.</p>
   <div class="flow" aria-label="Model de dada compartit"><span><b>source</b></span><span>→ fragment</span><span>→ loop</span><span>→ transformation</span><span>→ relation</span><span>→ provenance</span></div>
-
   <section class="intake" aria-labelledby="intake-title">
-    <p class="ey">ENTRADA DE MATÈRIA</p>
-    <h2 id="intake-title">Obrir una font</h2>
-    <div class="intake-actions">
-      <label class="picker">Fototeca — imatge o vídeo<input id="photo-input" type="file" accept="image/*,video/*" multiple /></label>
-      <label class="picker secondary">Arxius — àudio, vídeo o imatge<input id="file-input" type="file" accept="audio/*,video/*,image/*,.wav,.mp3,.m4a,.aac,.flac,.ogg,.mp4,.mov,.m4v,.webm" multiple /></label>
-    </div>
+    <p class="ey">ENTRADA DE MATÈRIA</p><h2 id="intake-title">Obrir una font</h2>
+    <div class="intake-actions"><label class="picker">Fototeca — imatge o vídeo<input id="photo-input" type="file" accept="image/*,video/*" multiple /></label><label class="picker secondary">Arxius — àudio, vídeo o imatge<input id="file-input" type="file" accept="audio/*,video/*,image/*,.wav,.mp3,.m4a,.aac,.flac,.ogg,.mp4,.mov,.m4v,.webm" multiple /></label></div>
     <small>La selecció és explícita: el Portal només rep els elements que tu tries. La font original queda fora del Còdex i el rastre en conserva la procedència.</small>
-    <div class="preview" id="preview">
-      <div class="media" id="media-preview">Cap font seleccionada</div>
-      <div class="meta" id="media-meta"></div>
-    </div>
+    <div class="preview" id="preview"><div class="media" id="media-preview">Cap font seleccionada</div><div class="meta" id="media-meta"></div></div>
   </section>
-
   <section class="organs" aria-label="Tres òrgans multimèdia">
     <article class="organ"><p class="ey">MEMÒRIA</p><h2>Looparium</h2><p>Arxiva, indexa i recupera loops sense separar-los del seu origen ni de les seves transformacions.</p><button data-organ="looparium">Obrir memòria</button></article>
     <article class="organ"><p class="ey">INSTRUMENT</p><h2>Looperum</h2><p>Rep una font externa o una peça del Looparium, en captura un fragment i el converteix en matèria repetible.</p><button data-organ="looperum">Activar instrument</button></article>
@@ -50,39 +48,9 @@
 </main>
 <script type="module">
   import { createCodexMediaRecord, evolveRecord, validateRecord } from './model.js';
-  const trace = document.querySelector('#trace');
-  const preview = document.querySelector('#preview');
-  const mediaPreview = document.querySelector('#media-preview');
-  const mediaMeta = document.querySelector('#media-meta');
-  let record = createCodexMediaRecord({source:{kind:'portal',name:'Llindar multimèdia',external:false}});
-  let objectUrl = null;
-
-  function ingest(file, entryPoint) {
-    if (!file) return;
-    if (objectUrl) URL.revokeObjectURL(objectUrl);
-    objectUrl = URL.createObjectURL(file);
-    const kind = file.type.startsWith('video/') ? 'video' : file.type.startsWith('audio/') ? 'audio' : file.type.startsWith('image/') ? 'image' : 'file';
-    record = createCodexMediaRecord({source:{kind,uri:objectUrl,name:file.name,mime:file.type || null,external:true}});
-    record = evolveRecord(record,'relation',{kind:'ingest',target:entryPoint});
-    mediaPreview.replaceChildren();
-    let el;
-    if (kind === 'video') { el = document.createElement('video'); el.controls = true; el.playsInline = true; }
-    else if (kind === 'audio') { el = document.createElement('audio'); el.controls = true; }
-    else if (kind === 'image') { el = document.createElement('img'); el.alt = file.name; }
-    if (el) { el.src = objectUrl; mediaPreview.append(el); } else { mediaPreview.textContent = file.name; }
-    mediaMeta.innerHTML = `<p><strong>${file.name}</strong></p><p>tipus: ${kind}</p><p>MIME: ${file.type || 'desconegut'}</p><p>mida: ${(file.size/1024/1024).toFixed(2)} MB</p><p>origen: ${entryPoint}</p><p>reversible: sí</p>`;
-    preview.classList.add('active');
-    trace.innerHTML = `<span class="ant">🐜</span>Nova <strong>source</strong> registrada · ${kind} · preparada per Looperum o Videodrome · origen preservat`;
-  }
-
-  document.querySelector('#photo-input').addEventListener('change', e => ingest(e.target.files?.[0], 'fototeca'));
-  document.querySelector('#file-input').addEventListener('change', e => ingest(e.target.files?.[0], 'arxius'));
-  document.querySelectorAll('[data-organ]').forEach(button => button.addEventListener('click', () => {
-    const organ = button.dataset.organ;
-    record = evolveRecord(record,'relation',{kind:'navigation',target:organ});
-    const check = validateRecord(record);
-    trace.innerHTML = `<span class="ant">🐜</span><strong>${organ}</strong> ha deixat rastre · relacions: ${record.relation.length} · reversible: ${record.provenance.reversible ? 'sí' : 'no'} · model: ${check.valid ? 'vàlid' : 'revisar'}`;
-  }));
+  const trace=document.querySelector('#trace'),preview=document.querySelector('#preview'),mediaPreview=document.querySelector('#media-preview'),mediaMeta=document.querySelector('#media-meta');
+  let record=createCodexMediaRecord({source:{kind:'portal',name:'Llindar multimèdia',external:false}}),objectUrl=null;
+  function ingest(file,entryPoint){if(!file)return;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(file);const kind=file.type.startsWith('video/')?'video':file.type.startsWith('audio/')?'audio':file.type.startsWith('image/')?'image':'file';record=createCodexMediaRecord({source:{kind,uri:objectUrl,name:file.name,mime:file.type||null,external:true}});record=evolveRecord(record,'relation',{kind:'ingest',target:entryPoint});mediaPreview.replaceChildren();let el;if(kind==='video'){el=document.createElement('video');el.controls=true;el.playsInline=true}else if(kind==='audio'){el=document.createElement('audio');el.controls=true}else if(kind==='image'){el=document.createElement('img');el.alt=file.name}if(el){el.src=objectUrl;mediaPreview.append(el)}else mediaPreview.textContent=file.name;mediaMeta.innerHTML=`<p><strong>${file.name}</strong></p><p>tipus: ${kind}</p><p>MIME: ${file.type||'desconegut'}</p><p>mida: ${(file.size/1024/1024).toFixed(2)} MB</p><p>origen: ${entryPoint}</p><p>reversible: sí</p>`;preview.classList.add('active');trace.innerHTML=`<span class="ant">🐜</span>Nova <strong>source</strong> registrada · ${kind} · preparada per Looperum o Videodrome · origen preservat`}
+  document.querySelector('#photo-input').addEventListener('change',e=>ingest(e.target.files?.[0],'fototeca'));document.querySelector('#file-input').addEventListener('change',e=>ingest(e.target.files?.[0],'arxius'));document.querySelectorAll('[data-organ]').forEach(button=>button.addEventListener('click',()=>{const organ=button.dataset.organ;record=evolveRecord(record,'relation',{kind:'navigation',target:organ});const check=validateRecord(record);trace.innerHTML=`<span class="ant">🐜</span><strong>${organ}</strong> ha deixat rastre · relacions: ${record.relation.length} · reversible: ${record.provenance.reversible?'sí':'no'} · model: ${check.valid?'vàlid':'revisar'}`}));
 </script>
-</body>
-</html>
+</body></html>
