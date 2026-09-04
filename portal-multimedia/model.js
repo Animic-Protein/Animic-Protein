@@ -1,7 +1,7 @@
 import './media-runtime-hotfix.js';
 import './beta12-ui.js';
 
-export const CODEX_MEDIA_SCHEMA_VERSION = "0.3.0";
+export const CODEX_MEDIA_SCHEMA_VERSION = "0.4.0";
 export const CODEX_MEDIA_STAGES = Object.freeze(["source","fragment","loop","transformation","relation","provenance"]);
 
 // Gramàtica operativa metabolitzada al Còdex Viu.
@@ -26,6 +26,8 @@ export const MUTATIO_TESTS = Object.freeze([
   "reversibility"
 ]);
 
+export const CONFLUENTIA_DEFAULT_THRESHOLD = 3;
+
 const makeId=prefix=>`${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
 const now=()=>new Date().toISOString();
 
@@ -38,6 +40,66 @@ export function evolveRecord(record,stage,payload={}){if(!CODEX_MEDIA_STAGES.inc
 export function deriveLoopRecord(record,payload={}){const at=now(),fragment={id:payload.fragmentId||makeId('fra'),at,start:Number(payload.start||0),end:Number(payload.end||0),duration:Math.max(0,Number(payload.end||0)-Number(payload.start||0))};let next=evolveRecord(record,'fragment',fragment);next=evolveRecord(next,'loop',{id:payload.loopId||makeId('loo'),start:fragment.start,end:fragment.end,duration:fragment.duration,mode:payload.mode||'forward',rate:Number(payload.rate||1)});if(payload.transformation)next=evolveRecord(next,'transformation',payload.transformation);return next}
 export function reactivateLoopRecord(loopRecord,source={}){const at=now(),sourceId=source.id||makeId('src'),next=createCodexMediaRecord({source:{id:sourceId,kind:source.kind||loopRecord.source?.kind||'unknown',uri:source.uri??loopRecord.source?.uri??null,name:source.name||`${loopRecord.source?.name||'Loop'} · reactivat`,mime:source.mime||loopRecord.source?.mime||null,external:false,createdAt:at},provenance:{originId:loopRecord.provenance?.originId||loopRecord.source?.id||sourceId,parentId:loopRecord.id,rootRecordId:loopRecord.provenance?.rootRecordId||loopRecord.id,generation:(loopRecord.provenance?.generation||0)+1,createdBy:'archivum.loop-chamber.reactivate',reversible:true,history:[...(loopRecord.provenance?.history||[]),{at,action:'loop.reactivated',ref:loopRecord.loop?.id||loopRecord.id}]}});next.relation.push({id:makeId('rel'),at,kind:'reactivated-from-archivum-loop',target:loopRecord.id});return next}
 export function validateRecord(record){const errors=[];if(!record?.schema?.startsWith('animic.codex.media/'))errors.push('schema');if(!record?.id)errors.push('id');if(!record?.source?.id)errors.push('source.id');if(!record?.provenance?.originId)errors.push('provenance.originId');if(!record?.provenance?.rootRecordId)errors.push('provenance.rootRecordId');if(record?.provenance?.destructive!==false)errors.push('provenance.destructive');return{valid:errors.length===0,errors}}
+
+// VIGILIA observa; no interpreta. Una observació només pot despertar la vigilància
+// si declara una diferència. El significat queda fora d'aquesta facultat.
+export function createVigilia(input={}){
+  const at=now();
+  return{
+    id:input.id||makeId('vig'),
+    subjectId:input.subjectId||null,
+    createdAt:at,
+    status:'watching',
+    baseline:input.baseline??null,
+    observations:[],
+    awakenedAt:null,
+    interpretation:null,
+    decisionRequired:true
+  };
+}
+
+export function observeVigilia(vigilia,observation={}){
+  const next=structuredClone(vigilia),at=now();
+  const item={
+    id:observation.id||makeId('obs'),
+    at,
+    source:observation.source||'unknown',
+    kind:observation.kind||'observation',
+    difference:Boolean(observation.difference),
+    traceRef:observation.traceRef||null,
+    note:observation.note||null
+  };
+  next.observations.push(item);
+  if(item.difference){next.status='awakened';next.awakenedAt=at;}
+  return next;
+}
+
+// CONFLUENTIA no suma opinions repetides. Només compta fonts independents afirmatives.
+export function assessConfluentia(evidence=[],options={}){
+  const threshold=Math.max(2,Number(options.threshold||CONFLUENTIA_DEFAULT_THRESHOLD));
+  const affirmative=(Array.isArray(evidence)?evidence:[]).filter(item=>item&&item.affirmative!==false&&item.source);
+  const bySource=new Map();
+  for(const item of affirmative)if(!bySource.has(item.source))bySource.set(item.source,item);
+  const independent=[...bySource.values()];
+  const count=independent.length;
+  const status=count>=threshold?'confluent':count>=2?'converging':count===1?'isolated':'silent';
+  return{
+    status,
+    count,
+    threshold,
+    independentSources:independent.map(item=>item.source),
+    evidence:independent,
+    decisionRequired:true,
+    canonical:false,
+    interpretation:null
+  };
+}
+
+export function publishConfluentia(assessment,detail={}){
+  if(typeof window==='undefined'||!assessment)return assessment;
+  window.dispatchEvent(new CustomEvent('codex:confluentia',{detail:{...detail,assessment}}));
+  return assessment;
+}
 
 export function assessMutatio(record,evidence={}){
   const trace=validateRecord(record).valid;
