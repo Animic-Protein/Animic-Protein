@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#02070c" />
+  <title>Portal multimèdia · Còdex Viu</title>
+  <style>
+    :root{--n:#02070c;--t:#f4fbff;--m:#94aab7;--c:#00c8ff;--o:#e3a629;--g:#3fff67;--l:#23465d}
+    *{box-sizing:border-box} body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#103d5e 0,transparent 38rem),var(--n);color:var(--t);font:16px/1.5 Arial,sans-serif}
+    main{width:min(1100px,calc(100% - 32px));margin:auto;padding:7vh 0}.ey{color:var(--c);letter-spacing:.18em;font-size:.72rem;text-transform:uppercase}.back{color:var(--m);text-decoration:none}
+    h1{font:400 clamp(3rem,9vw,7rem)/.9 Georgia,serif;letter-spacing:-.05em;margin:.2em 0}h1 em{color:var(--o);font-weight:400}.lead{max-width:720px;color:var(--m)}
+    .flow{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;color:var(--m);font-size:.78rem}.flow span{border:1px solid var(--l);border-radius:999px;padding:.35rem .65rem}.flow b{color:var(--g)}
+    .organs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2.5rem}.organ{min-height:280px;padding:22px;border:1px solid var(--l);border-radius:24px;background:#061019aa;display:flex;flex-direction:column}.organ:hover{border-color:var(--c)}
+    .organ h2{font:400 2rem Georgia,serif;margin:.2rem 0}.organ p{color:var(--m)}.organ button{margin-top:auto;border:1px solid var(--l);border-radius:999px;background:transparent;color:var(--t);padding:.75rem 1rem;cursor:pointer}.organ button:hover{border-color:var(--g)}
+    .trace{margin-top:2rem;padding:18px;border-left:2px solid var(--o);background:#07121a}.trace code{color:var(--g)}.ant{opacity:.7;margin-right:.35rem}
+    @media(max-width:760px){.organs{grid-template-columns:1fr}.organ{min-height:210px}}
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">← Còdex Viu</a>
+  <p class="ey">ANÍMIC PROTEIN · CÒDEX VIU · PORTAL MULTIMÈDIA β·01</p>
+  <h1>Matèria que<br><em>torna.</em></h1>
+  <p class="lead">Un únic metabolisme per a àudio i vídeo. L’origen no es destrueix: cada gest produeix diferència, rastre i possibilitat de retorn.</p>
+  <div class="flow" aria-label="Model de dada compartit">
+    <span><b>source</b></span><span>→ fragment</span><span>→ loop</span><span>→ transformation</span><span>→ relation</span><span>→ provenance</span>
+  </div>
+  <section class="organs" aria-label="Tres òrgans multimèdia">
+    <article class="organ"><p class="ey">MEMÒRIA</p><h2>Looparium</h2><p>Arxiva, indexa i recupera loops sense separar-los del seu origen ni de les seves transformacions.</p><button data-organ="looparium">Obrir memòria</button></article>
+    <article class="organ"><p class="ey">INSTRUMENT</p><h2>Looperum</h2><p>Rep una font externa o una peça del Looparium, en captura un fragment i el converteix en matèria repetible.</p><button data-organ="looperum">Activar instrument</button></article>
+    <article class="organ"><p class="ey">IMATGE + TEMPS</p><h2>Videodrome</h2><p>Compon i transforma material audiovisual amb la mateixa gramàtica del Còdex, no com una aplicació separada.</p><button data-organ="videodrome">Entrar al Videodrome</button></article>
+  </section>
+  <div class="trace" id="trace" aria-live="polite"><span class="ant">🐜</span>Cap transformació encara. <code>source → … → provenance</code></div>
+</main>
+<script type="module">
+  import { createCodexMediaRecord, evolveRecord, validateRecord } from './model.js';
+  const trace = document.querySelector('#trace');
+  let record = createCodexMediaRecord({source:{kind:'portal',name:'Llindar multimèdia',external:false}});
+  document.querySelectorAll('[data-organ]').forEach(button => button.addEventListener('click', () => {
+    const organ = button.dataset.organ;
+    record = evolveRecord(record,'relation',{kind:'navigation',target:organ});
+    const check = validateRecord(record);
+    trace.innerHTML = `<span class="ant">🐜</span><strong>${organ}</strong> ha deixat rastre · relacions: ${record.relation.length} · reversible: ${record.provenance.reversible ? 'sí' : 'no'} · model: ${check.valid ? 'vàlid' : 'revisar'}`;
+  }));
+</script>
+</body>
+</html>
