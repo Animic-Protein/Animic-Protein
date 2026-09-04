@@ -16,6 +16,7 @@ const required=[
   'portal-multimedia/beta12-ui.js',
   'portal-multimedia/archivum-sheets-lazy.js',
   'portal-multimedia/media-runtime-hotfix.js',
+  'governanca/MUTATIO_GRAMATICA_OPERATIVA_1.0.md',
   'sw.js'
 ];
 required.forEach(p=>ok(exists(p),'Falta recurs crític: '+p));
@@ -33,6 +34,15 @@ for(const stage of ['source','fragment','loop','transformation','relation','prov
 ok(/destructive\s*:\s*false/.test(model),'Contracte model: la procedència no força destructive=false');
 ok(model.includes('rootRecordId'),'Contracte model: falta rootRecordId');
 ok(model.includes('parentId'),'Contracte model: falta parentId');
+for(const marker of ['CODEX_OPERATIONAL_GRAMMAR','MUTATIO_TESTS','market-data','security-fact','signal','catalyst','history-kline','anomaly','watchlist','strategy','assessMutatio','suggestMutatioDestination','decisionRequired:true','canonical:false']){
+  ok(model.includes(marker),'Contracte MUTATIO: falta marcador '+marker);
+}
+for(const test of ['perceptible-difference','traceability','relation','reversibility'])ok(model.includes(test),'Contracte MUTATIO: falta test '+test);
+
+const grammar=read('governanca/MUTATIO_GRAMATICA_OPERATIVA_1.0.md');
+for(const marker of ['gramàtica operativa','Font','Fragment','Relació activa','Transformació','Memòria temporal','Error fèrtil','Looparium d’observació','Instrument','Rastre verificable','La Formiga assenyala; la persona decideix; el Còdex conserva el rastre.']){
+  ok(grammar.includes(marker),'Governança MUTATIO: falta '+marker);
+}
 
 const beta=read('portal-multimedia/beta12-ui.js');
 for(const marker of ['Archivum / Arxiu Viu','Cambra de loops','Videodrum · en prova','FONT → INSTRUMENT → TRANSFORMACIÓ → ARCHIVUM']){
@@ -76,5 +86,5 @@ if(failures.length){
   failures.forEach(x=>console.error(' - '+x));
   process.exit(1);
 }
-console.log('Auditoria Portal/Homeòstasi: OK');
-console.log('Smoke UI, contracte de dades, arrencada, cache i regressions verificats.');
+console.log('Auditoria Portal/Homeòstasi/MUTATIO: OK');
+console.log('Smoke UI, contracte de dades, gramàtica operativa, arrencada, cache i regressions verificats.');
