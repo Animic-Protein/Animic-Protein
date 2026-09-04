@@ -95,11 +95,21 @@ function installPhotoVideoBridge(){
       const btn=document.querySelector('[data-open="videodrome"]');
       if(btn)btn.click();
       const status=document.getElementById('vstatus');
-      if(status)status.textContent='Vídeo de Fototeca carregat · Videodrome II preparat.';
+      if(status)status.textContent='Vídeo de Fototeca carregat · Videodrum II preparat.';
     },30));
   },true);
 }
+function installVideodrumName(){
+  const replaceText=root=>{
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+    nodes.forEach(node=>{if(node.nodeValue?.includes('Videodrome'))node.nodeValue=node.nodeValue.replaceAll('Videodrome','Videodrum').replaceAll('VIDEODROME','VIDEODRUM')});
+  };
+  replaceText(document.body);
+  const observer=new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===Node.TEXT_NODE){if(node.nodeValue?.includes('Videodrome'))node.nodeValue=node.nodeValue.replaceAll('Videodrome','Videodrum')}else if(node.nodeType===Node.ELEMENT_NODE)replaceText(node)})));
+  observer.observe(document.body,{childList:true,subtree:true});
+}
 if(typeof window!=='undefined'){
-  const boot=()=>{setTimeout(installLoopariumUI,0);setTimeout(installPhotoVideoBridge,0)};
+  const boot=()=>{setTimeout(installLoopariumUI,0);setTimeout(installPhotoVideoBridge,0);setTimeout(installVideodrumName,0)};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 }
