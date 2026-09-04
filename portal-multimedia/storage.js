@@ -38,7 +38,7 @@ function txStore(name,mode,work){
 }
 function emit(name,reason='changed',id=null){try{window.dispatchEvent(new CustomEvent(name,{detail:{reason,id}}))}catch{}}
 function normalizeLoop(entry){const now=Date.now(),a=entry.archive||{};return {...entry,archive:{name:a.name||entry.name||'Loop sense nom',tags:Array.isArray(a.tags)?a.tags:[],note:a.note||'',pinned:Boolean(a.pinned),createdAt:a.createdAt||entry.savedAt||now,updatedAt:a.updatedAt||now}}}
-function normalizeArchive(entry){const now=Date.now();return {...entry,savedAt:entry.savedAt||now,name:entry.name||entry.record?.source?.name||'Element sense nom',kind:entry.kind||entry.record?.source?.kind||'unknown',tags:Array.isArray(entry.tags)?entry.tags:[],note:entry.note||'',pinned:Boolean(entry.pinned)}}
+function normalizeArchive(entry){const now=Date.now(),sheet=entry.technicalSheet||{};return {...entry,savedAt:entry.savedAt||now,name:entry.name||entry.record?.source?.name||'Element sense nom',kind:entry.kind||entry.record?.source?.kind||'unknown',tags:Array.isArray(entry.tags)?entry.tags:[],note:entry.note||'',pinned:Boolean(entry.pinned),technicalSheet:{title:sheet.title||entry.name||entry.record?.source?.name||'',description:sheet.description||'',instrument:sheet.instrument||entry.kind||'',transformation:sheet.transformation||'',perceptibleDifference:sheet.perceptibleDifference||'',relations:sheet.relations||'',author:sheet.author||'',rights:sheet.rights||'',license:sheet.license||'',sourceNote:sheet.sourceNote||'',updatedAt:sheet.updatedAt||0}}}
 
 export async function requestDurableStorage(){try{if(!navigator.storage?.persist)return false;if(await navigator.storage.persisted?.())return true;return await navigator.storage.persist()}catch{return false}}
 
@@ -61,20 +61,83 @@ export async function loadArchiveEntries(){
   const db=await openDb();
   return new Promise((resolve,reject)=>{const tx=db.transaction(ARCHIVE_STORE,'readonly'),req=tx.objectStore(ARCHIVE_STORE).getAll();req.onsuccess=()=>{archiveMemory=(req.result||[]).map(normalizeArchive).sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));resolve([...archiveMemory])};req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close()})
 }
+export async function updateArchiveMetadata(id,patch={}){
+  const db=await openDb();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(ARCHIVE_STORE,'readwrite'),store=tx.objectStore(ARCHIVE_STORE),get=store.get(id);
+    get.onsuccess=()=>{
+      if(!get.result){reject(new Error('Archive item not found'));return}
+      const row=normalizeArchive(get.result),sheetPatch=patch.technicalSheet||{};
+      Object.assign(row,patch);
+      if(Array.isArray(patch.tags))row.tags=[...new Set(patch.tags.map(x=>String(x).trim()).filter(Boolean))];
+      row.technicalSheet={...row.technicalSheet,...sheetPatch,updatedAt:Date.now()};
+      store.put(row);
+      if(archiveMemory)archiveMemory=archiveMemory.map(x=>x.id===id?normalizeArchive(row):x);
+    };
+    get.onerror=()=>reject(get.error);
+    tx.oncomplete=()=>{db.close();emit('archivum:changed','metadata',id);resolve(true)};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+  });
+}
 export async function deleteArchiveEntry(id){await txStore(ARCHIVE_STORE,'readwrite',s=>s.delete(id));if(archiveMemory)archiveMemory=archiveMemory.filter(x=>x.id!==id);emit('archivum:changed','delete',id)}
 
 function esc(v=''){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function fmtDate(v){try{return new Date(v).toLocaleString('ca-ES')}catch{return ''}}
+
+function installArchivumSheets(){
+  const list=document.getElementById('archiveList');
+  if(!list||document.getElementById('archive-sheet-style'))return;
+  const st=document.createElement('style');st.id='archive-sheet-style';st.textContent=`
+  .archive-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 8px}.archive-tab{min-height:34px;padding:.35rem .65rem;font-size:.78rem}.archive-tab.active{border-color:var(--g);color:var(--g)}
+  .archive-sheet-pane{display:none;border-top:1px solid var(--l);padding-top:10px}.archive-sheet-pane.active{display:block}
+  .archive-sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.archive-sheet-grid .wide{grid-column:1/-1}.archive-sheet-grid label{display:grid;gap:4px;color:var(--m);font-size:.78rem}.archive-sheet-grid input,.archive-sheet-grid textarea{width:100%;border:1px solid var(--l);border-radius:10px;background:#07111b;color:var(--t);padding:.55rem}.archive-sheet-grid textarea{min-height:76px;resize:vertical}.archive-read{display:grid;gap:7px;font-size:.82rem;color:var(--m)}.archive-read code{color:var(--g);overflow-wrap:anywhere}@media(max-width:760px){.archive-sheet-grid{grid-template-columns:1fr}.archive-sheet-grid .wide{grid-column:auto}}
+  `;document.head.append(st);
+  const decorate=()=>setTimeout(decorateArchiveCards,0);
+  window.addEventListener('archivum:changed',decorate);
+  new MutationObserver(decorate).observe(list,{childList:true,subtree:false});
+  decorate();
+}
+async function decorateArchiveCards(){
+  const list=document.getElementById('archiveList');if(!list)return;
+  const entries=await loadArchiveEntries().catch(()=>[]),cards=[...list.querySelectorAll('.archive-card')];
+  cards.forEach((card,i)=>{
+    const e=entries[i];if(!e||card.dataset.sheetReady===e.id)return;
+    card.dataset.sheetReady=e.id;card.dataset.archiveId=e.id;
+    const s=e.technicalSheet||{},prov=e.record?.provenance||{},src=e.record?.source||{};
+    const ui=document.createElement('div');ui.className='archive-sheet-ui';
+    ui.innerHTML=`<div class="archive-tabs"><button class="btn archive-tab active" data-tab="fitxa">Fitxa</button><button class="btn archive-tab" data-tab="provenance">Procedència</button><button class="btn archive-tab" data-tab="relations">Relacions</button><button class="btn archive-tab" data-tab="actions">Accions</button></div>
+    <div class="archive-sheet-pane active" data-pane="fitxa"><div class="archive-sheet-grid">
+      <label>Títol<input class="as-title" value="${esc(s.title||e.name)}"></label><label>Instrument / origen<input class="as-instrument" value="${esc(s.instrument||e.kind)}"></label>
+      <label class="wide">Descripció<textarea class="as-description">${esc(s.description||e.note||'')}</textarea></label>
+      <label class="wide">Transformació<textarea class="as-transformation">${esc(s.transformation||'')}</textarea></label>
+      <label class="wide">Diferència perceptible<textarea class="as-difference">${esc(s.perceptibleDifference||'')}</textarea></label>
+      <label>Etiquetes<input class="as-tags" value="${esc((e.tags||[]).join(', '))}"></label><label>Autor<input class="as-author" value="${esc(s.author||'')}"></label>
+      <label>Drets<input class="as-rights" value="${esc(s.rights||'')}"></label><label>Llicència<input class="as-license" value="${esc(s.license||'')}"></label>
+      <label class="wide">Nota sobre la font<textarea class="as-source-note">${esc(s.sourceNote||'')}</textarea></label>
+    </div><div class="actions" style="margin-top:10px"><button class="btn ochre as-save">Guardar fitxa tècnica</button></div></div>
+    <div class="archive-sheet-pane" data-pane="provenance"><div class="archive-read"><div><strong>Tipus:</strong> ${esc(e.kind)}</div><div><strong>Font:</strong> ${esc(src.name||e.name)}</div><div><strong>Generació:</strong> ${esc(prov.generation??0)}</div><div><strong>Arrel:</strong> <code>${esc(prov.rootRecordId||e.id)}</code></div><div><strong>Conservat:</strong> ${esc(fmtDate(e.savedAt))}</div></div></div>
+    <div class="archive-sheet-pane" data-pane="relations"><div class="archive-sheet-grid"><label class="wide">Relacions / vincles<textarea class="as-relations">${esc(s.relations||'')}</textarea></label></div><div class="actions" style="margin-top:10px"><button class="btn as-save">Guardar relacions</button></div></div>
+    <div class="archive-sheet-pane" data-pane="actions"><div class="archive-read"><div>Les accions pròpies de la targeta continuen sent reversibles: reactivar, enviar a instrument pertinent o eliminar.</div><div>La fitxa tècnica no substitueix la procedència; l'acompanya.</div></div></div>`;
+    card.append(ui);
+    ui.querySelectorAll('.archive-tab').forEach(b=>b.onclick=()=>{ui.querySelectorAll('.archive-tab').forEach(x=>x.classList.toggle('active',x===b));ui.querySelectorAll('.archive-sheet-pane').forEach(p=>p.classList.toggle('active',p.dataset.pane===b.dataset.tab))});
+    ui.querySelectorAll('.as-save').forEach(b=>b.onclick=async()=>{
+      const patch={name:ui.querySelector('.as-title').value.trim()||e.name,tags:ui.querySelector('.as-tags').value.split(',').map(x=>x.trim()).filter(Boolean),technicalSheet:{title:ui.querySelector('.as-title').value.trim(),description:ui.querySelector('.as-description').value.trim(),instrument:ui.querySelector('.as-instrument').value.trim(),transformation:ui.querySelector('.as-transformation').value.trim(),perceptibleDifference:ui.querySelector('.as-difference').value.trim(),relations:ui.querySelector('.as-relations').value.trim(),author:ui.querySelector('.as-author').value.trim(),rights:ui.querySelector('.as-rights').value.trim(),license:ui.querySelector('.as-license').value.trim(),sourceNote:ui.querySelector('.as-source-note').value.trim()}};
+      await updateArchiveMetadata(e.id,patch);b.textContent='✓ Guardat';setTimeout(()=>b.textContent=b.closest('[data-pane="relations"]')?'Guardar relacions':'Guardar fitxa tècnica',900);
+    });
+  });
+}
+
 function installLoopariumUI(){
   const section=document.getElementById('looparium'),list=document.getElementById('loops');
   if(!section||!list||document.getElementById('looparium-tools'))return;
   const box=document.createElement('div');box.id='looparium-tools';box.className='archive-tools';
   box.innerHTML='<div class="ey">LOOPARIUM · CAMBRA DE LOOPS</div><div class="archive-title">Trobar i reactivar loops.</div><div class="archive-toolbar"><input id="loopSearch" type="search" placeholder="Cerca nom, etiqueta, mode…"><select id="loopSort"><option value="recent">Més recents</option><option value="name">Nom A–Z</option><option value="generation">Generació</option><option value="family">Famílies</option></select></div>';
   list.before(box);
-  box.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',decorate));
-  window.addEventListener('looparium:changed',()=>setTimeout(decorate,20));
-  new MutationObserver(()=>setTimeout(decorate,0)).observe(list,{childList:true});decorate();
+  box.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',decorateLoops));
+  window.addEventListener('looparium:changed',()=>setTimeout(decorateLoops,20));
+  new MutationObserver(()=>setTimeout(decorateLoops,0)).observe(list,{childList:true});decorateLoops();
 }
-async function decorate(){
+async function decorateLoops(){
   const list=document.getElementById('loops');if(!list)return;const entries=await loadLoopEntries().catch(()=>[]),cards=[...list.querySelectorAll('.loop')],byRecent=[...entries].sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));
   const roots=new Map();entries.forEach(e=>{const r=e.record?.provenance?.rootRecordId||e.id;if(!roots.has(r))roots.set(r,[]);roots.get(r).push(e)});
   cards.forEach((card,i)=>{const e=byRecent[i];if(!e)return;card.dataset.loopId=e.id;let meta=card.querySelector('.loop-meta-edit');if(!meta){meta=document.createElement('div');meta.className='loop-meta-edit';card.append(meta)}const a=e.archive||{},r=e.record?.provenance?.rootRecordId||e.id,f=roots.get(r)||[e];meta.innerHTML=`<div class="archive-grid"><label>Nom<input class="lname" value="${esc(a.name||e.name)}"></label><label>Etiquetes<input class="ltags" value="${esc((a.tags||[]).join(', '))}"></label><label class="wide">Nota<input class="lnote" value="${esc(a.note||'')}"></label></div><div class="actions"><button class="btn lsave" data-id="${e.id}">Guardar fitxa</button><button class="btn lpin ${a.pinned?'active':''}" data-id="${e.id}">${a.pinned?'★ Fixat':'☆ Fixar'}</button></div><div class="archive-lineage">gen ${e.record?.provenance?.generation??0} · família ${f.length} · arrel <code>${esc(String(r).slice(0,14))}…</code></div>`});
@@ -110,6 +173,6 @@ function installVideodrumName(){
   observer.observe(document.body,{childList:true,subtree:true});
 }
 if(typeof window!=='undefined'){
-  const boot=()=>{setTimeout(installLoopariumUI,0);setTimeout(installPhotoVideoBridge,0);setTimeout(installVideodrumName,0)};
+  const boot=()=>{setTimeout(installLoopariumUI,0);setTimeout(installArchivumSheets,0);setTimeout(installPhotoVideoBridge,0);setTimeout(installVideodrumName,0)};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 }
