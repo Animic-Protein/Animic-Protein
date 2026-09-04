@@ -2,6 +2,7 @@ const DB_NAME='animic-looparium';
 const DB_VERSION=3;
 const LOOP_STORE='loops';
 const ARCHIVE_STORE='archive';
+let archiveMemory=null;
 
 function openDb(){
   return new Promise((resolve,reject)=>{
@@ -47,9 +48,20 @@ export async function updateLoopMetadata(id,patch={}){const db=await openDb();re
 export async function deleteLoopEntry(id){await txStore(LOOP_STORE,'readwrite',s=>s.delete(id));emit('looparium:changed','delete',id)}
 export async function clearLooparium(){await txStore(LOOP_STORE,'readwrite',s=>s.clear());emit('looparium:changed','clear')}
 
-export async function saveArchiveEntry(entry){const row=normalizeArchive(entry);await txStore(ARCHIVE_STORE,'readwrite',s=>s.put(row));emit('archivum:changed','save',row.id);return row}
-export async function loadArchiveEntries(){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(ARCHIVE_STORE,'readonly'),req=tx.objectStore(ARCHIVE_STORE).getAll();req.onsuccess=()=>resolve((req.result||[]).map(normalizeArchive).sort((a,b)=>(b.savedAt||0)-(a.savedAt||0)));req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close()})}
-export async function deleteArchiveEntry(id){await txStore(ARCHIVE_STORE,'readwrite',s=>s.delete(id));emit('archivum:changed','delete',id)}
+export async function saveArchiveEntry(entry){
+  const row=normalizeArchive(entry);
+  if(!archiveMemory)archiveMemory=[];
+  archiveMemory=[row,...archiveMemory.filter(x=>x.id!==row.id)].sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));
+  emit('archivum:changed','save',row.id);
+  txStore(ARCHIVE_STORE,'readwrite',s=>s.put(row)).catch(()=>{});
+  return row;
+}
+export async function loadArchiveEntries(){
+  if(archiveMemory)return [...archiveMemory];
+  const db=await openDb();
+  return new Promise((resolve,reject)=>{const tx=db.transaction(ARCHIVE_STORE,'readonly'),req=tx.objectStore(ARCHIVE_STORE).getAll();req.onsuccess=()=>{archiveMemory=(req.result||[]).map(normalizeArchive).sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));resolve([...archiveMemory])};req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close()})
+}
+export async function deleteArchiveEntry(id){await txStore(ARCHIVE_STORE,'readwrite',s=>s.delete(id));if(archiveMemory)archiveMemory=archiveMemory.filter(x=>x.id!==id);emit('archivum:changed','delete',id)}
 
 function esc(v=''){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function installLoopariumUI(){
@@ -72,4 +84,22 @@ async function decorate(){
   mapped.forEach(({card,e})=>{const a=e.archive||{},hay=[a.name,e.name,e.mode,e.kind,a.note,...(a.tags||[])].join(' ').toLowerCase();card.hidden=Boolean(search&&!hay.includes(search))});
   mapped.sort((x,y)=>{const ax=x.e.archive||{},ay=y.e.archive||{};if(Boolean(ax.pinned)!==Boolean(ay.pinned))return ax.pinned?-1:1;if(sort==='name')return String(ax.name||x.e.name).localeCompare(String(ay.name||y.e.name),'ca');if(sort==='generation')return (y.e.record?.provenance?.generation||0)-(x.e.record?.provenance?.generation||0);if(sort==='family')return String(x.e.record?.provenance?.rootRecordId||x.e.id).localeCompare(String(y.e.record?.provenance?.rootRecordId||y.e.id));return (y.e.savedAt||0)-(x.e.savedAt||0)}).forEach(x=>list.append(x.card));
 }
-if(typeof window!=='undefined'){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installLoopariumUI,0));else setTimeout(installLoopariumUI,0)}
+function installPhotoVideoBridge(){
+  const photo=document.getElementById('photo');
+  if(!photo||photo.dataset.videoBridge)return;
+  photo.dataset.videoBridge='1';
+  photo.addEventListener('change',event=>{
+    const f=event.target.files?.[0];
+    if(!f||!f.type.startsWith('video/'))return;
+    requestAnimationFrame(()=>setTimeout(()=>{
+      const btn=document.querySelector('[data-open="videodrome"]');
+      if(btn)btn.click();
+      const status=document.getElementById('vstatus');
+      if(status)status.textContent='Vídeo de Fototeca carregat · Videodrome II preparat.';
+    },30));
+  },true);
+}
+if(typeof window!=='undefined'){
+  const boot=()=>{setTimeout(installLoopariumUI,0);setTimeout(installPhotoVideoBridge,0)};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+}
