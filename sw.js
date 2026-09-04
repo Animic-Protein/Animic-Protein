@@ -1,10 +1,10 @@
-const CACHE = 'codex-viu-canonical-v64';
+const CACHE = 'codex-viu-canonical-v65';
 const ASSETS = [
   './', './index.html', './styles.css', './rosa.css', './rosa-lamina.css', './rosa-enhanced.css', './rosa-inter-nos.css', './cartographia.css',
   './germinacio.css', './error-fertil-i.css', './radices-brodsky.css', './vortex-ant.css', './temps-nu.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './error-fertil-i.js', './metabolism.js', './homeostasis.js', './lineage.js',
   './rosa.js', './rosa-lamina.js', './rosa-enhanced.js', './rosa-inter-nos.js', './memoria-radicum.js', './probatio-radicum.js', './lex-radicum.js', './constitutio-vitae.js', './promocio.js', './promocio.css', './branques.js', './branques.css', './pressio.js', './pressio.css', './homeostasi-constitucional.js', './homeostasi-constitucional.css', './histeresi.js', './histeresi.css', './allostasi.js', './allostasi.css', './consolidacio.js', './consolidacio.css', './reconsolidacio.js', './reconsolidacio.css', './breathing.js', './attention.js', './context-propi.js', './radices-brodsky.js', './vortex-ant.js', './temps-nu.js', './ressonancia.js', './ressonancia.css',
   './pont-site.json', './compost/error-fertil-i.md', './arrels/joseph-brodsky-creativitat.md', './arrels/joseph-brodsky-elogi-avorriment.md',
-  './manifest.webmanifest', './LICENSE.md', './universe/', './fusio-total/', './inter-nos-creative/', './cambra-nua-2/', './portal-multimedia/', './portal-multimedia/index.html', './portal-multimedia/model.js', './portal-multimedia/storage.js', './portal-multimedia/pulsarium.js', './formiga.css', './formiga.js', './assets/cambra-nua.svg', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'
+  './manifest.webmanifest', './LICENSE.md', './universe/', './fusio-total/', './inter-nos-creative/', './cambra-nua-2/', './portal-multimedia/', './portal-multimedia/index.html', './portal-multimedia/model.js', './portal-multimedia/storage.js', './portal-multimedia/pulsarium.js', './portal-multimedia/beta12-ui.js', './portal-multimedia/archivum-sheets-lazy.js', './formiga.css', './formiga.js', './assets/cambra-nua.svg', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
@@ -12,28 +12,7 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const requestUrl=new URL(event.request.url);
   if(requestUrl.pathname.includes('/portal-multimedia/')){
-    event.respondWith(
-      fetch(event.request,{cache:'no-store'}).then(response=>{
-        if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}
-        return response;
-      }).catch(async()=>{
-        const cached=await caches.match(event.request);
-        if(cached)return cached;
-        if(event.request.mode==='navigate')return caches.match('./portal-multimedia/');
-        return Response.error();
-      })
-    );
-    return;
+    event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}return response}).catch(async()=>{const cached=await caches.match(event.request);if(cached)return cached;if(event.request.mode==='navigate')return caches.match('./portal-multimedia/');return Response.error()}));return;
   }
-  event.respondWith(
-    fetch(event.request).then(response=>{
-      if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}
-      return response;
-    }).catch(async()=>{
-      const cached=await caches.match(event.request);
-      if(cached)return cached;
-      if(event.request.mode==='navigate')return caches.match('./index.html');
-      return Response.error();
-    })
-  );
+  event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}return response}).catch(async()=>{const cached=await caches.match(event.request);if(cached)return cached;if(event.request.mode==='navigate')return caches.match('./index.html');return Response.error()}));
 });
