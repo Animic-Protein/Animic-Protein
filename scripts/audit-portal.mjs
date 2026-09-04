@@ -1,0 +1,80 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execSync} from 'node:child_process';
+
+const root=process.cwd();
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const exists=p=>fs.existsSync(path.join(root,p));
+const failures=[];
+const ok=(cond,msg)=>{if(!cond)failures.push(msg)};
+
+const required=[
+  'portal-multimedia/index.html',
+  'portal-multimedia/model.js',
+  'portal-multimedia/storage.js',
+  'portal-multimedia/pulsarium.js',
+  'portal-multimedia/beta12-ui.js',
+  'portal-multimedia/archivum-sheets-lazy.js',
+  'portal-multimedia/media-runtime-hotfix.js',
+  'sw.js'
+];
+required.forEach(p=>ok(exists(p),'Falta recurs crític: '+p));
+if(failures.length){console.error(failures.join('\n'));process.exit(1)}
+
+const html=read('portal-multimedia/index.html');
+for(const marker of ['id="photoBtn"','id="photo"','id="fileBtn"','id="circulation"','id="looperum"','id="videodrome"','id="archivum"','id="showLoops"','id="archiveList"']){
+  ok(html.includes(marker),'Smoke Portal: falta '+marker);
+}
+ok(html.includes("from './model.js'"),'Smoke Portal: index no importa model.js');
+ok(html.includes("from './storage.js'"),'Smoke Portal: index no importa storage.js');
+
+const model=read('portal-multimedia/model.js');
+for(const stage of ['source','fragment','loop','transformation','relation','provenance']) ok(model.includes(`"${stage}"`),'Contracte model: falta etapa '+stage);
+ok(model.includes('destructive: false'),'Contracte model: la procedència no força destructive=false');
+ok(model.includes('rootRecordId'),'Contracte model: falta rootRecordId');
+ok(model.includes('parentId'),'Contracte model: falta parentId');
+
+const beta=read('portal-multimedia/beta12-ui.js');
+for(const marker of ['Archivum / Arxiu Viu','Cambra de loops','Videodrum · en prova','FONT → INSTRUMENT → TRANSFORMACIÓ → ARCHIVUM']){
+  ok(beta.includes(marker),'Taxonomia β·12.4: falta marcador '+marker);
+}
+
+const storage=read('portal-multimedia/storage.js');
+const bootMatch=storage.match(/function boot\(\)\{([\s\S]*?)\}\nif\(typeof window/);
+ok(Boolean(bootMatch),'Pressupost de càrrega: no es pot inspeccionar boot() de storage.js');
+if(bootMatch){
+  const boot=bootMatch[1];
+  for(const forbidden of ['openDb(','loadArchiveEntries(','loadLoopEntries(','installLoopTools(','installArchivumSheets(','decodeAudioData','arrayBuffer(']){
+    ok(!boot.includes(forbidden),'Pressupost de càrrega: boot() executa feina pesada: '+forbidden);
+  }
+}
+ok(!storage.includes('installPhotoVideoBridge'),'Regressió coneguda: ha reaparegut el doble pont Fototeca → Videodrum');
+
+const hotfix=read('portal-multimedia/media-runtime-hotfix.js');
+ok(hotfix.includes('Object URL')||hotfix.includes('object')||hotfix.includes('hardenVideo'),'Runtime multimèdia: falta protecció de càrrega de vídeo');
+ok(hotfix.includes('playsinline'),'Runtime multimèdia: falta compatibilitat playsinline');
+
+const sw=read('sw.js');
+const cacheMatch=sw.match(/const CACHE = ['"]([^'"]+)['"]/);
+ok(Boolean(cacheMatch),'Service Worker: falta nom de cache versionat');
+if(cacheMatch)ok(/v\d+$/.test(cacheMatch[1]),'Service Worker: la cache no acaba amb versió numèrica');
+for(const asset of ['portal-multimedia/model.js','portal-multimedia/storage.js','portal-multimedia/pulsarium.js','portal-multimedia/beta12-ui.js','portal-multimedia/archivum-sheets-lazy.js','portal-multimedia/media-runtime-hotfix.js']){
+  ok(sw.includes(`./${asset}`),'Service Worker: falta asset crític '+asset);
+}
+
+const base=process.env.CODEX_DIFF_BASE?.trim();
+if(base&&/^[0-9a-f]{7,40}$/i.test(base)&&!/^0+$/.test(base)){
+  try{
+    const changed=execSync(`git diff --name-only ${base}...HEAD`,{encoding:'utf8'}).trim().split(/\n+/).filter(Boolean);
+    const critical=changed.some(p=>p.startsWith('portal-multimedia/')&&/\.(?:js|html)$/.test(p));
+    if(critical)ok(changed.includes('sw.js'),'Cache discipline: ha canviat el Portal però sw.js no s’ha versionat/revisat');
+  }catch(err){console.warn('Avís: no s’ha pogut auditar el diff de cache:',err.message)}
+}
+
+if(failures.length){
+  console.error('Auditoria Portal/Homeòstasi: ERROR');
+  failures.forEach(x=>console.error(' - '+x));
+  process.exit(1);
+}
+console.log('Auditoria Portal/Homeòstasi: OK');
+console.log('Smoke UI, contracte de dades, arrencada, cache i regressions verificats.');
