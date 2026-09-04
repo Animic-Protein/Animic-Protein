@@ -3,6 +3,7 @@
     indici: "Indici fèrtil",
     cami: "Camí possible",
     pont: "Pont disponible",
+    confluencia: "Confluència de rastres",
   };
   let box,
     closed = false,
@@ -27,7 +28,7 @@
     closed = false;
     last = key;
     box.dataset.level = level;
-    box.querySelector(".formiga-pont__kind").textContent = labels[level];
+    box.querySelector(".formiga-pont__kind").textContent = labels[level] || level;
     box.querySelector(".formiga-pont__text").textContent = text;
     const go = box.querySelector(".formiga-pont__go");
     go.href = href || "#";
@@ -38,6 +39,21 @@
     if (box) box.removeAttribute("data-level");
   }
   window.FormigaPont = { show, hide };
+
+  // CONFLUENTIA és una facultat transversal. La Formiga només fa perceptible
+  // una convergència ja calculada; no interpreta ni canonitza el fenomen.
+  window.addEventListener("codex:confluentia", (event) => {
+    const assessment = event.detail?.assessment;
+    if (!assessment || assessment.status !== "confluent") return;
+    const count = Number(assessment.count) || 0;
+    show(
+      "confluencia",
+      `${count} rastres independents convergeixen aquí. La convergència no és certesa.`,
+      event.detail?.href || null,
+      event.detail?.label || "Examinar abans de decidir",
+    );
+  });
+
   function sala() {
     const signal = document.querySelector("#signal"),
       retorn = "../inter-nos-creative/#interlocutor";
