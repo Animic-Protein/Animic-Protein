@@ -29,8 +29,8 @@ ok(html.includes("from './model.js'"),'Smoke Portal: index no importa model.js')
 ok(html.includes("from './storage.js'"),'Smoke Portal: index no importa storage.js');
 
 const model=read('portal-multimedia/model.js');
-for(const stage of ['source','fragment','loop','transformation','relation','provenance']) ok(model.includes(`"${stage}"`),'Contracte model: falta etapa '+stage);
-ok(model.includes('destructive: false'),'Contracte model: la procedència no força destructive=false');
+for(const stage of ['source','fragment','loop','transformation','relation','provenance']) ok(model.includes(`"${stage}"`)||model.includes(`'${stage}'`),'Contracte model: falta etapa '+stage);
+ok(/destructive\s*:\s*false/.test(model),'Contracte model: la procedència no força destructive=false');
 ok(model.includes('rootRecordId'),'Contracte model: falta rootRecordId');
 ok(model.includes('parentId'),'Contracte model: falta parentId');
 
