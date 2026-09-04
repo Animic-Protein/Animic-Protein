@@ -1,4 +1,4 @@
-const CACHE = 'codex-viu-canonical-v61';
+const CACHE = 'codex-viu-canonical-v62';
 const ASSETS = [
   './', './index.html', './styles.css', './rosa.css', './rosa-lamina.css', './rosa-enhanced.css', './rosa-inter-nos.css', './cartographia.css',
   './germinacio.css', './error-fertil-i.css', './radices-brodsky.css', './vortex-ant.css', './temps-nu.css', './app.js', './foundation.js', './core.js', './germinacio.js', './phase3.js', './seed-bridge.js', './compost-cycle.js', './error-fertil-i.js', './metabolism.js', './homeostasis.js', './lineage.js',
@@ -8,4 +8,22 @@ const ASSETS = [
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
-self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}return response}).catch(async()=>{const cached=await caches.match(event.request);if(cached)return cached;if(event.request.mode==='navigate')return caches.match('./index.html');return Response.error()}))});
+self.addEventListener('fetch',event=>{
+  if(event.request.method!=='GET') return;
+  const requestUrl=new URL(event.request.url);
+  if(requestUrl.pathname.includes('/portal-multimedia/')){
+    event.respondWith(fetch(event.request,{cache:'no-store'}).catch(()=>Response.error()));
+    return;
+  }
+  event.respondWith(
+    fetch(event.request).then(response=>{
+      if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}
+      return response;
+    }).catch(async()=>{
+      const cached=await caches.match(event.request);
+      if(cached)return cached;
+      if(event.request.mode==='navigate')return caches.match('./index.html');
+      return Response.error();
+    })
+  );
+});
