@@ -2,159 +2,29 @@
 <html lang="ca">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#02070c" />
     <title>Anímic Protein · Còdex Viu</title>
-    <meta
-      name="description"
-      content="Còdex Viu d’Anímic Protein: entra, percep, actua i deixa rastre."
-    />
+    <meta name="description" content="Còdex Viu d’Anímic Protein: entra, percep, actua i deixa rastre." />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./formiga.css" />
     <style>
-      :root {
-        --n: #02070c;
-        --t: #f4fbff;
-        --m: #94aab7;
-        --c: #00c8ff;
-        --o: #e3a629;
-        --g: #3fff67;
-        --l: #23465d;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        min-height: 100svh;
-        background:
-          radial-gradient(circle at 50% 0, #103d5e 0, transparent 36rem),
-          var(--n);
-        color: var(--t);
-        font:
-          16px/1.5 Arial,
-          sans-serif;
-      }
-      .threshold {
-        min-height: 100svh;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        padding: 8vh 22px;
-      }
-      .inner {
-        max-width: 760px;
-      }
-      .ey {
-        color: var(--c);
-        letter-spacing: 0.18em;
-        font-size: 0.72rem;
-        text-transform: uppercase;
-      }
-      h1 {
-        font:
-          400 clamp(3.7rem, 13vw, 9rem) / 0.84 Georgia,
-          serif;
-        letter-spacing: -0.055em;
-        margin: 0.18em 0;
-      }
-      h1 em {
-        color: var(--o);
-        font-weight: 400;
-      }
-      .lead {
-        max-width: 620px;
-        margin: 1.6rem auto;
-        color: var(--m);
-        font-size: 1.12rem;
-      }
-      .enter {
-        display: grid;
-        place-items: center;
-        width: 170px;
-        height: 170px;
-        margin: 2.5rem auto 1rem;
-        border: 1px solid var(--o);
-        border-radius: 50%;
-        background: radial-gradient(circle, #17384a, #061019);
-        color: var(--t);
-        font:
-          1.35rem Georgia,
-          serif;
-        text-decoration: none;
-        box-shadow: 0 0 55px #00c8ff18;
-        transition: 0.25s;
-      }
-      .enter:hover,
-      .enter:focus-visible {
-        transform: scale(1.04);
-        border-color: var(--g);
-        outline: none;
-      }
-      .secondary {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-      }
-      .secondary a {
-        color: var(--m);
-        border-bottom: 1px solid var(--l);
-        text-decoration: none;
-        padding: 0.45rem;
-      }
-      .axiom {
-        margin: 4rem auto 0;
-        color: var(--m);
-        font-size: 0.78rem;
-      }
-      .ant {
-        display: inline-block;
-        margin-right: 0.4rem;
-        opacity: 0.7;
-      }
-      @media (max-width: 520px) {
-        h1 {
-          font-size: 4rem;
-        }
-        .enter {
-          width: 145px;
-          height: 145px;
-        }
-      }
+      :root {--n:#02070c;--t:#f4fbff;--m:#94aab7;--c:#00c8ff;--o:#e3a629;--g:#3fff67;--l:#23465d}
+      *{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#103d5e 0,transparent 36rem),var(--n);color:var(--t);font:16px/1.5 Arial,sans-serif}.threshold{min-height:100svh;display:grid;place-items:center;text-align:center;padding:8vh 22px}.inner{max-width:760px}.ey{color:var(--c);letter-spacing:.18em;font-size:.72rem;text-transform:uppercase}h1{font:400 clamp(3.7rem,13vw,9rem)/.84 Georgia,serif;letter-spacing:-.055em;margin:.18em 0}h1 em{color:var(--o);font-weight:400}.lead{max-width:620px;margin:1.6rem auto;color:var(--m);font-size:1.12rem}.enter{display:grid;place-items:center;width:170px;height:170px;margin:2.5rem auto 1rem;border:1px solid var(--o);border-radius:50%;background:radial-gradient(circle,#17384a,#061019);color:var(--t);font:1.35rem Georgia,serif;text-decoration:none;box-shadow:0 0 55px #00c8ff18;transition:.25s}.enter:hover,.enter:focus-visible{transform:scale(1.04);border-color:var(--g);outline:none}.secondary{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:2rem}.secondary a{color:var(--m);border-bottom:1px solid var(--l);text-decoration:none;padding:.45rem}.axiom{margin:4rem auto 0;color:var(--m);font-size:.78rem}.ant{display:inline-block;margin-right:.4rem;opacity:.7}@media(max-width:520px){h1{font-size:4rem}.enter{width:145px;height:145px}}
     </style>
   </head>
   <body>
-    <main class="threshold">
-      <div class="inner">
-        <p class="ey">ANÍMIC PROTEIN · CÒDEX VIU · LLINDAR</p>
-        <h1>No miris tot.<br /><em>Entra.</em></h1>
-        <p class="lead">
-          L’organisme no et demana que triïs una eina. Primer percep què està
-          succeint; després només revelarà allò que pugui ser pertinent.
-        </p>
-        <a
-          class="enter"
-          href="./universe/"
-          aria-label="Entrar a la navegació presencial d’Anímic Protein"
-          >ENTRAR</a
-        >
-        <nav class="secondary" aria-label="Accés cartogràfic secundari">
-          <a href="./fusio-total/">Veure territori</a
-          ><a href="./inter-nos-creative/">INTER NOS</a
-          ><a href="./cambra-nua-2/">Cambra Nua</a>
-        </nav>
-        <p class="axiom">
-          <span class="ant" aria-hidden="true">🐜</span>Presència → insinuació →
-          gest → resposta → diferència → rastre → relació → retorn.
-        </p>
-      </div>
-    </main>
+    <main class="threshold"><div class="inner">
+      <p class="ey">ANÍMIC PROTEIN · CÒDEX VIU · LLINDAR</p>
+      <h1>No miris tot.<br /><em>Entra.</em></h1>
+      <p class="lead">L’organisme no et demana que triïs una eina. Primer percep què està succeint; després només revelarà allò que pugui ser pertinent.</p>
+      <a class="enter" href="./universe/" aria-label="Entrar a la navegació presencial d’Anímic Protein">ENTRAR</a>
+      <nav class="secondary" aria-label="Accés cartogràfic secundari">
+        <a href="./fusio-total/">Veure territori</a><a href="./inter-nos-creative/">INTER NOS</a><a href="./cambra-nua-2/">Cambra Nua</a><a href="./portal-multimedia/">Portal multimèdia</a>
+      </nav>
+      <p class="axiom"><span class="ant" aria-hidden="true">🐜</span>Presència → insinuació → gest → resposta → diferència → rastre → relació → retorn.</p>
+    </div></main>
     <script src="./formiga.js"></script>
   </body>
 </html>
