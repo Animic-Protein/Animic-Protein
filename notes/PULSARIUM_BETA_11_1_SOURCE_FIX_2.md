@@ -1,0 +1,1 @@
+Pulsarium beta 11.1 exposes the active source visibly inside the instrument and samples from the selected file blob directly.
