@@ -1,3 +1,5 @@
+import './beta12-ui.js';
+
 export const CODEX_MEDIA_SCHEMA_VERSION = "0.2.0";
 
 export const CODEX_MEDIA_STAGES = Object.freeze([
@@ -123,7 +125,7 @@ export function reactivateLoopRecord(loopRecord, source = {}) {
       parentId: loopRecord.id,
       rootRecordId: loopRecord.provenance?.rootRecordId || loopRecord.id,
       generation: (loopRecord.provenance?.generation || 0) + 1,
-      createdBy: "looparium.reactivate",
+      createdBy: "archivum.loop-chamber.reactivate",
       reversible: true,
       history: [
         ...(loopRecord.provenance?.history || []),
@@ -134,7 +136,7 @@ export function reactivateLoopRecord(loopRecord, source = {}) {
   next.relation.push({
     id: makeId("rel"),
     at,
-    kind: "reactivated-from-looparium",
+    kind: "reactivated-from-archivum-loop",
     target: loopRecord.id,
   });
   return next;
