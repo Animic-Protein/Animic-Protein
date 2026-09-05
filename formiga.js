@@ -96,6 +96,12 @@
         );
       else hide();
     }).observe(derivation, { attributes: true, attributeFilter: ["class"] });
+    if (!document.querySelector('script[data-locutus-voice]')) {
+      const voice = document.createElement('script');
+      voice.src = './locutus-voice.js';
+      voice.dataset.locutusVoice = 'intrinsic';
+      document.body.append(voice);
+    }
   }
   function universe() {
     const organ = document.querySelector("#organ"),
