@@ -4,6 +4,7 @@
   const locutus = document.querySelector('#locutus');
   const conversation = document.querySelector('#conversation');
   const listenButton = document.querySelector('#listen');
+  const input = document.querySelector('#input');
   if (!locutus || !conversation || !('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
 
   const synth = window.speechSynthesis;
@@ -46,7 +47,6 @@
     utterance.rate = 0.82;
     utterance.pitch = 0.58;
     utterance.volume = 0.96;
-    utterance.dataset = undefined;
     utterance.onstart = () => locutus.dataset.voiceState = 'speaking';
     utterance.onend = () => locutus.dataset.voiceState = 'ready';
     utterance.onerror = () => locutus.dataset.voiceState = 'unavailable';
@@ -87,6 +87,9 @@
   }
 
   listenButton?.addEventListener('click', () => { armed = true; }, { capture: true });
+  input?.addEventListener('keydown', event => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') armed = true;
+  }, { capture: true });
   locutus.addEventListener('pointerdown', () => { armed = true; }, { once: true, capture: true });
   synth.addEventListener?.('voiceschanged', chooseVoice);
 
