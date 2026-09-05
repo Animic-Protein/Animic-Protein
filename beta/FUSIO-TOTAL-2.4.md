@@ -159,3 +159,31 @@ El nou camí **Direcció absent** no il·lustra simplement l’acta: n’incorpo
 - **Incertesa:** l’instrument no qualifica la decisió ni la converteix en principi.
 
 Amb aquesta mutació queda completat el darrer llindar operatiu original de Coniunctio. La constitució continua intacta.
+
+
+## Memòria estructural proposada · β·01 ↔ β·02
+
+**Memoria Radicum**, i no una capa paral·lela, incorpora β·01 i β·02 com a primer patró sostingut per casos reals. INTER NOS el fa visible quan la Rosa posa en relació **Rastre** i **Ressonància**:
+
+> Quan una continuïtat desapareix, el temps no queda buit; el seu rastre modifica l’escolta i la decisió següent.
+
+La recurrència no anul·la la diferència:
+
+- **β·01** neix d’una fallada i retorna al **Compost**.
+- **β·02** retira una direcció i transforma la **Cambra nua del temps**.
+- La relació entre totes dues retorna únicament al **Centre**.
+
+**Llindar:** suport 2/3. `Probatio Radicum` conserva el patró com a emergent perquè encara no arriba a tres casos traçables. `Lex Radicum` no el pot legislar.
+
+**Rang:** memòria estructural provisional, cap principi nou i cap mutació constitucional. INTER NOS recorda la repetició; no legisla a partir d’ella.
+
+### Validació sobre `main` actual · 2026-09-03
+
+La recurrència s’ha reconstruït damunt la Constitució d’Interfície, la Navegació Presencial i l’extensió gradual de la Formiga, sense substituir-ne cap capa ni retrocedir la memòria cau canònica.
+
+- **Rastre → Ressonància:** mostra «Rastre ↔ Ressonància · memòria» i reconeix el suport 2/3.
+- **Probatio Radicum:** conserva el patró com a `emergent`; relació i reversibilitat passen, diferència perceptible i traçabilitat romanen sota el llindar.
+- **Retorn:** la relació deriva exclusivament al Centre.
+- **Límit:** «Recurrència reconeguda» queda desactivat com a acció; no sembra ni legisla automàticament.
+- **Neteja:** «Netejar relació» oculta el panell, retira la memòria visible i restaura l’estat inicial.
+- **Compatibilitat:** `sw.js` queda governat per `main` (`v61`) i conserva les rutes actuals i els recursos de la Formiga.
