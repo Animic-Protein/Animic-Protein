@@ -5,6 +5,11 @@ const now=()=>new Date().toISOString();
 const load=()=>{try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}catch{return{}}};
 const save=data=>localStorage.setItem(STORE_KEY,JSON.stringify(data));
 const clean=value=>String(value||'').trim();
+const hasPerceptibleDifference=session=>Boolean(clean(session?.record?.fragment?.difference));
+const assertDifferenceForMovement=(session,action)=>{
+  if(hasPerceptibleDifference(session))return;
+  throw new Error(`Sense diferència perceptible, el Còdex no pot ${action}. Només quiet o reobserve.`);
+};
 
 export const KREATOR1_IMPULSES=Object.freeze(['quiet','relate','reobserve','transform','return']);
 
@@ -27,6 +32,7 @@ export function selectKreator1Fragment(sessionId,{description='',difference=''}=
 
 export function transformKreator1(sessionId,{operation='',description=''}={}){
   const registry=load(),session=registry[sessionId];if(!session)throw new Error('Sessió KREATOR 1 desconeguda');
+  assertDifferenceForMovement(session,'transformar');
   if(!clean(operation))throw new Error('Cal una única operació de transformació');
   session.record=evolveRecord(session.record,'transformation',{kind:'kreator1-first-mutation',operation:clean(operation),description:clean(description),reversible:true,at:now()});
   session.status='transformation';session.updatedAt=now();save(registry);return session;
@@ -34,6 +40,7 @@ export function transformKreator1(sessionId,{operation='',description=''}={}){
 
 export function relateKreator1(sessionId,{target='',kind='kreator1-emergent-relation',label=''}={}){
   const registry=load(),session=registry[sessionId];if(!session)throw new Error('Sessió KREATOR 1 desconeguda');
+  assertDifferenceForMovement(session,'relacionar');
   if(!clean(target))return session;
   session.record=evolveRecord(session.record,'relation',{kind,target:clean(target),label:clean(label),suggested:true,decisionRequired:true,canonical:false,reversible:true,traceRef:session.record.provenance?.originId});
   session.status='relation';session.updatedAt=now();save(registry);return session;
@@ -42,8 +49,11 @@ export function relateKreator1(sessionId,{target='',kind='kreator1-emergent-rela
 export function closeKreator1Session(sessionId,{impulse='quiet',decision='',unexpected='',nextWish=''}={}){
   if(!KREATOR1_IMPULSES.includes(impulse))throw new Error('Impuls KREATOR 1 invàlid');
   const registry=load(),session=registry[sessionId];if(!session)throw new Error('Sessió KREATOR 1 desconeguda');
+  const humanDecision=clean(decision);
+  if(!humanDecision)throw new Error('La decisió humana ha de quedar registrada.');
+  if(!['quiet','reobserve'].includes(impulse))assertDifferenceForMovement(session,`tancar amb impuls ${impulse}`);
   const check=validateRecord(session.record);if(!check.valid)throw new Error('Registre KREATOR 1 invàlid: '+check.errors.join(', '));
-  session.impulse=impulse;session.decision=clean(decision);session.unexpected=clean(unexpected);session.nextWish=clean(nextWish);session.status='closed';session.updatedAt=now();
+  session.impulse=impulse;session.decision=humanDecision;session.unexpected=clean(unexpected);session.nextWish=clean(nextWish);session.status='closed';session.updatedAt=now();
   session.record.provenance.history=[...(session.record.provenance.history||[]),{at:now(),action:'kreator1.session.closed',ref:sessionId,impulse,decision:session.decision}];
   save(registry);window.dispatchEvent(new CustomEvent('codex:kreator1-session',{detail:session}));return session;
 }
