@@ -1,3 +1,4 @@
+import './source-routing-ui.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 if(!document.getElementById('archive-sheet-style')){const blocker=document.createElement('style');blocker.id='archive-sheet-style';blocker.dataset.lazyBlocker='1';document.head.append(blocker)}
 function setText(el,text){if(el&&el.textContent!==text)el.textContent=text}
