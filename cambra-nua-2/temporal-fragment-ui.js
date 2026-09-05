@@ -1,7 +1,6 @@
 import {createTemporalFragment,relateTemporalFragment,TEMPORAL_DESTINATIONS} from './temporal-fragment.js';
 
 let activeRecord=null;
-const labels={cambra:'Retornar a Cambra',resonance:'→ Biblioteca de Ressonàncies',compost:'→ Compost',interNos:'→ INTER NOS'};
 
 function ensureUi(){
   const result=document.querySelector('#result');
@@ -19,11 +18,16 @@ function renderActions(){
   if(!actions||!activeRecord)return;
   actions.replaceChildren();
   state.textContent=`Fragment ${activeRecord.fragment?.id||activeRecord.id} · root ${activeRecord.provenance?.rootRecordId||'—'} · generació ${activeRecord.provenance?.generation??0}. Un sol origen; múltiples relacions.`;
+  const circulation=document.createElement('a');
+  circulation.className='button secondary';
+  circulation.href='./fragment-circulation.html';
+  circulation.textContent='Veure sistema circulatori →';
+  actions.append(circulation);
   Object.entries(TEMPORAL_DESTINATIONS).forEach(([key,dest])=>{
     const a=document.createElement('a');
     a.className='button secondary';
     a.href=dest.href||'#';
-    a.textContent=labels[key]||dest.label;
+    a.textContent=`Retornar → ${dest.label}`;
     a.addEventListener('click',()=>{
       const out=relateTemporalFragment(activeRecord,key);
       activeRecord=out.record;
@@ -41,7 +45,7 @@ window.addEventListener('codex:temporal-difference',event=>{
     activeRecord=createTemporalFragment(event.detail||{});
     window.__codexTemporalFragment=activeRecord;
     renderActions();
-    window.FormigaPont?.show?.('pont','La diferència ja té procedència. Pot circular sense duplicar-se.','#temporalReturns','Triar un únic retorn pertinent');
+    window.FormigaPont?.show?.('pont','La diferència ja té procedència. Pot circular sense duplicar-se.','./fragment-circulation.html','Veure el sistema circulatori');
   }catch(err){console.warn('Temporal fragment failed',err)}
 });
 
