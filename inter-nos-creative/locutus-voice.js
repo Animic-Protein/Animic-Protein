@@ -9,9 +9,11 @@
 
   const synth = window.speechSynthesis;
   const PREF_KEY = 'animic.locutus.voice.enabled/v1';
+  const PROFILE = Object.freeze({ rate: 0.78, pitch: 0.54, volume: 0.94, pause: 240 });
   let enabled = localStorage.getItem(PREF_KEY) !== 'false';
   let armed = false;
   let lastSpoken = '';
+  let speechToken = 0;
 
   const normalize = value => String(value || '').replace(/\s+/g, ' ').trim();
 
@@ -32,27 +34,53 @@
     return [...synth.getVoices()].sort((a, b) => candidateScore(b) - candidateScore(a))[0] || null;
   }
 
+  function segments(text) {
+    const clean = normalize(text);
+    if (!clean) return [];
+    return clean.match(/[^.!?;:]+[.!?;:]?/g)?.map(normalize).filter(Boolean) || [clean];
+  }
+
   function speak(text) {
     const clean = normalize(text);
     if (!enabled || !armed || !clean || clean === lastSpoken) return false;
+    const parts = segments(clean);
+    if (!parts.length) return false;
+
     synth.cancel();
-    const utterance = new SpeechSynthesisUtterance(clean);
+    const token = ++speechToken;
     const voice = chooseVoice();
-    if (voice) {
-      utterance.voice = voice;
-      utterance.lang = voice.lang;
-    } else {
-      utterance.lang = document.documentElement.lang || 'ca-ES';
-    }
-    utterance.rate = 0.82;
-    utterance.pitch = 0.58;
-    utterance.volume = 0.96;
-    utterance.onstart = () => locutus.dataset.voiceState = 'speaking';
-    utterance.onend = () => locutus.dataset.voiceState = 'ready';
-    utterance.onerror = () => locutus.dataset.voiceState = 'unavailable';
     lastSpoken = clean;
-    synth.speak(utterance);
+    locutus.dataset.voiceState = 'speaking';
+
+    const next = index => {
+      if (token !== speechToken || !enabled) return;
+      if (index >= parts.length) {
+        locutus.dataset.voiceState = 'ready';
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(parts[index]);
+      if (voice) {
+        utterance.voice = voice;
+        utterance.lang = voice.lang;
+      } else {
+        utterance.lang = document.documentElement.lang || 'ca-ES';
+      }
+      utterance.rate = PROFILE.rate;
+      utterance.pitch = PROFILE.pitch;
+      utterance.volume = PROFILE.volume;
+      utterance.onend = () => window.setTimeout(() => next(index + 1), PROFILE.pause);
+      utterance.onerror = () => locutus.dataset.voiceState = 'unavailable';
+      synth.speak(utterance);
+    };
+
+    next(0);
     return true;
+  }
+
+  function stop() {
+    speechToken += 1;
+    synth.cancel();
+    locutus.dataset.voiceState = 'ready';
   }
 
   function messageText(node) {
@@ -72,14 +100,14 @@
       toggle.textContent = enabled ? 'VEU · ACTIVA' : 'VEU · SILENCI';
       toggle.setAttribute('aria-pressed', String(enabled));
       toggle.title = enabled
-        ? 'LOCUTUS locuta les seves devolucions quan una interacció de veu és possible.'
+        ? 'LOCUTUS locuta amb una prosòdia pròpia, pausada i reversible.'
         : 'La veu de LOCUTUS està silenciada. El text continua intacte.';
     };
     toggle.addEventListener('click', () => {
       armed = true;
       enabled = !enabled;
       localStorage.setItem(PREF_KEY, String(enabled));
-      if (!enabled) synth.cancel();
+      if (!enabled) stop();
       refresh();
     });
     head.append(toggle);
@@ -91,7 +119,6 @@
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') armed = true;
   }, { capture: true });
   locutus.addEventListener('pointerdown', () => { armed = true; }, { once: true, capture: true });
-  synth.addEventListener?.('voiceschanged', chooseVoice);
 
   const observer = new MutationObserver(mutations => {
     for (const mutation of mutations) {
@@ -105,11 +132,13 @@
 
   window.LocutusVoice = Object.freeze({
     speak,
-    stop: () => synth.cancel(),
+    stop,
     isEnabled: () => enabled,
     arm: () => { armed = true; },
+    profile: PROFILE,
   });
 
   locutus.dataset.voice = 'intrinsic-reversible';
+  locutus.dataset.voiceProfile = 'locutus-1';
   locutus.dataset.voiceState = 'ready';
 })();
