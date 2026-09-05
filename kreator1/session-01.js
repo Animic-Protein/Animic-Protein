@@ -1,4 +1,4 @@
-import {createCodexMediaRecord,evolveRecord,validateRecord} from '../portal-multimedia/model.js';
+import {createCodexMediaRecord,evolveRecord,validateRecord,isExternalSource} from '../portal-multimedia/model.js';
 
 const STORE_KEY='animic.codex.kreator1/v1';
 const now=()=>new Date().toISOString();
@@ -6,19 +6,28 @@ const load=()=>{try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}cat
 const save=data=>localStorage.setItem(STORE_KEY,JSON.stringify(data));
 const clean=value=>String(value||'').trim();
 const hasPerceptibleDifference=session=>Boolean(clean(session?.record?.fragment?.difference));
+const hasTraceableProvenance=session=>Boolean(clean(session?.record?.provenance?.originId)&&clean(session?.record?.source?.id));
 const assertDifferenceForMovement=(session,action)=>{
   if(hasPerceptibleDifference(session))return;
   throw new Error(`Sense diferència perceptible, el Còdex no pot ${action}. Només quiet o reobserve.`);
 };
+const assertReturnReady=session=>{
+  assertDifferenceForMovement(session,'retornar');
+  if(!hasTraceableProvenance(session))throw new Error('RETURN exigeix procedència traçable.');
+};
 
 export const KREATOR1_IMPULSES=Object.freeze(['quiet','relate','reobserve','transform','return']);
 
-export function beginKreator1Session({creator='KREATOR 1',sourceName='Font 001',sourceKind='media',uri='',mime='',rights='participant-authorized',description=''}={}){
+export function beginKreator1Session({creator='KREATOR 1',sourceName='Font 001',sourceKind='media',uri='',mime='',rights='participant-authorized',description='',external}={}){
   const sessionId=`kreator1-${Date.now().toString(36)}`;
+  const explicitExternal=typeof external==='boolean'?external:undefined;
   let record=createCodexMediaRecord({
-    source:{id:`src-${sessionId}`,kind:sourceKind,name:clean(sourceName)||'Font 001',uri:clean(uri),mime:clean(mime),external:false,createdAt:now()},
-    provenance:{originId:`src-${sessionId}`,createdBy:clean(creator)||'KREATOR 1',rights, reversible:true,history:[{at:now(),action:'kreator1.session.started',ref:sessionId}]}
+    source:{id:`src-${sessionId}`,kind:sourceKind,name:clean(sourceName)||'Font 001',uri:clean(uri),mime:clean(mime),external:explicitExternal,createdAt:now()},
+    provenance:{originId:`src-${sessionId}`,createdBy:clean(creator)||'KREATOR 1',rights,reversible:true,history:[{at:now(),action:'kreator1.session.started',ref:sessionId}]}
   });
+  // Si no s'ha declarat explícitament, el model conserva la seva semàntica i els kinds
+  // research/external-data continuen sent reconeguts com a fonts externes.
+  if(explicitExternal===undefined&&isExternalSource(record))record.source.external=true;
   record=evolveRecord(record,'fragment',{id:`fragment-${sessionId}`,kind:'kreator1-observation',description:clean(description),status:'unselected',perceptibleDifference:null});
   const registry=load();registry[sessionId]={sessionId,status:'source',record,decision:null,impulse:null,createdAt:now(),updatedAt:now()};save(registry);
   return registry[sessionId];
@@ -51,7 +60,8 @@ export function closeKreator1Session(sessionId,{impulse='quiet',decision='',unex
   const registry=load(),session=registry[sessionId];if(!session)throw new Error('Sessió KREATOR 1 desconeguda');
   const humanDecision=clean(decision);
   if(!humanDecision)throw new Error('La decisió humana ha de quedar registrada.');
-  if(!['quiet','reobserve'].includes(impulse))assertDifferenceForMovement(session,`tancar amb impuls ${impulse}`);
+  if(impulse==='return')assertReturnReady(session);
+  else if(!['quiet','reobserve'].includes(impulse))assertDifferenceForMovement(session,`tancar amb impuls ${impulse}`);
   const check=validateRecord(session.record);if(!check.valid)throw new Error('Registre KREATOR 1 invàlid: '+check.errors.join(', '));
   session.impulse=impulse;session.decision=humanDecision;session.unexpected=clean(unexpected);session.nextWish=clean(nextWish);session.status='closed';session.updatedAt=now();
   session.record.provenance.history=[...(session.record.provenance.history||[]),{at:now(),action:'kreator1.session.closed',ref:sessionId,impulse,decision:session.decision}];
