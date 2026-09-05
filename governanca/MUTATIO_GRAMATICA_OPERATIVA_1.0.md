@@ -19,7 +19,7 @@ La fusió és de **gramàtica operativa**, no de contingut.
 | catalyst | Transformació |
 | history / K-line | Memòria temporal |
 | anomaly | Error fèrtil |
-| watchlist | Looparium d'observació |
+| watchlist | Looparium d’observació |
 | strategy | Instrument |
 | provenance | Rastre verificable |
 
